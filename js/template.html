@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Черепашандия</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<script>
+			var drawLine;
+			var drawCircle;
+			var setColor;
+
+			var init = function()
+			{
+				var ctx = document.getElementById("ctx").getContext("2d");
+				var pointSize = 5;
+
+				drawLine = function (x, y, x1, y1)
+				{
+					ctx.beginPath();
+					ctx.moveTo(x, y);
+					ctx.lineTo(x1, y1);
+					ctx.closePath();
+					ctx.stroke();
+				}
+
+				drawPoint = function(x, y)
+				{
+					drawCircle(x, y, pointSize);
+				}
+
+				drawCircle = function(x, y, r)
+				{
+					ctx.beginPath();
+					ctx.arc(x,y,r,0,2*Math.PI);
+					ctx.closePath();
+					ctx.stroke();
+				}
+
+				setColor = function(color)
+				{
+					ctx.strokeStyle = color;
+				}
+
+				setPointRadius = function(r)
+				{
+					pointSize = r;
+				}
+			}
+		</script>
+		<style type="text/css">
+			body {background-color:#cccccc;}
+			.canvasContainer {text-align: center;}
+			canvas {background-color: #ffffff;}
+			.sideHelp{float:left;background-color:#bbbbbb;padding:0 2em .5em .5em}
+		</style>
+	</head>
+	<body onLoad="init()">
+		<div class="sideHelp">
+			<h4>Общие функции рисования</h4>
+			<ul>
+				<li>setColor("#ff00ff")</li>
+				<li>drawLine(x1, y1, x2, y2)</li>
+				<li>drawCircle(x, y, r)</li>
+				<li>setPointRadius(r)</li>
+				<li>drawPoint(x, y)</li>
+		</div>
+		<div class="canvasContainer">
+			<canvas id="ctx" width="800" height="400"></canvas>
+		</div>
+
+
+
+		<script>
+		//======== Это место для вашей программки (PUT YOUR CODE HERE)================
+
+
+
+
+		//============================================================================
+		</script>
+	</body>
+</html>
