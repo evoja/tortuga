@@ -1,35 +1,34 @@
 var createTortoise;
 var initTortoise = function(canvas, tortoiseContainer)
 {
-	var width = 32;
-	var height = 32;
 	var createTortoiseDiv = function()
 	{
 		var ttd = document.createElement("DIV");
-		ttd.className = "ttx";
-		ttd.style.width = width + "px";
-		ttd.style.height = height + "px";
+		ttd.className = "om-tortoise-div";
 		tortoiseContainer.appendChild(ttd);
 
-		var tti = document.createElement("DIV");
-		tti.className = "tti";
-		tti.style.width = "4px";
-		tti.style.height = "4px";
-		tti.style.position = "relative";
-		tti.style.top = "28px";
-		tti.style.left = "14px";
-		ttd.appendChild(tti);
+		var pointer = document.createElement("DIV");
+		pointer.className = "om-tortoise-pointer";
+		ttd.appendChild(pointer);
 
-		return {ttd:ttd, tti:tti};
+		var color = document.createElement("DIV");
+		color.className = "om-tortoise-color";
+		ttd.appendChild(color);
+
+		var image = document.createElement("DIV");
+		image.className = "om-tortoise-image";
+		ttd.appendChild(image);
+
+		return {main:ttd, pointer:pointer, color:color};
 	}
 
-	createTortoise = function(xx, yy)
+	createTortoise = function(xx, yy, color)
 	{
 		var ttdi = createTortoiseDiv();
-		var ttd = ttdi.ttd;
+		var ttd = ttdi.main;
 		var x = xx || 0;
 		var y = yy || 0;
-		var color = "#000";
+		var color = color || "#0a0";
 		var rotation = 180;
 		var isDrawing = false;
 
@@ -41,14 +40,15 @@ var initTortoise = function(canvas, tortoiseContainer)
 		var updateDiv = function()
 		{
 			var rad = radRot();
-			var dx = width * (Math.cos(rad)/2 + Math.sin(rad));
-			var dy = height * (Math.cos(rad) - Math.sin(rad) / 2);
+			var dx = ttd.offsetWidth * (Math.cos(rad)/2 + Math.sin(rad));
+			var dy = ttd.offsetHeight * (Math.cos(rad) - Math.sin(rad) / 2);
 			ttd.style.left = (x + dx) + "px";
 			ttd.style.top =  (y + dy) + "px";
 			ttd.style["-webkit-transform"] = "rotate(" + rotation + "deg)";
 			ttd.style["-webkit-transform-origin"] = "0% 0%"
 
-			ttdi.tti.style.background = isDrawing ? color : "none";
+			ttdi.pointer.style.background = isDrawing ? color : "none";
+			ttdi.color.style["border-color"] = color;
 		}
 
 		var degToRad = function(deg)
