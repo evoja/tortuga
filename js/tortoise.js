@@ -26,6 +26,7 @@ var initTortoise = function(tortoiseContainer)
 	{
 		var ttdi = createTortoiseDiv();
 		var ttd = ttdi.main;
+
 		var x = xx || 0;
 		var y = yy || 0;
 		var color = color || "#0a0";
@@ -59,6 +60,7 @@ var initTortoise = function(tortoiseContainer)
 		var tortoise = {
 			go: function(length)
 			{
+				length = length || 0;
 				var ox = x;
 				var oy = y;
 
@@ -77,6 +79,7 @@ var initTortoise = function(tortoiseContainer)
 			},
 			rotate: function(deg)
 			{
+				deg = deg || 0;
 				rotation -= deg;
 				updateDiv();
 			},
@@ -95,7 +98,7 @@ var initTortoise = function(tortoiseContainer)
 
 			setColor: function(c)
 			{
-				color = c;
+				color = c || color;
 				updateDiv();
 			}
 		}
