@@ -1,5 +1,5 @@
 var createTortoise;
-var initTortoise = function(canvas, tortoiseContainer)
+var initTortoise = function(tortoiseContainer)
 {
 	var createTortoiseDiv = function()
 	{
