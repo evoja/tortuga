@@ -27,8 +27,8 @@ var initTortoise = function(canvas, tortoiseContainer)
 	{
 		var ttdi = createTortoiseDiv();
 		var ttd = ttdi.ttd;
-		var x = xx;
-		var y = yy;
+		var x = xx || 0;
+		var y = yy || 0;
 		var color = "#000";
 		var rotation = 180;
 		var isDrawing = false;
