@@ -1,51 +1,60 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Черепашандия</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<script src="js/files.js"></script>
-		<script src="js/drawing.js"></script>
-		<script src="js/tortoise.js"></script>
-		<style type="text/css">
-			body {background-color:#cccccc;}
-			h1 {font-size: 20px}
-			h2 {font-size: 16px;}
-			.canvasContainer {text-align: center;}
-			canvas {background-color: #ffffff;}
-			.sideHelp
+<head>
+	<title>Черепашандия</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<script src="js/Om.js"></script>
+	<script src="js/files.js"></script>
+	<script src="js/drawing.js"></script>
+	<script src="js/tortoise.js"></script>
+	<style type="text/css">
+		body {background-color:#cccccc;}
+		h1 {font-size: 20px}
+		h2 {font-size: 16px;}
+		.canvasContainer {text-align: center;}
+		canvas {background-color: #ffffff;}
+		.sideHelp
+		{
+			float:left;
+			background-color:#bbbbbb;
+			padding:0 1em .5em 1em;
+			max-width: 20%;
+		}
+	</style>
+
+	<script>
+		var init = function()
+		{
+			initDrawing(document.getElementById("ctx"));
+			initTortoise(document.getElementById("ctx"),
+				document.getElementById("ttx"));
+			initFiles(document.getElementById("files"));
+		}
+	</script>
+</head>
+<body onLoad="init()">
+	<div class="sideHelp">
+		<h1>Черепашандия</h1>
+		<h2>Работа из консоли</h2>
+		<script>
+			(function()
 			{
-				float:left;
-				background-color:#bbbbbb;
-				padding:0 1em .5em 1em;
-				max-width: 20%;
-			}
-		</style>
-	</head>
-	<body onLoad="init()">
-		<div class="sideHelp">
-			<h1>Черепашандия</h1>
-			<h2>Работа из консоли</h2>
-			<script>
-				(function()
-				{
-					var isMac = function(){return navigator.appVersion.indexOf("Mac")!=-1}
-					var key = isMac() ? "⌥⌘J" : "Ctrl + Shif + J";
-					document.write("Нажмите " + key + ", чтобы открыть консоль.");
-				})()
-			</script>
-			<h2>Ваши файлы</h2>
-			<input type="file" id="files" name="files[]" multiple />
-			<output id="list"></output>
-			<h2>Общие функции рисования</h2>
-			<ul>
-				<li>setColor("#ff00ff")</li>
-				<li>drawLine(x1, y1, x2, y2)</li>
-				<li>drawCircle(x, y, r)</li>
-				<li>setPointRadius(r)</li>
-				<li>drawPoint(x, y)</li>
-		</div>
-		<div class="canvasContainer">
-			<canvas id="ctx" width="800" height="400"></canvas>
-		</div>
-	</body>
+				var key = Om.isMac() ? "⌥⌘J" : "Ctrl + Shif + J";
+				document.write("Нажмите " + key + ", чтобы открыть консоль.");
+			})()
+		</script>
+		<h2>Ваши файлы</h2>
+		<input type="file" id="files" name="files[]" multiple />
+		<h2>Общие функции рисования</h2>
+		<ul>
+			<li>setColor("#ff00ff")</li>
+			<li>drawLine(x1, y1, x2, y2)</li>
+			<li>drawCircle(x, y, r)</li>
+			<li>setPointRadius(r)</li>
+			<li>drawPoint(x, y)</li>
+	</div>
+	<div class="canvasContainer">
+		<canvas id="ctx" width="800" height="400"></canvas>
+	</div>
+</body>
 </html>

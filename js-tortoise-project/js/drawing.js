@@ -2,9 +2,9 @@ var drawLine;
 var drawCircle;
 var setColor;
 
-var init = function()
+var initDrawing = function(canvas)
 {
-	var ctx = document.getElementById("ctx").getContext("2d");
+	var ctx = canvas.getContext("2d");
 	var pointSize = 5;
 
 	drawLine = function (x, y, x1, y1)
@@ -38,6 +38,4 @@ var init = function()
 	{
 		pointSize = r;
 	}
-
-	initFiles(	document.getElementById('files'));
 }
