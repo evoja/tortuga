@@ -9,14 +9,20 @@
 	<script src="js/drawing.js"></script>
 	<script src="js/tortoise.js"></script>
 	<style type="text/css">
-		body {background-color:#cccccc;}
+		body
+		{
+			background-color:#cccccc;
+			width: 1070px;
+			margin-left:auto;
+			margin-right:auto;
+		}
 		h1 {font-size: 20px}
 		h2 {font-size: 16px;}
 		.canvasContainer
 		{
-			text-align: center;
+			width:800px;
+			margin-right:auto;
 			position:relative;
-			float:right;
 			overflow: hidden;
 		}
 		canvas
@@ -27,8 +33,12 @@
 		{
 			float:left;
 			background-color:#bbbbbb;
-			padding:0 1em .5em 1em;
-			max-width: 20%;
+			width: 250px;
+			margin-right:20px;
+		}
+		.sideHelp-inner
+		{
+			padding:0 1em .5em 1em;			
 		}
 	</style>
 
@@ -43,7 +53,7 @@
 	</script>
 </head>
 <body onLoad="init()">
-	<div class="sideHelp">
+	<div class="sideHelp"><div class="sideHelp-inner">
 		<h1>Черепашандия</h1>
 		<h2>Работа из консоли</h2>
 		<script>
@@ -63,7 +73,8 @@
 			<li>setPointRadius(r)</li>
 			<li>drawPoint(x, y)</li>
 		</ul>
-	</div>
+		<a href="http://lgr.su/lg/54342572"><img src="http://cs10990.userapi.com/u51344610/-14/x_d88b741c.jpg" width="100%"/></a>
+	</div></div>
 	<div class="canvasContainer" id="canvasContainer">
 		<canvas id="ctx" width="800" height="400"></canvas>
 	</div>
