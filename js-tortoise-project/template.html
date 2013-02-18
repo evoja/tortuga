@@ -11,8 +11,21 @@
 		body {background-color:#cccccc;}
 		h1 {font-size: 20px}
 		h2 {font-size: 16px;}
-		.canvasContainer {text-align: center;}
-		canvas {background-color: #ffffff;}
+		.canvasContainer
+		{
+			text-align: center;
+			position:relative;
+			float:right;
+		}
+		.ttx
+		{
+			position:absolute;
+			background-image: url("img/tortoise.png");
+		}
+		canvas
+		{
+			background-color: #ffffff;
+		}
 		.sideHelp
 		{
 			float:left;
@@ -27,7 +40,7 @@
 		{
 			initDrawing(document.getElementById("ctx"));
 			initTortoise(document.getElementById("ctx"),
-				document.getElementById("ttx"));
+				document.getElementById("canvasContainer"));
 			initFiles(document.getElementById("files"));
 		}
 	</script>
@@ -52,8 +65,9 @@
 			<li>drawCircle(x, y, r)</li>
 			<li>setPointRadius(r)</li>
 			<li>drawPoint(x, y)</li>
+		</ul>
 	</div>
-	<div class="canvasContainer">
+	<div class="canvasContainer" id="canvasContainer">
 		<canvas id="ctx" width="800" height="400"></canvas>
 	</div>
 </body>
