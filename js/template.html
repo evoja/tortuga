@@ -48,13 +48,29 @@
 		</script>
 		<style type="text/css">
 			body {background-color:#cccccc;}
+			h1 {font-size: 24px}
 			.canvasContainer {text-align: center;}
 			canvas {background-color: #ffffff;}
-			.sideHelp{float:left;background-color:#bbbbbb;padding:0 2em .5em .5em}
+			.sideHelp
+			{
+				float:left;
+				background-color:#bbbbbb;
+				padding:0 1em .5em 1em;
+				max-width: 20%;
+			}
 		</style>
 	</head>
 	<body onLoad="init()">
 		<div class="sideHelp">
+			<h1>Черепашандия</h1>
+			<script>
+				(function()
+				{
+					var isMac = function(){return navigator.appVersion.indexOf("Mac")!=-1}
+					var key = isMac() ? "⌥⌘J" : "Ctrl + Shif + J";
+					document.write("Нажмите " + key + ", чтобы открыть консоль.");
+				})()
+			</script>
 			<h4>Общие функции рисования</h4>
 			<ul>
 				<li>setColor("#ff00ff")</li>
