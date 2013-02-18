@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Черепашандия</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="css/tortoise.css">
+	<script src="js/Om.js"></script>
+	<script src="js/files.js"></script>
+	<script src="js/drawing.js"></script>
+	<script src="js/tortoise.js"></script>
+	<style type="text/css">
+		body
+		{
+			background-color:#cccccc;
+			width: 1120px;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		h1 {font-size: 20px}
+		h2 {font-size: 16px;}
+		.canvasContainer
+		{
+			width:800px;
+			margin-right:auto;
+			position:relative;
+			overflow: hidden;
+		}
+		canvas
+		{
+			background-color: #ffffff;
+		}
+		.sideHelp
+		{
+			float:left;
+			background-color:#bbbbbb;
+			width: 300px;
+			margin-right:20px;
+		}
+		.sideHelp-inner
+		{
+			padding:0 1em .5em 1em;			
+		}
+	</style>
+
+	<script>
+		var init = function()
+		{
+			initDrawing(document.getElementById("ctx"));
+			initTortoise(document.getElementById("ctx"),
+				document.getElementById("canvasContainer"));
+			initFiles(document.getElementById("files"));
+		}
+	</script>
+</head>
+<body onLoad="init()">
+	<div class="sideHelp"><div class="sideHelp-inner">
+		<h1>Черепашандия</h1>
+		<h2>Работа из консоли</h2>
+		<script>
+			(function()
+			{
+				var key = Om.isMac() ? "⌥⌘J" : "Ctrl + Shif + J";
+				document.write("Нажмите " + key + ", чтобы открыть консоль.");
+			})()
+		</script>
+		<h2>Ваши файлы</h2>
+		<input type="file" id="files" name="files[]" multiple />
+		<h2>Черепашка</h2>
+		<ul>
+			<li>var t = createTortoise(x, y, color)</li>
+			<li>t.tailDown()</li>
+			<li>t.tailUp()</li>
+			<li>t.go(length)</li>
+			<li>t.rotate(degrees)</li>
+			<li>t.setColor(color)</li>
+		</ul>
+		Цвет задаётся стандартным образом: "#f0f" или "#ff00ff";
+		<h2>Общие функции рисования</h2>
+		<ul>
+			<li>setColor("#ff00ff")</li>
+			<li>drawLine(x1, y1, x2, y2)</li>
+			<li>drawCircle(x, y, r)</li>
+			<li>setPointRadius(r)</li>
+			<li>drawPoint(x, y)</li>
+		</ul>
+		<a href="http://lgr.su/lg/54342572"><img src="http://cs10990.userapi.com/u51344610/-14/x_d88b741c.jpg" width="100%"/></a>
+	</div></div>
+	<div class="canvasContainer" id="canvasContainer">
+		<canvas id="ctx" width="800" height="400"></canvas>
+	</div>
+</body>
+</html>
