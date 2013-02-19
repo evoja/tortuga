@@ -56,98 +56,83 @@ var initTortoise;
 
 
 	//==== Construction helpers ====
-var applyMethodsToProto = function (methods, proto)
-{
-	for(var key in methods)
+	var applyMethodsToProto = function (methods, proto)
 	{
-		proto[key] = (function(key){ return function()
+		for(var key in methods)
 		{
-			var size = arguments.length;
-			var args = [this];
-			for(var j = 0; j < size; ++j)
+			proto[key] = (function(key){ return function()
 			{
-				args.push(arguments[j]);
-			}
-			methods[key].apply(null, args);
-			updateDiv(t);
-			return this;
-		}})(key)
-	}
-}
-
-	var proto = {}
-
-	proto.go = function(t, length)
-	{
-		length = length || 0;
-		var ox = t.x;
-		var oy = t.y;
-
-		var rad = radRot(t);
-		t.x += length * Math.sin(rad);
-		t.y += length * Math.cos(rad);
-
-		if(t.isDrawing)
-		{
-			oldColor = setColor(t.color);
-			drawLine(ox, oy, t.x, t.y);
-			setColor(oldColor);
+				var size = arguments.length;
+				var args = [this];
+				for(var j = 0; j < size; ++j)
+				{
+					args.push(arguments[j]);
+				}
+				methods[key].apply(null, args);
+				updateDiv(t);
+				return this;
+			}})(key)
 		}
+	}
+
+	var proto = {
+		go : function(t, length)
+		{
+			length = length || 0;
+			var ox = t.x;
+			var oy = t.y;
+
+			var rad = radRot(t);
+			t.x += length * Math.sin(rad);
+			t.y += length * Math.cos(rad);
+
+			if(t.isDrawing)
+			{
+				oldColor = setColor(t.color);
+				drawLine(ox, oy, t.x, t.y);
+				setColor(oldColor);
+			}
+		},
+
+		rotate : function(t, deg){t.rotation -= (deg || 0)},
+		tailUp : function(t){t.isDrawing = false},
+		tailDown : function(t){t.isDrawing = true},
+		setColor : function(t, c){t.color = c || t.color}
 	}
 	proto.fw = proto.go;
 	proto.forward = proto.go;
-
-	proto.rotate = function(t, deg)
-	{
-		deg = deg || 0;
-		t.rotation -= deg;
-	},
 	proto.lt = proto.rotate;
 	proto.rt = function(t, deg){t.rotate(deg ? -deg : 0)}
-
-	proto.tailUp = function(t)
-	{
-		t.isDrawing = false;
-	},
 	proto.up = proto.tailUp;
-
-	proto.tailDown = function(t)
-	{
-		t.isDrawing = true;
-	},
 	proto.dw = proto.tailDown;
 
-	proto.setColor = function(t, c)
-	{
-		t.color = c || t.color;
-	}
 
 	createTortoise = function(xx, yy, color)
 	{
 		return new Tortoise(xx, yy, color);
 	}
 
-initTortoise = function(tortoiseContainer)
-{
-	var TortoiseConstructor = function(xx, yy, color)
-	{		
-		var ttdi = createTortoiseDiv(tortoiseContainer);
-		var ttd = ttdi.main;
+	initTortoise = function(tortoiseContainer)
+	{
+		var TortoiseConstructor = function(xx, yy, color)
+		{		
+			var ttdi = createTortoiseDiv(tortoiseContainer);
+			var ttd = ttdi.main;
 
-		this.x = xx || 0;
-		this.y = yy || 0;
-		this.color = color || "#0a0";
-		this.rotation = 180;
-		this.isDrawing = false;
+			this.x = xx || 0;
+			this.y = yy || 0;
+			this.color = color || "#0a0";
+			this.rotation = 180;
+			this.isDrawing = false;
 
-		this.getDivObject = function(){return ttdi}
+			this.getDivObject = function(){return ttdi}
 
-		updateDiv(this);
+			updateDiv(this);
+		}
+		applyMethodsToProto(proto, TortoiseConstructor.prototype);
+		Tortoise = TortoiseConstructor;
+
+		return TortoiseConstructor;
 	}
-
-	applyMethodsToProto(proto, TortoiseConstructor.prototype);
-
-	Tortoise = TortoiseConstructor;
-}
 
 })()
