@@ -56,25 +56,6 @@ var initTortoise;
 
 
 	//==== Construction helpers ====
-	var applyMethodsToProto = function (methods, proto)
-	{
-		for(var key in methods)
-		{
-			proto[key] = (function(key){ return function()
-			{
-				var size = arguments.length;
-				var args = [this];
-				for(var j = 0; j < size; ++j)
-				{
-					args.push(arguments[j]);
-				}
-				methods[key].apply(null, args);
-				updateDiv(t);
-				return this;
-			}})(key)
-		}
-	}
-
 	var proto = {
 		go : function(t, length)
 		{
@@ -106,6 +87,82 @@ var initTortoise;
 	proto.up = proto.tailUp;
 	proto.dw = proto.tailDown;
 
+	var applyMethodsToProto = function (methods, proto, wrapMethod)
+	{
+		for(var key in methods)
+		{
+			proto[key] = wrapMethod(methods[key]);
+		}
+	}
+
+	var addObjectToArguments = function(obj, oargs)
+	{
+		var size = oargs.length;
+		var nargs = [obj];
+		for(var j = 0; j < size; ++j)
+		{
+			nargs.push(oargs[j]);
+		}
+		return nargs;		
+	}
+
+	var wrapTortoisProtoMethod = function(fun)
+	{
+		return function()
+		{
+			var args = addObjectToArguments(this, arguments);
+			fun.apply(null, args);
+			updateDiv(t);
+			return this;
+		}
+	}
+
+	//==== Повторушки дяди грушки =======
+	var wrapRepeatTortoriseProtoMethod = function(fun)
+	{
+		return function()
+		{
+			this.calls.push({fun: fun, args: arguments});
+			return this;
+		}		
+	}
+
+	var createRepeatTortoise = function(count)
+	{
+		console.log(this);
+		return new RepeatTortoise(this, count);
+	}
+
+	var RepeatTortoise = function(t, count)
+	{
+		this.t = t;
+		this.count = count;
+		this.calls = [];
+	}
+	applyMethodsToProto(proto, RepeatTortoise.prototype,
+		wrapRepeatTortoriseProtoMethod);
+	RepeatTortoise.prototype.endRepeat = function()
+	{
+		var calls = this.calls;
+		var size = calls.length;
+		for(var j = 0; j < this.count; ++j)
+		{
+			for(var i = 0; i < size; ++i)
+			{
+				console.log(this, this.t, calls[i].args);
+				var args = addObjectToArguments(this.t, calls[i].args);
+				calls[i].fun.apply(null, args);
+			}
+		}
+		updateDiv(this.t);
+		this.calls = [];
+		return this.t;
+	}
+	RepeatTortoise.prototype.end = RepeatTortoise.prototype.endRepeat;
+	RepeatTortoise.prototype.repeat = createRepeatTortoise;
+
+
+	//=== главные конструкторы ======
 
 	createTortoise = function(xx, yy, color)
 	{
@@ -129,7 +186,10 @@ var initTortoise;
 
 			updateDiv(this);
 		}
-		applyMethodsToProto(proto, TortoiseConstructor.prototype);
+		applyMethodsToProto(proto, TortoiseConstructor.prototype,
+			wrapTortoisProtoMethod);
+
+		TortoiseConstructor.prototype.repeat = createRepeatTortoise;
 		Tortoise = TortoiseConstructor;
 
 		return TortoiseConstructor;
