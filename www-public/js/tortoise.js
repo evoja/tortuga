@@ -86,37 +86,46 @@ var initTortoise = function(tortoiseContainer)
 		}
 
 		updateDiv(t);
+		return t;
 	}
 	proto.fw = proto.go;
 	proto.forward = proto.go;
 
 	proto.rotate = function(deg)
 	{
+		var t = this;
 		deg = deg || 0;
-		this.rotation -= deg;
-		updateDiv(this);
+		t.rotation -= deg;
+		updateDiv(t);
+		return t;
 	},
 	proto.lt = proto.rotate;
-	proto.rt = function(deg){this.rotate(deg ? -deg : 0)}
+	proto.rt = function(deg){return this.rotate(deg ? -deg : 0)}
 
 	proto.tailUp = function()
 	{
-		this.isDrawing = false;
-		updateDiv(this);
+		var t = this;
+		t.isDrawing = false;
+		updateDiv(t);
+		return t;
 	},
 	proto.up = proto.tailUp;
 
 	proto.tailDown = function()
 	{
-		this.isDrawing = true;
-		updateDiv(this);
+		var t = this;
+		t.isDrawing = true;
+		updateDiv(t);
+		return t;
 	},
 	proto.dw = proto.tailDown;
 
 	proto.setColor = function(c)
 	{
-		this.color = c || this.color;
-		updateDiv(this);
+		var t = this;
+		t.color = c || t.color;
+		updateDiv(t);
+		return t;
 	}
 
 	createTortoise = function(xx, yy, color)
