@@ -65,11 +65,10 @@ var initTortoise = function(tortoiseContainer)
 		ttdi.color.style["border-color"] = t.color;
 	}
 
-	var proto = Tortoise.prototype;
+	var proto = {}
 
-	proto.go = function(length)
+	proto.go = function(t, length)
 	{
-		var t = this;
 		length = length || 0;
 		var ox = t.x;
 		var oy = t.y;
@@ -84,48 +83,50 @@ var initTortoise = function(tortoiseContainer)
 			drawLine(ox, oy, t.x, t.y);
 			setColor(oldColor);
 		}
-
-		updateDiv(t);
-		return t;
 	}
 	proto.fw = proto.go;
 	proto.forward = proto.go;
 
-	proto.rotate = function(deg)
+	proto.rotate = function(t, deg)
 	{
-		var t = this;
 		deg = deg || 0;
 		t.rotation -= deg;
-		updateDiv(t);
-		return t;
 	},
 	proto.lt = proto.rotate;
-	proto.rt = function(deg){return this.rotate(deg ? -deg : 0)}
+	proto.rt = function(t, deg){t.rotate(deg ? -deg : 0)}
 
-	proto.tailUp = function()
+	proto.tailUp = function(t)
 	{
-		var t = this;
 		t.isDrawing = false;
-		updateDiv(t);
-		return t;
 	},
 	proto.up = proto.tailUp;
 
-	proto.tailDown = function()
+	proto.tailDown = function(t)
 	{
-		var t = this;
 		t.isDrawing = true;
-		updateDiv(t);
-		return t;
 	},
 	proto.dw = proto.tailDown;
 
-	proto.setColor = function(c)
+	proto.setColor = function(t, c)
 	{
-		var t = this;
 		t.color = c || t.color;
-		updateDiv(t);
-		return t;
+	}
+
+	var trueproto = Tortoise.prototype;
+	for(var key in proto)
+	{
+		trueproto[key] = (function(key){ return function()
+		{
+			var size = arguments.length;
+			var args = [this];
+			for(var j = 0; j < size; ++j)
+			{
+				args.push(arguments[j]);
+			}
+			proto[key].apply(null, args);
+			updateDiv(t);
+			return this;
+		}})(key)
 	}
 
 	createTortoise = function(xx, yy, color)
