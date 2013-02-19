@@ -7,7 +7,6 @@
 	<script src="js/Om.js"></script>
 	<script src="js/files.js"></script>
 	<script src="js/drawing.js"></script>
-	<script src="js/tortoise.js"></script>
 	<script src="js/tortoise/Tortoise.js"></script>
 	<script src="js/tortoise/RepeatTortoise.js"></script>
 	<style type="text/css">
@@ -47,6 +46,15 @@
 	</style>
 
 	<script>
+		var createTortoise;
+		var initTortoise = function(tortoiseContainer)
+		{
+			createTortoise = function(xx, yy, color)
+			{
+				return new Tortoise(xx, yy, color, tortoiseContainer);
+			}
+		}
+
 		var init = function()
 		{
 			initDrawing(document.getElementById("ctx"));
