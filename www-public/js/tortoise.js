@@ -1,12 +1,14 @@
 var createTortoise;
 var Tortoise;
-var initTortoise = function(tortoiseContainer)
-{
-	var createTortoiseDiv = function()
+var initTortoise;
+
+(function(){
+	//=== Graph and HTML =====
+	var createTortoiseDiv = function(container)
 	{
 		var ttd = document.createElement("DIV");
 		ttd.className = "om-tortoise-div";
-		tortoiseContainer.appendChild(ttd);
+		container.appendChild(ttd);
 
 		var pointer = document.createElement("DIV");
 		pointer.className = "om-tortoise-pointer";
@@ -21,32 +23,6 @@ var initTortoise = function(tortoiseContainer)
 		ttd.appendChild(image);
 
 		return {main:ttd, pointer:pointer, color:color};
-	}
-
-	Tortoise = function(xx, yy, color)
-	{		
-		var ttdi = createTortoiseDiv();
-		var ttd = ttdi.main;
-
-		this.x = xx || 0;
-		this.y = yy || 0;
-		this.color = color || "#0a0";
-		this.rotation = 180;
-		this.isDrawing = false;
-
-		this.getDivObject = function(){return ttdi}
-
-		updateDiv(this);
-	}
-
-	var degToRad = function(deg)
-	{
-		return deg / 180 * Math.PI;
-	}
-
-	var radRot = function(t)
-	{
-		return Math.PI - degToRad(t.rotation);
 	}
 
 	var updateDiv = function(t)
@@ -64,6 +40,40 @@ var initTortoise = function(tortoiseContainer)
 		ttdi.pointer.style.background = t.isDrawing ? t.color : "none";
 		ttdi.color.style["border-color"] = t.color;
 	}
+
+
+
+	//=== Math ===
+	var degToRad = function(deg)
+	{
+		return deg / 180 * Math.PI;
+	}
+
+	var radRot = function(t)
+	{
+		return Math.PI - degToRad(t.rotation);
+	}
+
+
+	//==== Construction helpers ====
+var applyMethodsToProto = function (methods, proto)
+{
+	for(var key in methods)
+	{
+		proto[key] = (function(key){ return function()
+		{
+			var size = arguments.length;
+			var args = [this];
+			for(var j = 0; j < size; ++j)
+			{
+				args.push(arguments[j]);
+			}
+			methods[key].apply(null, args);
+			updateDiv(t);
+			return this;
+		}})(key)
+	}
+}
 
 	var proto = {}
 
@@ -112,25 +122,32 @@ var initTortoise = function(tortoiseContainer)
 		t.color = c || t.color;
 	}
 
-	var trueproto = Tortoise.prototype;
-	for(var key in proto)
-	{
-		trueproto[key] = (function(key){ return function()
-		{
-			var size = arguments.length;
-			var args = [this];
-			for(var j = 0; j < size; ++j)
-			{
-				args.push(arguments[j]);
-			}
-			proto[key].apply(null, args);
-			updateDiv(t);
-			return this;
-		}})(key)
-	}
-
 	createTortoise = function(xx, yy, color)
 	{
 		return new Tortoise(xx, yy, color);
 	}
+
+initTortoise = function(tortoiseContainer)
+{
+	var TortoiseConstructor = function(xx, yy, color)
+	{		
+		var ttdi = createTortoiseDiv(tortoiseContainer);
+		var ttd = ttdi.main;
+
+		this.x = xx || 0;
+		this.y = yy || 0;
+		this.color = color || "#0a0";
+		this.rotation = 180;
+		this.isDrawing = false;
+
+		this.getDivObject = function(){return ttdi}
+
+		updateDiv(this);
+	}
+
+	applyMethodsToProto(proto, TortoiseConstructor.prototype);
+
+	Tortoise = TortoiseConstructor;
 }
+
+})()
