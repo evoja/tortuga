@@ -62,11 +62,9 @@ var RepeatTortoise;
 
 	var wrapProtoMethods = function(sourceNames, targetProto, wrapMethod)
 	{
-		console.log("wrap");
 		var size = sourceNames.length;
 		for(var i = 0; i < size; ++i)
 		{
-			console.log(sourceNames[i]);
 			targetProto[sourceNames[i]] = wrapMethod(sourceNames[i])
 		}
 	}
