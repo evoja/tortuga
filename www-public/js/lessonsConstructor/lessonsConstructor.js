@@ -3,12 +3,8 @@ var initLessonConstructor;
 (function(){
 var getLinkAreaText = function(areaValue)
 {
-	var value = btoa(RawDeflate.deflate(Om.htmlspecialchars(areaValue, true)));
-	var path = location.pathname.substring(0, location.pathname.lastIndexOf("/")+1);
-	return value.length > 2000 
-		? areaValue.length 
-		: location.origin + location.host + path + 
-				"?" + value;
+	var link = ParamsUtil.getLessonLink(areaValue);
+	return link.length > 2000 ? areaValue.length : link;
 }
 
 var updateLinkArea = function(linkarea, areaValue)
