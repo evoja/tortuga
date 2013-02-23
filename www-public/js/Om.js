@@ -41,5 +41,14 @@ rhtmlspecialchars : function(str)
 		str = str.replace(/&amp;/ig, '&'); /* must do &amp; last */
 	}
 	return str;
+},
+
+utf8_to_b64 : function ( str )
+{
+    return window.btoa(unescape(encodeURIComponent( str )));
+},
+b64_to_utf8 : function ( str )
+{
+    return decodeURIComponent(escape(window.atob( str )));
 }
 }

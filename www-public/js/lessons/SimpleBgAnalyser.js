@@ -3,6 +3,8 @@ var initTortoiseCanvasBackground;
 {
 	initTortoiseCanvasBackground = function(div)
 	{
-		div.style["background-image"] = 'url("' + ParamsUtil.getLesson() + '")';
+		var lesson = ParamsUtil.getLesson()[0];
+		document.title = lesson.title;
+		div.style["background-image"] = 'url("' + lesson.src + '")';
 	}
 })()

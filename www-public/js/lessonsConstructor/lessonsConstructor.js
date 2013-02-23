@@ -7,9 +7,26 @@ var getLinkAreaText = function(areaValue)
 	return link;
 }
 
+var createLesson = function(text)
+{
+	var lines = text.split("\n");
+	var size = lines.length;
+
+	var lesson = [];
+	for(var i = 0; i < size; i += 3)
+	{
+		lesson.push({
+				title: lines[i + 0],
+				src: lines[i + 1],
+				description: lines[i + 2]
+			});
+	}
+	return lesson;
+}
+
 var updateLinkArea = function(linkarea, areaValue)
 {
-	var url = getLinkAreaText(areaValue);
+	var url = getLinkAreaText(createLesson(areaValue));
 
 	linkarea.innerHTML = "";
 	if(url.length < 2000)
