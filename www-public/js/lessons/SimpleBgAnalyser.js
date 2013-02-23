@@ -1,8 +1,8 @@
 var initTortoiseCanvasBackground;
 (function()
 {
-	initTortoiseCanvasBackground = function(canvas)
+	initTortoiseCanvasBackground = function(div)
 	{
-		canvas.style["background-image"] = 'url("' + ParamsUtil.getUriParams() + '")';
+		div.style["background-image"] = 'url("' + ParamsUtil.getUriParams() + '")';
 	}
 })()

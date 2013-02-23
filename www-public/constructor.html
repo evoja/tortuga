@@ -1,0 +1,33 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Сделайте свой урок</title>
+<script src="js/Helper.js"></script>
+<script src="js/Om.js"></script>
+<script src="js/lib/rawdeflate.js"></script>
+<script src="js/lib/rawinflate.js"></script>
+<script src="js/lessonsConstructor/lessonsConstructor.js"></script>
+
+<style>
+textarea {width: 50%; height: 10em;}
+div {width:50%;}
+</style>
+
+
+<script>
+
+var init = function()
+{
+	initLessonConstructor(document.getElementById("area"),
+		document.getElementById("createbutton"),
+		document.getElementById("linkarea"));
+}
+</script>
+
+</head>
+<body onload="init()">
+	<textarea id="area"></textarea><br>
+	<button id="createbutton">Создать урок</button><br>
+	<div id="linkarea"></div>
+</body>
+</html>
