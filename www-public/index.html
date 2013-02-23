@@ -11,6 +11,7 @@
 	<script src="js/drawing.js"></script>
 	<script src="js/lessons/ParamsUtil.js"></script>
 	<script src="js/lessons/SimpleBgAnalyser.js"></script>
+	<script src="js/lessons/lessons.js"></script>
 	<script src="js/tortoise/Tortoise.js"></script>
 	<script src="js/tortoise/RepeatTortoise.js"></script>
 	<style type="text/css">
@@ -52,6 +53,21 @@
 		{
 			padding:0 1em .5em 1em;			
 		}
+
+		.lessonsList-item
+		{
+			cursor: pointer;			
+		}
+		.lessonsList-item:hover
+		{
+			background-color: rgba(0, 0, 0, .05);		
+		}
+		.lessonsList-item-text
+		{
+			display: inline;
+			color:#0000cc;
+			border-bottom: #00c dashed 1px;
+		}
 	</style>
 
 	<script>
@@ -69,6 +85,8 @@
 			initDrawing(document.getElementById("canvasContainer-canvas"));
 			initTortoise(document.getElementById("canvasContainer"));
 			initFiles(document.getElementById("files"));
+			initLessons(document.getElementById("canvasContainer-bg"),
+				document.getElementById("lessonsList"));
 			initTortoiseCanvasBackground(document.getElementById("canvasContainer-bg"));
 		}
 	</script>
@@ -76,6 +94,7 @@
 <body onLoad="init()">
 	<div class="sideHelp"><div class="sideHelp-inner">
 		<h1>Черепашандия</h1>
+		<div id="lessonsList"></div>
 		<h2>Работа из консоли</h2>
 		<p>Работать будет только в Хроме и хромоподобных браузерах.</p>
 		<p>
