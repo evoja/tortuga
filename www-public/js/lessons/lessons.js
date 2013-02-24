@@ -11,7 +11,8 @@ var applyItem = function(list, item, bg)
 	itemDiv.className = "lessonsList-item";
 	itemDiv.onclick = function(e)
 	{
-		console.log(item);
+		document.title = item.title;
+		bg.style["background-image"] = 'url("' + item.src + '")';
 	}
 	itemDiv.appendChild(itemText);
 
