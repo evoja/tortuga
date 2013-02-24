@@ -32,6 +32,26 @@ ul {margin-top: 0;}
 p {margin-top:0;}
 #canvasContainer{width:800px;height: 400px;}
 
+.tortuga-lessonsListContainer-list
+{
+	float:left;
+	background-color: #fff;
+	margin:0;
+	padding:0;
+}
+.tortuga-lessonsListContainer-item
+{
+	padding: 1em;
+	display:inline-block;
+	background-color: rgba(0, 0, 0, 0.03);
+}
+.tortuga-lessonsListContainer-itemSelected.tortuga-lessonsListContainer-item
+{
+	background-color: rgba(0, 0, 0, 0);
+}
+
+
+
 .sideHelp
 {
 	float:left;
@@ -51,13 +71,6 @@ p {margin-top:0;}
 		Tortuga.initApp(document.getElementById("canvasContainer"),
 			document.getElementById("lessonsList"),
 			document.getElementById("files"))
-
-		// initDrawing(document.getElementById("canvasContainer-canvas"));
-		// initTortoise(document.getElementById("canvasContainer"));
-		// initFiles(document.getElementById("files"));
-		// initLessons(document.getElementById("canvasContainer-bg"),
-		// 	document.getElementById("lessonsList"));
-		// initTortoiseCanvasBackground(document.getElementById("canvasContainer-bg"));
 	}
 </script>
 </head>
@@ -66,7 +79,6 @@ p {margin-top:0;}
 <body onLoad="init()">
 	<div class="sideHelp"><div class="sideHelp-inner">
 		<h1>Черепашандия</h1>
-		<div id="lessonsList"></div>
 		<h2>Работа из консоли</h2>
 		<p>Работать будет только в Хроме и хромоподобных браузерах.</p>
 		<p>
@@ -118,6 +130,9 @@ p {margin-top:0;}
 		</ul>
 		<a href="http://lgr.su/lg/54342572"><img src="http://cs10990.userapi.com/u51344610/-14/x_d88b741c.jpg" width="100%"/></a>
 	</div></div>
+
+
+	<div id="lessonsList"></div>
 	<div id="canvasContainer"></div>
 </body>
 </html>
