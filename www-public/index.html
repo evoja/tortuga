@@ -34,16 +34,21 @@ p {margin-top:0;}
 
 .tortuga-lessonsListContainer-list
 {
-	float:left;
-	background-color: #fff;
+	/*background-color: #fff;*/
 	margin:0;
 	padding:0;
 }
+.tortuga-lessonItemDescription
+{
+	margin-bottom: 1em;
+	margin-top: 1ex;
+}
 .tortuga-lessonsListContainer-item
 {
-	padding: 1em;
+	padding: 1ex;
+	padding-left: 0;
 	display:inline-block;
-	background-color: rgba(0, 0, 0, 0.03);
+	/*background-color: rgba(0, 0, 0, 0.03);*/
 }
 .tortuga-lessonsListContainer-itemSelected.tortuga-lessonsListContainer-item
 {
@@ -55,7 +60,7 @@ p {margin-top:0;}
 .sideHelp
 {
 	float:left;
-	background-color:#bbbbbb;
+	background-color:#bbb;
 	width: 300px;
 	margin-right:20px;
 }
@@ -70,6 +75,7 @@ p {margin-top:0;}
 	{
 		Tortuga.initApp(document.getElementById("canvasContainer"),
 			document.getElementById("lessonsList"),
+			document.getElementById("lessonItemDescription"),
 			document.getElementById("files"))
 	}
 </script>
@@ -133,6 +139,7 @@ p {margin-top:0;}
 
 
 	<div id="lessonsList"></div>
+	<div id="lessonItemDescription"></div>
 	<div id="canvasContainer"></div>
 </body>
 </html>

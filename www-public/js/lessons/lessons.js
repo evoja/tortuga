@@ -38,10 +38,11 @@ var removeClass = function (elem, className)
 }
 
 var selectItem = function(item, itemText, itemDiv,
-	selectedItemContext, bg)
+	selectedItemContext, bg, descrDiv)
 {
 	var sic = selectedItemContext;
 	document.title = item.title;
+	descrDiv.innerHTML = item.description;
 	bg.style["background-image"] = 'url("' + item.src + '")';
 
 	if(sic.itemText)
@@ -60,7 +61,7 @@ var selectItem = function(item, itemText, itemDiv,
 	appendClass(item)
 }
 
-var applyItem = function(list, item, bg, selectedItemContext)
+var applyItem = function(list, item, bg, selectedItemContext, descrDiv)
 {
 	var sic = selectedItemContext;
 	var itemText = document.createElement("DIV");
@@ -71,7 +72,7 @@ var applyItem = function(list, item, bg, selectedItemContext)
 	appendClass(itemDiv, CL_ITEM);
 	itemDiv.onclick = function(e)
 	{
-		selectItem(item, itemText, itemDiv, sic, bg);
+		selectItem(item, itemText, itemDiv, sic, bg, descrDiv);
 	}
 	itemDiv.appendChild(itemText);
 	list.appendChild(itemDiv);
@@ -83,23 +84,28 @@ var applyItem = function(list, item, bg, selectedItemContext)
 	}
 }
 
-var createList = function(lesson, bg)
+var createList = function(lesson, bg, descrDiv)
 {
 	var ul = document.createElement("UL");
 	appendClass(ul, CL_UL);
 	var size = lesson.length;
 	var selectedItemContext = {};
-	var firstObject = applyItem(ul, lesson[0], bg, selectedItemContext);
+	var aifun = function(item)
+	{
+		return applyItem(ul, item, bg, selectedItemContext, descrDiv)
+	}
+
+	var firstObject = aifun(lesson[0]);
 	for(var i = 1; i < size; ++i)
 	{
-		applyItem(ul, lesson[i], bg, selectedItemContext);
+		aifun(lesson[i])
 	}
 	selectItem(firstObject.item, firstObject.itemText, firstObject.itemDiv,
-		selectedItemContext, bg);
+		selectedItemContext, bg, descrDiv);
 	return ul;
 }
 
-Tortuga.initLessons = function(bg, list)
+Tortuga.initLessons = function(bg, list, descrDiv)
 {
 	var lesson = Tortuga.ParamsUtil.getLesson();
 	if(lesson == null)
@@ -109,7 +115,7 @@ Tortuga.initLessons = function(bg, list)
 	appendClass(header, CL_HEADER);
 	list.appendChild(header);
 
-	list.appendChild(createList(lesson, bg));
+	list.appendChild(createList(lesson, bg, descrDiv));
 }
 
 })()

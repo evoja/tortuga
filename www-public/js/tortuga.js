@@ -58,11 +58,13 @@ var configureFilesArea = function(filesArea)
 }
 
 //==== lessons ======
-var configureLessonsAreas = function(lessonsListContainer)
+var configureLessonsAreas = function(lessonsListContainer, lessonItemDescription)
 {
 	appendClass(lessonsList, "tortuga-lessonsListContainer")
+	appendClass(lessonItemDescription, "tortuga-lessonItemDescription")
 	return {
-		lessonsListContainer : lessonsListContainer
+		lessonsListContainer : lessonsListContainer,
+		lessonItemDescription : lessonItemDescription
 	}
 }
 
@@ -70,17 +72,18 @@ var configureLessonsAreas = function(lessonsListContainer)
 var initApp = function(
 	canvasContainer,
 	lessonsListContainer,
+	lessonItemDescription,
 	filesArea
 	)
 {
 	var canvasObjects = configureCanvasContainer(canvasContainer)
 	var filesObjects = configureFilesArea(filesArea)
-	var lessonsObjects = configureLessonsAreas(lessonsListContainer);
+	var lessonsObjects = configureLessonsAreas(lessonsListContainer, lessonItemDescription);
 
 	Tortuga.initDrawing(canvasObjects.canvas)
 	Tortuga.initTortoise(canvasObjects.canvasContainer)
 	Tortuga.initFiles(filesObjects.button)
-	Tortuga.initLessons(canvasObjects.bg, lessonsListContainer);
+	Tortuga.initLessons(canvasObjects.bg, lessonsListContainer, lessonItemDescription);
 /*
 		initTortoiseCanvasBackground(document.getElementById("canvasContainer-bg"));
 */
