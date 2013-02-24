@@ -15,6 +15,11 @@ prependArgumentsByObject : function(obj, oargs)
 	return nargs;		
 },
 
+getAppendedClassName : function(prevClasses, className)
+{
+	return (prevClasses ? prevClasses + " " : "") + className
+},
+
 htmlspecialchars : function (str, withoutAmps)
 {
 	if (typeof(str) == "string")

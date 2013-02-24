@@ -1,5 +1,4 @@
-var ParamsUtil;
-
+ns("Tortuga");
 (function()
 {
 var utf8_to_prezip = function(str)
@@ -41,13 +40,12 @@ var getLessonTextFromUriValue = function()
 var getLesson = function()
 {
 	var text = getLessonTextFromUriValue();
-	console.log(text);
 	return JSON.parse(text);
 }
 
 
 
-ParamsUtil = {
+Tortuga.ParamsUtil = {
 	getLesson : getLesson,
 	getLessonLink : getLessonLink
 }

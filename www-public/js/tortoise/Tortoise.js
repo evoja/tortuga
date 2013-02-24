@@ -1,4 +1,5 @@
-var Tortoise;
+ns("Tortuga");
+var createTortoise;
 (function(){
 	var prependArgumentsByObject = Om.prependArgumentsByObject;
 
@@ -105,7 +106,7 @@ var Tortoise;
 	proto.up = proto.tailUp;
 	proto.dw = proto.tailDown;
 
-	Tortoise = function(xx, yy, color, tortoiseContainer)
+	var Tortoise = function(xx, yy, color, tortoiseContainer)
 	{		
 		var ttdi = createTortoiseDiv(tortoiseContainer);
 		var ttd = ttdi.main;
@@ -124,6 +125,15 @@ var Tortoise;
 		wrapTortoisProtoMethod);
 	Tortoise.prototype.repeat = function(count)
 	{
-		return new RepeatTortoise(this, count);
+		return new Tortuga.RepeatTortoise(this, count);
+	}
+
+	Tortuga.Tortoise = Tortoise;
+	Tortuga.initTortoise = function(tortoiseContainer)
+	{
+		createTortoise = function(xx, yy, color)
+		{
+			return new Tortoise(xx, yy, color, tortoiseContainer);
+		}
 	}
 })()

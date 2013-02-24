@@ -1,9 +1,8 @@
-var initLessonConstructor;
-
+ns("Torguta");
 (function(){
 var getLinkAreaText = function(areaValue)
 {
-	var link = ParamsUtil.getLessonLink(areaValue);
+	var link = Tortuga.ParamsUtil.getLessonLink(areaValue);
 	return link;
 }
 
@@ -50,7 +49,7 @@ var updateLinkArea = function(linkarea, areaValue)
 	}
 }
 
-initLessonConstructor = function(area, button, linkarea)
+Tortuga.initLessonConstructor = function(area, button, linkarea)
 {
 	button.onclick = function(e){updateLinkArea(linkarea, area.value)}
 
