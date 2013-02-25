@@ -32,6 +32,11 @@ ul {margin-top: 0;}
 p {margin-top:0;}
 #canvasContainer{width:800px;height: 400px;}
 
+.tortuga-lessonsListContainer-header:after
+{
+	content:"Уроки";
+	font-weight: bold;
+}
 .tortuga-lessonsListContainer-list
 {
 	/*background-color: #fff;*/
@@ -48,7 +53,14 @@ p {margin-top:0;}
 	padding: 1ex;
 	padding-left: 0;
 	display:inline-block;
-	/*background-color: rgba(0, 0, 0, 0.03);*/
+}
+.tortuga-lessonsListContainer-item-text:after
+{
+	content:",";
+}
+.tortuga-lessonsListContainer-item:last-child .tortuga-lessonsListContainer-item-text:after
+{
+	content:".";
 }
 .tortuga-lessonsListContainer-itemSelected.tortuga-lessonsListContainer-item
 {

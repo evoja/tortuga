@@ -134,7 +134,7 @@ Tortuga.initLessons = function(bg, list, descrDiv)
 	if(lesson == null)
 		return
 
-	var header = document.createElement("H2");
+	var header = document.createElement("DIV");
 	appendClass(header, CL_HEADER);
 	list.appendChild(header);
 
