@@ -1,6 +1,7 @@
 ns("Tortuga");
 (function()
 {
+var htmlspecialchars = Om.htmlspecialchars
 var getAppendedClassName = Om.getAppendedClassName
 var CL_UL = "tortuga-lessonsListContainer-list"
 var CL_HEADER = "tortuga-lessonsListContainer-header"
@@ -37,12 +38,29 @@ var removeClass = function (elem, className)
 	elem.className = cut;
 }
 
+var repairLinks = function (text)
+{
+	var answer = '<a href="$1">$2</a>';
+	var f = "&lt;a href=";
+	var m1 = "&quot;(.*?)&quot;";
+	var m2 = "&#039;(.*?)&#039;";
+	var l = "&gt;(.*?)&lt;/a&gt;";
+	var r1 = new RegExp(f + m1 + l, "g");
+	var r2 = new RegExp(f + m2 + l, "g");
+	return text.replace(r1, answer).replace(r2, answer)
+}
+
+var repairLineBreaks = function (text)
+{
+	return text.replace("&lt;br&gt;", "<br/>").replace("&lt;br/&gt;", "<br/>")
+}
+
 var selectItem = function(item, itemText, itemDiv,
 	selectedItemContext, bg, descrDiv)
 {
 	var sic = selectedItemContext;
 	document.title = item.title;
-	descrDiv.innerHTML = item.description;
+	descrDiv.innerHTML = repairLinks(item.description);
 	bg.style["background-image"] = 'url("' + item.src + '")';
 
 	if(sic.itemText)
@@ -61,8 +79,13 @@ var selectItem = function(item, itemText, itemDiv,
 	appendClass(item)
 }
 
-var applyItem = function(list, item, bg, selectedItemContext, descrDiv)
+var applyItem = function(list, inputItem, bg, selectedItemContext, descrDiv)
 {
+	var item = {
+		src : htmlspecialchars(inputItem.src),
+		title : htmlspecialchars(inputItem.title, true),
+		description : repairLineBreaks(repairLinks(htmlspecialchars(inputItem.description, true)))
+	}
 	var sic = selectedItemContext;
 	var itemText = document.createElement("DIV");
 	appendClass(itemText, CL_ITEM_TEXT);
