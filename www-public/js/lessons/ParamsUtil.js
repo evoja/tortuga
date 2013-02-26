@@ -27,20 +27,20 @@ var getLessonLink = function(lesson)
 
 var getLessonTextFromUriValue = function()
 {
+	return prezip_to_utf8(RawDeflate.inflate(atob(location.search.substring(1))));
+}
+
+var getLesson = function()
+{
 	try
 	{
-		return prezip_to_utf8(RawDeflate.inflate(atob(location.search.substring(1))));
+		var text = getLessonTextFromUriValue();
+		return JSON.parse(text);
 	}
 	catch(e)
 	{
 		return null;
 	}
-}
-
-var getLesson = function()
-{
-	var text = getLessonTextFromUriValue();
-	return JSON.parse(text);
 }
 
 
