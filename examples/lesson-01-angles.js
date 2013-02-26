@@ -144,28 +144,6 @@ t.rotate(72);
 t.tailUp();
 t.go(1000);
 
-
-var t = createTortoise(700, 50, "#888");
-t.tailDown();
-t.rotate(36);
-t.go(len);
-t.go(-len);
-t.rotate(72);
-t.go(len);
-t.go(-len);
-t.rotate(72);
-t.go(len);
-t.go(-len);
-t.rotate(72);
-t.go(len);
-t.go(-len);
-t.rotate(72);
-t.go(len);
-t.go(-len);
-t.rotate(72);
-t.tailUp();
-t.go(1000);
-
 var t = createTortoise(700, 200, "#888");
 t.tailDown();
 t.rotate(45);
