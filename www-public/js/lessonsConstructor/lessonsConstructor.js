@@ -8,7 +8,7 @@ var getLinkAreaText = function(areaValue)
 
 var createLesson = function(text)
 {
-	var lines = text.split("\n");
+	var lines = text.split("\n\n");
 	var size = lines.length;
 
 	var lesson = [];

@@ -46,14 +46,14 @@ var repairLinks = function (text)
 	var m1 = "&quot;(.*?)&quot;";
 	var m2 = "&#039;(.*?)&#039;";
 	var l = "&gt;(.*?)&lt;/a&gt;";
-	var r1 = new RegExp(f + m1 + l, "g");
-	var r2 = new RegExp(f + m2 + l, "g");
+	var r1 = new RegExp(f + m1 + l, "gi");
+	var r2 = new RegExp(f + m2 + l, "gi");
 	return text.replace(r1, answer).replace(r2, answer)
 }
 
 var repairLineBreaks = function (text)
 {
-	return text.replace("&lt;br&gt;", "<br/>").replace("&lt;br/&gt;", "<br/>")
+	return text.replace(/&lt;br&gt;/gi, "<br/>").replace(/&lt;br\/&gt;/gi, "<br/>")
 }
 
 var selectItem = function(item, itemText, itemDiv,
@@ -136,6 +136,7 @@ var createList = function(lesson, bg, descrDiv)
 Tortuga.initLessons = function(bg, list, descrDiv)
 {
 	var lesson = Tortuga.ParamsUtil.getLesson();
+	console.log(lesson);
 	if(lesson == null)
 		return
 
