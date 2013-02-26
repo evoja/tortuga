@@ -7,6 +7,7 @@ var CL_UL = "tortuga-lessonsListContainer-list"
 var CL_HEADER = "tortuga-lessonsListContainer-header"
 var CL_ITEM = "tortuga-lessonsListContainer-item"
 var CL_ITEM_SELECTED = "tortuga-lessonsListContainer-itemSelected"
+var CL_ITEM_NUMBER = "tortuga-lessonsListContainer-item-number"
 var CL_ITEM_TEXT = "tortuga-lessonsListContainer-item-text"
 var CL_ITEM_TEXT_SELECTED = "tortuga-lessonsListContainer-item-textSelected"
 
@@ -79,7 +80,7 @@ var selectItem = function(item, itemText, itemDiv,
 	appendClass(item)
 }
 
-var applyItem = function(list, inputItem, bg, selectedItemContext, descrDiv)
+var applyItem = function(list, inputItem, bg, selectedItemContext, descrDiv, itemIndex)
 {
 	var item = {
 		src : htmlspecialchars(inputItem.src),
@@ -87,6 +88,9 @@ var applyItem = function(list, inputItem, bg, selectedItemContext, descrDiv)
 		description : repairLineBreaks(repairLinks(htmlspecialchars(inputItem.description, true)))
 	}
 	var sic = selectedItemContext;
+	var itemNumber = document.createElement("DIV");
+	appendClass(itemNumber, CL_ITEM_NUMBER);
+	itemNumber.innerHTML = itemIndex;
 	var itemText = document.createElement("DIV");
 	appendClass(itemText, CL_ITEM_TEXT);
 	itemText.innerHTML = item.title;
@@ -97,6 +101,7 @@ var applyItem = function(list, inputItem, bg, selectedItemContext, descrDiv)
 	{
 		selectItem(item, itemText, itemDiv, sic, bg, descrDiv);
 	}
+	itemDiv.appendChild(itemNumber);
 	itemDiv.appendChild(itemText);
 	list.appendChild(itemDiv);
 
@@ -113,15 +118,15 @@ var createList = function(lesson, bg, descrDiv)
 	appendClass(ul, CL_UL);
 	var size = lesson.length;
 	var selectedItemContext = {};
-	var aifun = function(item)
+	var aifun = function(item, index)
 	{
-		return applyItem(ul, item, bg, selectedItemContext, descrDiv)
+		return applyItem(ul, item, bg, selectedItemContext, descrDiv, index)
 	}
 
-	var firstObject = aifun(lesson[0]);
+	var firstObject = aifun(lesson[0], 1);
 	for(var i = 1; i < size; ++i)
 	{
-		aifun(lesson[i])
+		aifun(lesson[i], i+1)
 	}
 	selectItem(firstObject.item, firstObject.itemText, firstObject.itemDiv,
 		selectedItemContext, bg, descrDiv);

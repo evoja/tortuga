@@ -54,9 +54,17 @@ p {margin-top:0;}
 	padding-left: 0;
 	display:inline-block;
 }
+.tortuga-lessonsListContainer-item-number
+{
+	display: inline;
+}
+.tortuga-lessonsListContainer-item-number:after
+{
+	content: ". ";
+}
 .tortuga-lessonsListContainer-item-text:after
 {
-	content:",";
+	content:";";
 }
 .tortuga-lessonsListContainer-item:last-child .tortuga-lessonsListContainer-item-text:after
 {

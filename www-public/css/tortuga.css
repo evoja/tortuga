@@ -39,6 +39,10 @@
 {
 	background-color: rgba(0, 0, 0, .05);		
 }
+.tortuga-lessonsListContainer-item-number
+{
+	display: none;
+}
 .tortuga-lessonsListContainer-item-text
 {
 	display: inline;
@@ -50,5 +54,6 @@
 {
 	color:inherit;
 	border-bottom: none;
+	font-weight: bold;
 }
 
