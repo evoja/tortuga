@@ -1,9 +1,10 @@
+ns("Tortuga");
 var drawLine;
 var drawCircle;
 var setColor;
 var drawPolyLine;
 
-var initDrawing = function(canvas)
+Tortuga.initDrawing = function(canvas)
 {
 	var ctx = canvas.getContext("2d");
 	var pointSize = 5;

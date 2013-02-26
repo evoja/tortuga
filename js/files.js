@@ -2,8 +2,8 @@
 За возможность создания этого файла спасибо статье:
 http://www.html5rocks.com/en/tutorials/file/dndfiles/
 */
-
-var initFiles = function(filesSelector)
+ns("Tortuga");
+Tortuga.initFiles = function(filesSelector)
 {
 	var mapFileList = function(list, fun)
 	{

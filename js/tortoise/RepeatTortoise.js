@@ -1,4 +1,4 @@
-var RepeatTortoise;
+ns("Tortuga");
 (function(){
 	//==== Layer and Item ==============
 	var Layer = function(parentLayer, count)
@@ -62,21 +62,19 @@ var RepeatTortoise;
 
 	var wrapProtoMethods = function(sourceNames, targetProto, wrapMethod)
 	{
-		console.log("wrap");
 		var size = sourceNames.length;
 		for(var i = 0; i < size; ++i)
 		{
-			console.log(sourceNames[i]);
 			targetProto[sourceNames[i]] = wrapMethod(sourceNames[i])
 		}
 	}
 
-	RepeatTortoise = function(tortoise, count)
+	var RepeatTortoise = function(tortoise, count)
 	{
 		this.tortoise = tortoise;
 		this.layer = new Layer(null, count);
 	}
-	wrapProtoMethods(createNames(Tortoise.prototype), 
+	wrapProtoMethods(createNames(Tortuga.Tortoise.prototype), 
 		RepeatTortoise.prototype, wrapProtoMethod);
 	RepeatTortoise.prototype.repeat = function(count)
 	{
@@ -99,4 +97,5 @@ var RepeatTortoise;
 		}
 	}
 
+	Tortuga.RepeatTortoise = RepeatTortoise;
 })()
