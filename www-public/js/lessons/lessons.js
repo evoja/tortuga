@@ -136,7 +136,6 @@ var createList = function(lesson, bg, descrDiv)
 Tortuga.initLessons = function(bg, list, descrDiv)
 {
 	var lesson = Tortuga.ParamsUtil.getLesson();
-	console.log(lesson);
 	if(lesson == null)
 		return
 

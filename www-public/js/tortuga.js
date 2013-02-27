@@ -1,4 +1,6 @@
 ns("Tortuga");
+var SQ2 = Math.sqrt(2);
+
 (function(){
 var getAppendedClassName = Om.getAppendedClassName
 
