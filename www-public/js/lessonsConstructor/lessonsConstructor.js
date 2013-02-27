@@ -11,16 +11,17 @@ var createLesson = function(text)
 	var lines = text.split("\n\n");
 	var size = lines.length;
 
-	var lesson = [];
-	for(var i = 0; i < size; i += 3)
+	var title = lines[0];
+	var items = [];
+	for(var i = 1; i < size; i += 3)
 	{
-		lesson.push({
+		items.push({
 				title: lines[i + 0],
 				src: lines[i + 1],
 				description: lines[i + 2]
 			});
 	}
-	return lesson;
+	return {title: title, items: items};
 }
 
 var updateLinkArea = function(linkarea, areaValue)

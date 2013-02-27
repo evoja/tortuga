@@ -57,10 +57,10 @@ var repairLineBreaks = function (text)
 }
 
 var selectItem = function(item, itemText, itemDiv,
-	selectedItemContext, bg, descrDiv)
+	selectedItemContext, bg, descrDiv, env)
 {
 	var sic = selectedItemContext;
-	document.title = item.title;
+	env.setLessonsTitle(item.title);
 	descrDiv.innerHTML = repairLinks(item.description);
 	bg.style["background-image"] = 'url("' + item.src + '")';
 
@@ -80,12 +80,14 @@ var selectItem = function(item, itemText, itemDiv,
 	appendClass(item)
 }
 
-var applyItem = function(list, inputItem, bg, selectedItemContext, descrDiv, itemIndex)
+var applyItem = function(list, inputItem, bg, selectedItemContext, 
+	descrDiv, itemIndex, env)
 {
 	var item = {
 		src : htmlspecialchars(inputItem.src),
 		title : htmlspecialchars(inputItem.title, true),
-		description : repairLineBreaks(repairLinks(htmlspecialchars(inputItem.description, true)))
+		description : repairLineBreaks(repairLinks(
+			htmlspecialchars(inputItem.description, true)))
 	}
 	var sic = selectedItemContext;
 	var itemNumber = document.createElement("DIV");
@@ -99,7 +101,7 @@ var applyItem = function(list, inputItem, bg, selectedItemContext, descrDiv, ite
 	appendClass(itemDiv, CL_ITEM);
 	itemDiv.onclick = function(e)
 	{
-		selectItem(item, itemText, itemDiv, sic, bg, descrDiv);
+		selectItem(item, itemText, itemDiv, sic, bg, descrDiv, env);
 	}
 	itemDiv.appendChild(itemNumber);
 	itemDiv.appendChild(itemText);
@@ -112,7 +114,7 @@ var applyItem = function(list, inputItem, bg, selectedItemContext, descrDiv, ite
 	}
 }
 
-var createList = function(lesson, bg, descrDiv)
+var createList = function(lesson, bg, descrDiv, env)
 {
 	var ul = document.createElement("UL");
 	appendClass(ul, CL_UL);
@@ -120,7 +122,7 @@ var createList = function(lesson, bg, descrDiv)
 	var selectedItemContext = {};
 	var aifun = function(item, index)
 	{
-		return applyItem(ul, item, bg, selectedItemContext, descrDiv, index)
+		return applyItem(ul, item, bg, selectedItemContext, descrDiv, index, env)
 	}
 
 	var firstObject = aifun(lesson[0], 1);
@@ -129,11 +131,21 @@ var createList = function(lesson, bg, descrDiv)
 		aifun(lesson[i], i+1)
 	}
 	selectItem(firstObject.item, firstObject.itemText, firstObject.itemDiv,
-		selectedItemContext, bg, descrDiv);
+		selectedItemContext, bg, descrDiv, env);
 	return ul;
 }
 
-Tortuga.initLessons = function(bg, list, descrDiv)
+var LessonEnv = function(tortugaEnv, title)
+{
+	this.tortugaEnv = tortugaEnv;
+	this.title = title;
+}
+LessonEnv.prototype.setLessonsTitle = function(itemTitle)
+{
+	this.tortugaEnv.setLessonsTitle(itemTitle + " \\ " + this.title);
+}
+
+Tortuga.initLessons = function(bg, list, descrDiv, env)
 {
 	var lesson = Tortuga.ParamsUtil.getLesson();
 	if(lesson == null)
@@ -143,7 +155,8 @@ Tortuga.initLessons = function(bg, list, descrDiv)
 	appendClass(header, CL_HEADER);
 	list.appendChild(header);
 
-	list.appendChild(createList(lesson, bg, descrDiv));
+	list.appendChild(createList(lesson.items, bg, descrDiv,
+		new LessonEnv(env, lesson.title)));
 }
 
 })()

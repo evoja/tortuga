@@ -9,6 +9,12 @@ var appendClass = function (elem, className)
 	elem.className = getAppendedClassName(elem.className, className)
 }
 
+var TortugaEnv = function(){}
+TortugaEnv.prototype.setLessonsTitle = function(lessonsTitle)
+{
+	document.title = lessonsTitle + " \\ Tortuga";
+}
+
 
 //==== canvas =======
 var createCanvasBg = function(canvasContainer)
@@ -85,7 +91,8 @@ var initApp = function(
 	Tortuga.initDrawing(canvasObjects.canvas)
 	Tortuga.initTortoise(canvasObjects.canvasContainer)
 	Tortuga.initFiles(filesObjects.button)
-	Tortuga.initLessons(canvasObjects.bg, lessonsListContainer, lessonItemDescription);
+	Tortuga.initLessons(canvasObjects.bg, lessonsListContainer, lessonItemDescription,
+		new TortugaEnv());
 /*
 		initTortoiseCanvasBackground(document.getElementById("canvasContainer-bg"));
 */
