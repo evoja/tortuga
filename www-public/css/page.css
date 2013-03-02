@@ -25,6 +25,7 @@ p {margin-top:0;}
 	width: 100%;
 	padding:75px 0 75px 0;
 	position: absolute;
+	z-index: 2;
 }
 .header-link
 {
@@ -33,26 +34,46 @@ p {margin-top:0;}
 	margin: 0 auto 0 auto;
 }
 
+.balloon-shadow
+{
+	box-shadow: 0 0 30px 2px rgba(0, 0, 0, .42);	
+	border-radius: 30px;
+	padding:1em 30px 1em 30px;
+}
+
 .balloon
 {
 	background:#e0f8ff;
-	border-radius: 30px;
-	padding:30px;
-	box-shadow: 0 0 30px 2px rgba(0, 0, 0, .42);
+	padding: 30px 30px 1em 30px;
+}
+
+.balloon-blue
+{
+	margin-bottom: 1em;
+	margin-top: 1ex;
+	background: #78cedc;
 }
 
 .workingArea
 {
+	position: relative;
 	background:	center center no-repeat
 		url("../img/sky.png"),
 		-webkit-linear-gradient(top, #306e69, #8fe3f0 54%, #6bb5ba);
-	padding: 350px 20% 340px 20%;
+	padding: 350px 18% 340px 18%;
+	font-size: large;
+	z-index: 1;
 }
 
 #canvasContainer
 {
 	width:100%;
 	height: 400px;
+}
+
+#files
+{
+	margin-top:1em;
 }
 
 .sideHelp
@@ -72,18 +93,12 @@ p {margin-top:0;}
 	float:right;
 }
 
-#files
-{
-	float:left;
-}
-
 .bottomContent
 {
 	font-size: small;
 	padding: 0px 15% 3em 15%;
 	background: repeat url("../img/grass.png"), #084;
 	position: relative;
-	z-index: -1;	
 }
 .bottomContent:before
 {
@@ -117,6 +132,11 @@ p {margin-top:0;}
 }
 
 /*** Lessons **********************************/
+.tortuga-lessonsContainers-empty
+{
+	display:none;
+}
+
 .tortuga-lessonsListContainer-header:after
 {
 	content:"Задачи";
@@ -130,12 +150,6 @@ p {margin-top:0;}
 }
 .tortuga-lessonItemDescription
 {
-	margin-bottom: 1em;
-	margin-top: 1ex;
-	background: #78cedc;
-	border-radius: 30px;
-	padding:1em 30px 1em 30px;
-	box-shadow: 0 0 30px 2px rgba(0, 0, 0, .42);
 }
 .tortuga-lessonsListContainer-item
 {

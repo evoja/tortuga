@@ -3,6 +3,7 @@ ns("Tortuga");
 {
 var htmlspecialchars = Om.htmlspecialchars
 var getAppendedClassName = Om.getAppendedClassName
+var CL_ALL_EMPTY = "tortuga-lessonsContainers-empty"
 var CL_UL = "tortuga-lessonsListContainer-list"
 var CL_HEADER = "tortuga-lessonsListContainer-header"
 var CL_ITEM = "tortuga-lessonsListContainer-item"
@@ -145,11 +146,20 @@ LessonEnv.prototype.setLessonsTitle = function(itemTitle)
 	this.tortugaEnv.setLessonsTitle(itemTitle + " \\ " + this.title);
 }
 
-Tortuga.initLessons = function(bg, list, descrDiv, env)
+Tortuga.initLessons = function(bg, list, descrDiv, env, allContainers)
 {
 	var lesson = Tortuga.ParamsUtil.getLesson();
 	if(lesson == null)
+	{
+		if(allContainers != null)
+		{
+			allContainers.forEach(function(item)
+			{
+				appendClass(item, CL_ALL_EMPTY);
+			})
+		}
 		return
+	}
 
 	var header = document.createElement("DIV");
 	appendClass(header, CL_HEADER);

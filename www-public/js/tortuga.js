@@ -81,6 +81,7 @@ var initApp = function(
 	canvasContainer,
 	lessonsListContainer,
 	lessonItemDescription,
+	lessonsContainers,
 	filesArea
 	)
 {
@@ -92,7 +93,7 @@ var initApp = function(
 	Tortuga.initTortoise(canvasObjects.canvasContainer)
 	Tortuga.initFiles(filesObjects.button)
 	Tortuga.initLessons(canvasObjects.bg, lessonsListContainer, lessonItemDescription,
-		new TortugaEnv());
+		new TortugaEnv(), lessonsContainers);
 /*
 		initTortoiseCanvasBackground(document.getElementById("canvasContainer-bg"));
 */

@@ -25,6 +25,7 @@
 		Tortuga.initApp(document.getElementById("canvasContainer"),
 			document.getElementById("lessonsList"),
 			document.getElementById("lessonItemDescription"),
+			[document.getElementById("lessonsContainer")],
 			document.getElementById("files"))
 	}
 </script>
@@ -36,9 +37,11 @@
 		<a href="http://progschool-ru.github.com/org.omich.tortoise/"><div class="header-link"></div></a>
 	</div>
 	<div class="workingArea">
-		<div id="lessonItemDescription"></div>
-		<div class="balloon">
+		<div class="balloon-shadow balloon-blue" id="lessonsContainer">
 			<div id="lessonsList"></div>
+			<div id="lessonItemDescription"></div>
+		</div>
+		<div class="balloon-shadow balloon">
 
 			<div class="sideHelp"><div class="sideHelp-inner">
 				<h2>Работа из консоли</h2>
