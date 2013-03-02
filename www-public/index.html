@@ -36,39 +36,40 @@
 		<a href="http://progschool-ru.github.com/org.omich.tortoise/"><div class="header-link"></div></a>
 	</div>
 	<div class="workingArea">
-		<div id="lessonsList"></div>
 		<div id="lessonItemDescription"></div>
+		<div class="balloon">
+			<div id="lessonsList"></div>
 
-		<div class="sideHelp"><div class="sideHelp-inner">
-			<h2>Работа из консоли</h2>
-			<p>Работать будет только в Хроме и хромоподобных браузерах.</p>
-			<p>
-			<script>
-				(function()
-				{
-					var key = Om.isMac() ? "⌥⌘J" : "Ctrl + Shif + J";
-					document.write("Нажмите " + key + ", чтобы открыть консоль.");
-				})()
-			</script>
-			</p>
-			<h2>Черепашка</h2>
-			<ul>
-				<li>var t = createTortoise(x, y, color)</li>
-				<li>t.tailDown()</li>
-				<li>t.tailUp()</li>
-				<li>t.go(length)</li>
-				<li>t.rotate(degrees)</li>
-				<li>t.setColor(color)</li>
-			</ul>
-			Цвет задаётся стандартным образом: "#f0f" или "#ff00ff";
-		</div></div>
+			<div class="sideHelp"><div class="sideHelp-inner">
+				<h2>Работа из консоли</h2>
+				<p>Работать будет только в Хроме и хромоподобных браузерах.</p>
+				<p>
+				<script>
+					(function()
+					{
+						var key = Om.isMac() ? "⌥⌘J" : "Ctrl + Shif + J";
+						document.write("Нажмите " + key + ", чтобы открыть консоль.");
+					})()
+				</script>
+				</p>
+				<h2>Черепашка</h2>
+				<ul>
+					<li>var t = createTortoise(x, y, color)</li>
+					<li>t.tailDown()</li>
+					<li>t.tailUp()</li>
+					<li>t.go(length)</li>
+					<li>t.rotate(degrees)</li>
+					<li>t.setColor(color)</li>
+				</ul>
+				Цвет задаётся стандартным образом: "#f0f" или "#ff00ff";
+			</div></div>
 
-		<div id="canvasContainer"></div>
-		<h2>Ваши файлы</h2>
-		<div id="files"></div>
+			<div id="canvasContainer"></div>
+			<div id="files"></div>
+		</div>
+		<div class="tortoiseMan"></div>
 	</div>
 	<div class="bottomContent"><div class="bottomContent-inner">
-		<div class="tortoiseMan"></div>
 		<div class="bottomContent-block">
 			<h2>Общие функции рисования</h2>
 			<ul>
