@@ -32,68 +32,80 @@
 
 
 <body onLoad="init()">
-	<div class="sideHelp"><div class="sideHelp-inner">
-		<h1><a href="http://progschool-ru.github.com/org.omich.tortoise/">Черепашандия</a></h1>
-		<h2>Работа из консоли</h2>
-		<p>Работать будет только в Хроме и хромоподобных браузерах.</p>
-		<p>
-		<script>
-			(function()
-			{
-				var key = Om.isMac() ? "⌥⌘J" : "Ctrl + Shif + J";
-				document.write("Нажмите " + key + ", чтобы открыть консоль.");
-			})()
-		</script>
-		</p>
-		<p>Хотя в новых Иешниках, наверное, тоже будет работать. Но там консоль как-то по-другому открывается.</p>
+	<div class="header">
+		<a href="http://progschool-ru.github.com/org.omich.tortoise/"><div class="header-link"></div></a>
+	</div>
+	<div class="workingArea">
+		<div id="lessonsList"></div>
+		<div id="lessonItemDescription"></div>
+
+		<div class="sideHelp"><div class="sideHelp-inner">
+			<h2>Работа из консоли</h2>
+			<p>Работать будет только в Хроме и хромоподобных браузерах.</p>
+			<p>
+			<script>
+				(function()
+				{
+					var key = Om.isMac() ? "⌥⌘J" : "Ctrl + Shif + J";
+					document.write("Нажмите " + key + ", чтобы открыть консоль.");
+				})()
+			</script>
+			</p>
+			<h2>Черепашка</h2>
+			<ul>
+				<li>var t = createTortoise(x, y, color)</li>
+				<li>t.tailDown()</li>
+				<li>t.tailUp()</li>
+				<li>t.go(length)</li>
+				<li>t.rotate(degrees)</li>
+				<li>t.setColor(color)</li>
+			</ul>
+			Цвет задаётся стандартным образом: "#f0f" или "#ff00ff";
+		</div></div>
+
+		<div id="canvasContainer"></div>
 		<h2>Ваши файлы</h2>
 		<div id="files"></div>
-		<h2>Черепашка</h2>
-		<ul>
-			<li>var t = createTortoise(x, y, color)</li>
-			<li>t.tailDown()</li>
-			<li>t.tailUp()</li>
-			<li>t.go(length)</li>
-			<li>t.rotate(degrees)</li>
-			<li>t.setColor(color)</li>
-		</ul>
-		Цвет задаётся стандартным образом: "#f0f" или "#ff00ff";
-		<h2>Общие функции рисования</h2>
-		<ul>
-			<li>setColor("#ff00ff")</li>
-			<li>drawLine(x1, y1, x2, y2)</li>
-			<li>drawCircle(x, y, r)</li>
-			<li>setPointRadius(r)</li>
-			<li>drawPoint(x, y)</li>
-		</ul>
-		<h2>Уроки:</h2>
-		<ul>
-			<li><a href="?nVRNbxJRFP0rL7NwxVerGxFrolttdGWiuKB1BBIcKDNEm6YJH8HaUNOUdGV05cItTDuFUhj+wrv/yHPvmwEaa40uSjr33nfvOeee9/Ysr+xVbCtr6R/U1KGeqDUrYZU9+71rZV/vraT1mb6iHpJufRuBiu26VcdNe9W61ygWkpm15Fqy4BQRT9WcIure2u52vVzzylWHG/SppQOFHh060GOlfepRFxPP6ZjaSo/16I6z5dYecEjP8HupqK1DFE+4fM5xJckx0gNEQ+6hp8hSh9EhyB/o2OSA0pOoYxSgTiq3VU9v5B19imppgyIcu0DXEC3CBT4OKygy0D6XmUb3MnGDlT50rMBsHtUCazZKmjPmN1dQpbr97mHeKnleLZtO71YbXiO1Zafvl3Y+2sVtZ7P8IW9t6J/MmYkbgkFEjXqKmZ3JlHNAbFHvUS5d2PinWc7O85cvnlTWXz1+xrO+8hAmOQYBiKkH1KYjJVwixadYwCELfKADRAMEB/SZWcp0az+xYpFvsjaoKJhDoD5ChKUc32ab9WStWtktInqzcZa7Amt2BPt0xooMzRAAQl6SPm90+kccIHnTUpXux06BpTrU5Y0aIwzgzi4stcTQEceM8Cf2WfQxOiI9QwGMPl7YmWGOuJBVNKeG0sZnl5uypwtr9nUYnfT5xtwAZiIKTHlIfFfEuswPMGVXRowwvhlMnJcJp8+4FLtFCXzOTpOtY8hA1m00xp0EVqNcmFAxSe3HrMQyzGy6go8h/QXFNf3C/9IPp0bxqc3UdQ+eijLY9W2Ou5ssVRuufes7hfeIR4tbLugEY2E5kRxy8U0YmXfptwdpgTw2GvXM93pm8Xzo7yAT871kqRV9Qm2Af83TJw+SEDEXkXNN44VA1i8bjzVaithivelE8RMh6zRg2f6BaTpkVLg0PHR5kJeCAW3hMqGOqZ3LLmdik8gNIgJ9QThgCyLQpl6WdZgYq/BEsILDYZsrkUAecfk+j54RfwU9tVMRhjmW+Wb/Fw==">Знакомство с&nbsp;черепахой и&nbsp;измерением углов</a>
-		</ul>
-		<h2>Видеоинструкции для взрослых:</h2>
-		<ul>
-			<li><a href="http://screencast.com/t/ESGwonG6d2a" target="_blank">Работа в консоли</a></li>
-			<li><a href="http://screencast.com/t/6pxKFQHpCV" target="_blank">Программирование</a></li>
-			<li><a href="http://screencast.com/t/nejrq4z4klQ" target="_blank">Файлы</a></li>
-			<li><a href="http://screencast.com/t/cZpxHdJG" target="_blank">События браузера</a></li>
-			<li><a href="http://screencast.com/t/A9omEEKtCZL8" target="_blank">Циклы в стиле Logo</a></li>
-			<li><a href="http://screencast.com/t/NgzrcuzgVqp" target="_blank">Создание уроков</a></li>
-		</ul>
-		<h2>Аналоги</h2>
-		<ul>
-			<li><a href="http://andyhd.github.com/Logo-Tortoise/">Logo-Tortoise</a>, и <a href="https://github.com/andyhd/Logo-Tortoise">код</a></li>
-			<li><a href="http://www.calormen.com/logo/">Logo Interpreter</a></li>
-			<li><a href="http://www.transum.org/software/Logo/">Online Logo</a></li> от <a href="http://www.transum.org/">Transum</a>
-			<li><a href="http://tortue-logo.fr/en/logo-turtle">Tortue-logo</a> от французов. С многострочным редактором и возможностью сохранять свои проги на сервере.</a></li>
-			<li><a href="http://logo.twentygototen.org/">Papert</a> с возможностью сохранять рисунки(!) и замедленного проигрывания программы</li>
-			<li>Совсем не аналог в смысле ссылок выше, а вообще альтернатива черепахам: <a href="http://en.wikipedia.org/wiki/Scratch_(programming_language)">Scratch</a></li>
-		</ul>
-		<a href="http://lgr.su/lg/54342572"><img src="http://cs10990.userapi.com/u51344610/-14/x_d88b741c.jpg" width="100%"/></a>
+	</div>
+	<div class="bottomContent"><div class="bottomContent-inner">
+		<div class="bottomContent-block">
+			<h2>Общие функции рисования</h2>
+			<ul>
+				<li>setColor("#ff00ff")</li>
+				<li>drawLine(x1, y1, x2, y2)</li>
+				<li>drawCircle(x, y, r)</li>
+				<li>setPointRadius(r)</li>
+				<li>drawPoint(x, y)</li>
+			</ul>
+		</div>
+		<div class="bottomContent-block">
+			<h2>Уроки:</h2>
+			<ul>
+				<li><a href="?nVRNbxJRFP0rL7NwxVerGxFrolttdGWiuKB1BBIcKDNEm6YJH8HaUNOUdGV05cItTDuFUhj+wrv/yHPvmwEaa40uSjr33nfvOeee9/Ysr+xVbCtr6R/U1KGeqDUrYZU9+71rZV/vraT1mb6iHpJufRuBiu26VcdNe9W61ygWkpm15Fqy4BQRT9WcIure2u52vVzzylWHG/SppQOFHh060GOlfepRFxPP6ZjaSo/16I6z5dYecEjP8HupqK1DFE+4fM5xJckx0gNEQ+6hp8hSh9EhyB/o2OSA0pOoYxSgTiq3VU9v5B19imppgyIcu0DXEC3CBT4OKygy0D6XmUb3MnGDlT50rMBsHtUCazZKmjPmN1dQpbr97mHeKnleLZtO71YbXiO1Zafvl3Y+2sVtZ7P8IW9t6J/MmYkbgkFEjXqKmZ3JlHNAbFHvUS5d2PinWc7O85cvnlTWXz1+xrO+8hAmOQYBiKkH1KYjJVwixadYwCELfKADRAMEB/SZWcp0az+xYpFvsjaoKJhDoD5ChKUc32ab9WStWtktInqzcZa7Amt2BPt0xooMzRAAQl6SPm90+kccIHnTUpXux06BpTrU5Y0aIwzgzi4stcTQEceM8Cf2WfQxOiI9QwGMPl7YmWGOuJBVNKeG0sZnl5uypwtr9nUYnfT5xtwAZiIKTHlIfFfEuswPMGVXRowwvhlMnJcJp8+4FLtFCXzOTpOtY8hA1m00xp0EVqNcmFAxSe3HrMQyzGy6go8h/QXFNf3C/9IPp0bxqc3UdQ+eijLY9W2Ou5ssVRuufes7hfeIR4tbLugEY2E5kRxy8U0YmXfptwdpgTw2GvXM93pm8Xzo7yAT871kqRV9Qm2Af83TJw+SEDEXkXNN44VA1i8bjzVaithivelE8RMh6zRg2f6BaTpkVLg0PHR5kJeCAW3hMqGOqZ3LLmdik8gNIgJ9QThgCyLQpl6WdZgYq/BEsILDYZsrkUAecfk+j54RfwU9tVMRhjmW+Wb/Fw==">Знакомство с&nbsp;черепахой и&nbsp;измерением углов</a>
+			</ul>
+		</div>
+		<div class="bottomContent-block">
+			<h2>Видеоинструкции для взрослых:</h2>
+			<ul>
+				<li><a href="http://screencast.com/t/ESGwonG6d2a" target="_blank">Работа в консоли</a></li>
+				<li><a href="http://screencast.com/t/6pxKFQHpCV" target="_blank">Программирование</a></li>
+				<li><a href="http://screencast.com/t/nejrq4z4klQ" target="_blank">Файлы</a></li>
+				<li><a href="http://screencast.com/t/cZpxHdJG" target="_blank">События браузера</a></li>
+				<li><a href="http://screencast.com/t/A9omEEKtCZL8" target="_blank">Циклы в стиле Logo</a></li>
+				<li><a href="http://screencast.com/t/NgzrcuzgVqp" target="_blank">Создание уроков</a></li>
+			</ul>
+		</div>
+		<div class="bottomContent-block">
+			<h2>Аналоги</h2>
+			<ul>
+				<li><a href="http://andyhd.github.com/Logo-Tortoise/">Logo-Tortoise</a>, и <a href="https://github.com/andyhd/Logo-Tortoise">код</a></li>
+				<li><a href="http://www.calormen.com/logo/">Logo Interpreter</a></li>
+				<li><a href="http://www.transum.org/software/Logo/">Online Logo</a></li> от <a href="http://www.transum.org/">Transum</a>
+				<li><a href="http://tortue-logo.fr/en/logo-turtle">Tortue-logo</a> от французов. С многострочным редактором и возможностью сохранять свои проги на сервере.</a></li>
+				<li><a href="http://logo.twentygototen.org/">Papert</a> с возможностью сохранять рисунки(!) и замедленного проигрывания программы</li>
+				<li>Совсем не аналог в смысле ссылок выше, а вообще альтернатива черепахам: <a href="http://en.wikipedia.org/wiki/Scratch_(programming_language)">Scratch</a></li>
+			</ul>
+		</div>
 	</div></div>
-
-
-	<div id="lessonsList"></div>
-	<div id="lessonItemDescription"></div>
-	<div id="canvasContainer"></div>
 </body>
 </html>
