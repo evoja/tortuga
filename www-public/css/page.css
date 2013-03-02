@@ -1,0 +1,72 @@
+body
+{
+	background: -webkit-linear-gradient(90deg, #3aaee8, #3092cf);
+	/*width: 1120px;*/
+	margin-left:auto;
+	margin-right:auto;
+}
+h1 {font-size: 20px}
+h2 {font-size: 16px;padding:0px;margin: 1em 0 1ex 0;}
+ul {margin-top: 0;}
+p {margin-top:0;}
+
+
+/*** Tortoise *******************************************************/
+#canvasContainer{width:800px;height: 400px;}
+
+.tortuga-lessonsListContainer-header:after
+{
+	content:"Задачи";
+	font-weight: bold;
+}
+.tortuga-lessonsListContainer-list
+{
+	/*background-color: #fff;*/
+	margin:0;
+	padding:0;
+}
+.tortuga-lessonItemDescription
+{
+	margin-bottom: 1em;
+	margin-top: 1ex;
+}
+.tortuga-lessonsListContainer-item
+{
+	padding: 1ex;
+	padding-left: 0;
+	display:inline-block;
+}
+.tortuga-lessonsListContainer-item-number
+{
+	display: inline;
+}
+.tortuga-lessonsListContainer-item-number:after
+{
+	content: ". ";
+}
+.tortuga-lessonsListContainer-item-text:after
+{
+	content:";";
+}
+.tortuga-lessonsListContainer-item:last-child .tortuga-lessonsListContainer-item-text:after
+{
+	content:".";
+}
+.tortuga-lessonsListContainer-itemSelected.tortuga-lessonsListContainer-item
+{
+	background-color: rgba(0, 0, 0, 0);
+}
+
+
+
+.sideHelp
+{
+	float:left;
+	background-color:#bbb;
+	width: 300px;
+	margin-right:20px;
+}
+.sideHelp-inner
+{
+	padding:0 1em .5em 1em;			
+}
