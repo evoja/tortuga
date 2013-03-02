@@ -13,8 +13,8 @@ body
 	position:relative;
 }
 
-h1 {font-size: 20px}
-h2 {font-size: 16px;padding:0px;margin: 1em 0 1ex 0;}
+h1 {font-size: 1.2em}
+h2 {font-size: 1em;padding:0px;margin: 1em 0 1ex 0;}
 ul {margin-top: 0;}
 p {margin-top:0;}
 
@@ -54,23 +54,40 @@ p {margin-top:0;}
 
 .tortoiseMan
 {
-	float:right;
+	width:216px;
+	height: 384px;
+	background: left top url("http://cs10990.userapi.com/u51344610/-14/x_d88b741c.jpg");
+	background-size: 100% 100%;
+	top: -340px;
+	right: 15%;
+	position:absolute;
+}
+
+#files
+{
+	float:left;
 }
 
 .bottomContent
 {
 	font-size: small;
 	padding: 0px 15% 3em 15%;
-	background: right top no-repeat content-box
-		url("http://cs10990.userapi.com/u51344610/-14/x_d88b741c.jpg"),
-		-webkit-linear-gradient(top, rgba(0, 0, 0, 0) 500px, #084 300px);
+	background: repeat url("../img/grass.png"), #084;
+	margin-top:340px;
+	position: relative;
+	z-index: -1;	
+
+	/*	right top no-repeat content-box
+			url("http://cs10990.userapi.com/u51344610/-14/x_d88b741c.jpg"),*/
+		/*-webkit-linear-gradient(top, rgba(0, 0, 0, 0) 500px, #084 300px);*/
 }
 .bottomContent:before
 {
 	content:"";
-	padding-top:600px;
-	clear:both;
 	display:block;
+	clear:both;
+	padding-top: 44px;
+	height:2em;
 }
 .bottomContent:after
 {
@@ -84,6 +101,15 @@ p {margin-top:0;}
 {
 	width: 25%;
 	float:left;
+}
+
+.bottomContent-block li
+{
+	list-style-type: none;
+}
+.bottomContent-block ul
+{
+	padding-left: 1ex;
 }
 
 /*** Lessons **********************************/
