@@ -35,6 +35,8 @@
 		Tortuga.initHelp([gebid("tortoiseMan"), gebid("help-help")],
 			[gebid("help-help")], 
 			[gebid("help-underHelp")])
+
+		alert(navigator.appVersion);
 	}
 })()
 </script>
@@ -51,34 +53,50 @@
 			<div id="lessonItemDescription"></div>
 		</div>
 		<div class="balloon-shadow balloon">
-
-			<div id="help-help" class="sideHelp"><div class="sideHelp-inner">
-				<h2>Работа из консоли</h2>
-				<p>Работать будет только в Хроме и хромоподобных браузерах.</p>
-				<p>
-				<script>
-					(function()
-					{
-						var key = Om.isMac() ? "⌥⌘J" : "Ctrl + Shif + J";
-						document.write("Нажмите " + key + ", чтобы открыть консоль.");
-					})()
-				</script>
-				</p>
-				<h2>Черепашка</h2>
-				<ul>
-					<li>var t = createTortoise(x, y, color)</li>
-					<li>t.tailDown()</li>
-					<li>t.tailUp()</li>
-					<li>t.go(length)</li>
-					<li>t.rotate(degrees)</li>
-					<li>t.setColor(color)</li>
-				</ul>
-				Цвет задаётся стандартным образом: "#f0f" или "#ff00ff";
-			</div></div>
 			<div id="help-underHelp">
 				<div id="canvasContainer"></div>
 				<div id="files"></div>
 			</div>
+
+			<div id="help-help" class="sideHelp"><div class="sideHelp-inner">
+				<h2>Работа из консоли</h2>
+				<p>
+				<script>
+					(function()
+					{
+						if(!Om.isChrome())
+						{
+							document.write("Работать будет только в&nbsp;<a href='https://www.google.com/intl/en/chrome/'>Хроме</a> и&nbsp;<a href='http://ru.wikipedia.org/wiki/Chromium#.D0.9F.D1.80.D0.B8.D0.BB.D0.BE.D0.B6.D0.B5.D0.BD.D0.B8.D1.8F.2C_.D0.BE.D1.81.D0.BD.D0.BE.D0.B2.D0.B0.D0.BD.D0.BD.D1.8B.D0.B5_.D0.BD.D0.B0_Chromium'>других</a> хромоподобных <a href='http://browser.yandex.ru'>браузерах</a>.")
+						}
+						else
+						{
+							var key = Om.isMac() ? "⌥⌘J" : "Ctrl + Shif + J";
+							document.write("Консоль открывается сочетанием клавиш: <b>" + key + ".</b>");
+						}
+					})()
+				</script>
+				</p>
+				<h2>Основные команды</h2>
+				<ul>
+					<li><b>var x = createTortoise()</b>&nbsp;&mdash; создать черепаху в&nbsp;начале координат.</li>
+					<li><b>var t = createTortoise(100, 50, "green")</b>&nbsp;&mdash; создать черепаху в&nbsp;нужном месте определённого цвета</li>
+					<li><b>t.go(50)</b>&nbsp;&mdash; пройти вперёд на&nbsp;нужное расстояние</li>
+					<li><b>t.rotate(45)</b>&nbsp;&mdash; повернуться против часовой стрелки на&nbsp;нужное количество градусов</li>
+					<li><b>t.tailDown()</b>&nbsp;&mdash; опустить хвост, чтобы рисовать линию.</li>
+					<li><b>t.tailUp()</b>&nbsp;&mdash; поднять хвост, чтобы просто перемещаться.</li>
+					<li><b>t.setColor("red")</b>&nbsp;&mdash; поменять цвет черепахе.</li>
+				</ul>
+				<p>
+					И, напоследок, <a href="http://youtu.be/nqPWQCl2ZBM">видеоинструкция</a>
+				</p>
+				<h2>Более подробная справка</h2>
+				<ul>
+					<li>Сокращённая запись</li>
+					<li>Повторение</li>
+					<li>Цвета</li>
+					<li>Советы</li>
+				</ul>
+			</div></div>
 		</div>
 		<div class="tortoiseMan" id="tortoiseMan"></div>
 	</div>

@@ -23,6 +23,8 @@ p {margin-top:0;}
 .opaque
 {
 	opacity: 0;
+	float: left;
+	width: 0;
 }
 
 .pointer
@@ -60,6 +62,13 @@ p {margin-top:0;}
 {
 	background:#e0f8ff;
 	padding: 30px 30px 1em 30px;
+	position: relative;
+}
+.balloon:after
+{
+	content:"";
+	clear: both;
+	display: block;
 }
 
 .balloon-blue
@@ -93,8 +102,6 @@ p {margin-top:0;}
 
 .sideHelp
 {
-	position: absolute;
-	z-index: 2;
 }
 
 .sideHelp .sideHelp-inner h2

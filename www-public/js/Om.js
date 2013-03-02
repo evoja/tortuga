@@ -17,6 +17,11 @@ isMac : function()
 	return navigator.appVersion.indexOf("Mac")!=-1
 },
 
+isChrome : function()
+{
+	return navigator.appVersion.indexOf("Chrome") != -1
+},
+
 prependArgumentsByObject : function(obj, oargs)
 {
 	var size = oargs.length;
