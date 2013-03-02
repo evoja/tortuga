@@ -3,6 +3,9 @@ ns("Tortuga");
 {
 var htmlspecialchars = Om.htmlspecialchars
 var getAppendedClassName = Om.getAppendedClassName
+var appendClass = Om.appendClass
+var removeClass = Om.removeClass
+
 var CL_ALL_EMPTY = "tortuga-lessonsContainers-empty"
 var CL_UL = "tortuga-lessonsListContainer-list"
 var CL_HEADER = "tortuga-lessonsListContainer-header"
@@ -12,33 +15,6 @@ var CL_ITEM_NUMBER = "tortuga-lessonsListContainer-item-number"
 var CL_ITEM_TEXT = "tortuga-lessonsListContainer-item-text"
 var CL_ITEM_TEXT_SELECTED = "tortuga-lessonsListContainer-item-textSelected"
 
-var appendClass = function (elem, className)
-{
-	elem.className = getAppendedClassName(elem.className, className)
-}
-
-var removeClass = function (elem, className)
-{
-	var old = elem.className;
-	var index = old.indexOf(className);
-	if(index < 0)
-		return;
-
-	var isLast = index + className.length == old.length;
-	var isFirst = index == 0;
-	var cut = old.substring(0, index) + old.substring(index + className.length);
-
-	if(!isLast)
-	{
-		cut = cut.substring(index, index + 1);
-	}
-	if(isLast && !isFirst)
-	{
-		cut = cut.substring(0, index - 1);
-	}
-
-	elem.className = cut;
-}
 
 var repairLinks = function (text)
 {

@@ -12,6 +12,7 @@
 <script src="js/Om.js"></script>
 <script src="js/drawing.js"></script>
 <script src="js/files.js"></script>
+<script src="js/help.js"></script>
 <script src="js/lessons/lessons.js"></script>
 <script src="js/lessons/ParamsUtil.js"></script>
 <script src="js/lessons/SimpleBgAnalyser.js"></script>
@@ -20,14 +21,22 @@
 <script src="js/tortoise/RepeatTortoise.js"></script>
 
 <script>
-	var init = function()
+(function()
+{
+	var gebid = function(id){return document.getElementById(id)}
+	init = function()
 	{
-		Tortuga.initApp(document.getElementById("canvasContainer"),
-			document.getElementById("lessonsList"),
-			document.getElementById("lessonItemDescription"),
-			[document.getElementById("lessonsContainer")],
-			document.getElementById("files"))
+		Tortuga.initApp(gebid("canvasContainer"),
+			gebid("lessonsList"),
+			gebid("lessonItemDescription"),
+			[gebid("lessonsContainer")],
+			gebid("files"))
+
+		Tortuga.initHelp([gebid("tortoiseMan"), gebid("help-help")],
+			[gebid("help-help")], 
+			[gebid("help-underHelp")])
 	}
+})()
 </script>
 </head>
 
@@ -43,7 +52,7 @@
 		</div>
 		<div class="balloon-shadow balloon">
 
-			<div class="sideHelp"><div class="sideHelp-inner">
+			<div id="help-help" class="sideHelp"><div class="sideHelp-inner">
 				<h2>Работа из консоли</h2>
 				<p>Работать будет только в Хроме и хромоподобных браузерах.</p>
 				<p>
@@ -66,11 +75,12 @@
 				</ul>
 				Цвет задаётся стандартным образом: "#f0f" или "#ff00ff";
 			</div></div>
-
-			<div id="canvasContainer"></div>
-			<div id="files"></div>
+			<div id="help-underHelp">
+				<div id="canvasContainer"></div>
+				<div id="files"></div>
+			</div>
 		</div>
-		<div class="tortoiseMan"></div>
+		<div class="tortoiseMan" id="tortoiseMan"></div>
 	</div>
 	<div class="bottomContent"><div class="bottomContent-inner">
 		<div class="bottomContent-block">

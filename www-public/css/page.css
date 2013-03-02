@@ -15,6 +15,21 @@ h2 {font-size: 1em;padding:0px;margin: 1em 0 1ex 0;}
 ul {margin-top: 0;}
 p {margin-top:0;}
 
+.hidden
+{
+	display: none;
+}
+
+.opaque
+{
+	opacity: 0;
+}
+
+.pointer
+{
+	cursor: pointer;
+}
+
 
 /*** Tortoise page *******************************************************/
 .header
@@ -78,10 +93,14 @@ p {margin-top:0;}
 
 .sideHelp
 {
-	width:50px;
-	position:absolute;
-	right: 50px;
-	font-size: small;
+	position: absolute;
+	z-index: 2;
+}
+
+.sideHelp .sideHelp-inner h2
+{
+	margin: 0;
+	padding:0;
 }
 
 .tortoiseMan
@@ -125,6 +144,7 @@ p {margin-top:0;}
 .bottomContent-block li
 {
 	list-style-type: none;
+	margin-top:1ex;
 }
 .bottomContent-block ul
 {
