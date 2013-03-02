@@ -34,6 +34,13 @@ p {margin-top:0;}
 
 
 /*** Tortoise page *******************************************************/
+.warning
+{
+	background-color: #f88;
+	padding: 1em;
+	text-align: center;
+	font-size: x-large;
+}
 .header
 {
 	background: url("../img/title-tortuga.png") no-repeat center 50px,
