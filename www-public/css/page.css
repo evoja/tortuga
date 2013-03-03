@@ -15,18 +15,6 @@ h2 {font-size: 1em;padding:0px;margin: 1em 0 1ex 0;}
 ul {margin-top: 0;}
 p {margin-top:0;}
 
-.hidden
-{
-	display: none;
-}
-
-.opaque
-{
-	opacity: 0;
-	float: left;
-	width: 0;
-}
-
 .pointer
 {
 	cursor: pointer;
@@ -77,6 +65,10 @@ p {margin-top:0;}
 	clear: both;
 	display: block;
 }
+.balloon.sideHelp-shown
+{
+	background: #fff;
+}
 
 .balloon-blue
 {
@@ -107,8 +99,17 @@ p {margin-top:0;}
 	margin-top:1em;
 }
 
+#help-underHelp.sideHelp-shown
+{
+	opacity: 0;
+	float: left;
+	width: 0;
+}
+
+
 .sideHelp
 {
+	display: none;
 }
 
 .sideHelp .sideHelp-inner h2

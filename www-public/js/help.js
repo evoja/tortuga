@@ -5,9 +5,8 @@ ns("Tortuga");
 	var appendClass = Om.appendClass
 	var removeClass = Om.removeClass
 
-	var CL_HIDDEN = "hidden"
+	var CL_HELP_SHOWN = "sideHelp-shown"
 	var CL_POINTER = "pointer"
-	var CL_OPAQUE = "opaque"
 
 	var falseFun = function(){return false}
 
@@ -26,14 +25,9 @@ ns("Tortuga");
 
 	funs.showHelp = function(o)
 	{
-		o.underHelpDivs.forEach(function(item)
-		{
-			appendClass(item, CL_OPAQUE);
-		})
-
 		o.helpDivs.forEach(function(item)
 		{
-			removeClass(item, CL_HIDDEN);
+			appendClass(item, CL_HELP_SHOWN);
 		})
 
 		o.helpButtons.forEach(createForEachHandler(funs.hideHelp, o))
@@ -41,24 +35,18 @@ ns("Tortuga");
 
 	funs.hideHelp = function(o)
 	{
-		o.underHelpDivs.forEach(function(item)
-		{
-			removeClass(item, CL_OPAQUE);
-		})
-
 		o.helpDivs.forEach(function(item)
 		{
-			appendClass(item, CL_HIDDEN);
+			removeClass(item, CL_HELP_SHOWN);
 		})
 
 		o.helpButtons.forEach(createForEachHandler(funs.showHelp, o))
 	}
 
-	Tortuga.initHelp = function(helpButtons, helpDivs, underHelpDivs){
+	Tortuga.initHelp = function(helpButtons, helpDivs){
 		funs.hideHelp({
 			helpButtons:helpButtons,
-			helpDivs:helpDivs,
-			underHelpDivs:underHelpDivs
+			helpDivs:helpDivs
 		})
 	}
 })();

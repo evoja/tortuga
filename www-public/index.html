@@ -33,8 +33,7 @@
 			gebid("files"))
 
 		Tortuga.initHelp([gebid("tortoiseMan"), gebid("help-help")],
-			[gebid("help-help")], 
-			[gebid("help-underHelp")])
+			[gebid("help-help"), gebid("help-underHelp"), gebid("canvasBalloon")])
 	}
 
 	if(!Om.isChrome())
@@ -55,7 +54,7 @@
 			<div id="lessonsList"></div>
 			<div id="lessonItemDescription"></div>
 		</div>
-		<div class="balloon-shadow balloon">
+		<div class="balloon-shadow balloon" id="canvasBalloon">
 			<div id="help-underHelp">
 				<div id="canvasContainer"></div>
 				<div id="files"></div>
