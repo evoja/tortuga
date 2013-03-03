@@ -31,8 +31,9 @@ p {margin-top:0;}
 }
 .header
 {
-	background: url("../img/title-tortuga.png") no-repeat center 50px,
-		url("../img/header-bg.png") no-repeat top center;
+	background: url("../img/title_font.png") no-repeat center 30px,
+		url("../img/titlebackground.png") no-repeat top center;
+	background-size: 460px auto, auto 310px;
 	height:150px;
 	width: 100%;
 	padding:75px 0 75px 0;
@@ -51,6 +52,17 @@ p {margin-top:0;}
 	box-shadow: 0 0 30px 2px rgba(0, 0, 0, .42);	
 	border-radius: 30px;
 	padding:1em 30px 1em 30px;
+	width: 64%;
+	max-width: 900px;
+	min-width: 500px;
+	margin-left:auto;
+	margin-right:auto;
+	text-align: left;
+}
+
+.balloon-shadow > *
+{
+	overflow: hidden;
 }
 
 .balloon
@@ -83,7 +95,9 @@ p {margin-top:0;}
 	background:	center center no-repeat
 		url("../img/sky.png"),
 		-webkit-linear-gradient(top, #306e69, #8fe3f0 54%, #6bb5ba);
-	padding: 350px 18% 340px 18%;
+	/*padding: 350px 18% 340px 18%;*/
+	padding: 230px 0 340px 0;
+	text-align: center;
 	font-size: large;
 	z-index: 1;
 }
@@ -115,11 +129,12 @@ p {margin-top:0;}
 	content:"";
 	display: block;
 	position: absolute;
-	right: 160px;
+	right: 120px;
 	bottom: -80px;
-	border-top: 80px white solid;
+	border-top: 80px #fff solid;
 	border-left: 80px rgba(0, 0, 0, 0) solid;	
 	-webkit-transform: skew(20deg);
+	z-index: 1;
 }
 
 .sideHelp .sideHelp-inner h2
@@ -138,9 +153,11 @@ p {margin-top:0;}
 {
 	width:216px;
 	height: 384px;
-	background: left top url("../img/tortoiseMan.png");
+	background: right top no-repeat url("../img/tortoiseMan.png");
 	background-size: 100% 100%;
-	float:right;
+	position: absolute;
+	bottom: -384px;
+	right: -60px;
 }
 
 .bottomContent
