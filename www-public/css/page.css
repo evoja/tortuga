@@ -115,6 +115,12 @@ p {margin-top:0;}
 {
 	margin: 0;
 	padding:0;
+	display: none;
+}
+
+.sideHelp.sideHelp-shown
+{
+	display: block;
 }
 
 .tortoiseMan
@@ -130,7 +136,8 @@ p {margin-top:0;}
 {
 	font-size: small;
 	padding: 0px 15% 3em 15%;
-	background: repeat url("../img/grass.png"), #084;
+	background: repeat url("../img/grass.png"),
+		-webkit-linear-gradient(top, #6bb5ba 5px, #084 15px);
 	position: relative;
 }
 .bottomContent:before
