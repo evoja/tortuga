@@ -29,8 +29,14 @@ var createCanvas = function(canvasContainer)
 {
 	var canvas = document.createElement("CANVAS")
 	appendClass(canvas, "tortuga-canvasContainer-canvas")
-	canvas.width = canvasContainer.offsetWidth
-	canvas.height = canvasContainer.offsetHeight
+	var width = canvasContainer.offsetWidth;
+	var height = Math.floor(width * 9 / 16);
+	canvas.width = width
+	canvas.height = height
+	console.log(width, height);
+	canvasContainer.style.width = width + "px";
+	canvasContainer.style.height = height + "px";
+	console.log(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
 	canvasContainer.appendChild(canvas)
 	return canvas
 }
