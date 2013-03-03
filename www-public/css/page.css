@@ -111,6 +111,17 @@ p {margin-top:0;}
 {
 	display: none;
 }
+.sideHelp:after
+{
+	content:"";
+	display: block;
+	position: absolute;
+	right: 160px;
+	bottom: -80px;
+	border-top: 80px white solid;
+	border-left: 80px rgba(0, 0, 0, 0) solid;	
+	-webkit-transform: skew(20deg);
+}
 
 .sideHelp .sideHelp-inner h2
 {
