@@ -36,6 +36,8 @@ var createTortoise;
 		ttd.style.top =  (t.y + dy) + "px";
 		ttd.style["-webkit-transform"] = "rotate(" + t.rotation + "deg)";
 		ttd.style["-webkit-transform-origin"] = "0% 0%"
+		ttd.style["MozTransform"] = "rotate(" + t.rotation + "deg)";
+		ttd.style["MozTransformOrigin"] = "0% 0%";
 
 		ttdi.pointer.style.background = t.isDrawing ? t.color : "none";
 		ttdi.color.style["border-color"] = t.color;
