@@ -145,10 +145,11 @@ p {margin-top:0;}
 	display: block;
 	position: absolute;
 	left: 120px;
-	bottom: -80px;
+	bottom: -79px;
 	border-top: 80px #fff solid;
 	border-right: 80px rgba(0, 0, 0, 0) solid;	
 	-webkit-transform: skew(-20deg);
+	-moz-transform: skew(-20deg);
 	z-index: 1;
 }
 
