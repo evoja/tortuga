@@ -104,12 +104,16 @@ p {margin-top:0;}
 .workingArea
 {
 	position: relative;
+	background-color: #6bb5ba;
 	background:	center center no-repeat
 		url("../img/sky.png"),
 		-webkit-linear-gradient(top, #306e69, #8fe3f0 54%, #6bb5ba);
 	background: center center no-repeat
 		url("../img/sky.png"),
-		-moz-linear-gradient(top,  #306e69, #8fe3f0 54%, #6bb5ba);
+		-moz-linear-gradient(top, #306e69, #8fe3f0 54%, #6bb5ba);
+	background:	center center no-repeat
+		url("../img/sky.png"),
+		-ms-linear-gradient(top, #306e69, #8fe3f0 54%, #6bb5ba);
 	padding: 230px 0 340px 0;
 	text-align: center;
 	font-size: large;
@@ -180,10 +184,13 @@ p {margin-top:0;}
 {
 	font-size: small;
 	padding: 0px 15% 3em 15%;
+	background-color: #084;
 	background: repeat url("../img/grass.png"),
 		-webkit-linear-gradient(top, #6bb5ba 5px, #084 15px);
 	background: repeat url("../img/grass.png"),
-		-moz-linear-gradient(top,  #6bb5ba 5px, #084 15px);
+		-moz-linear-gradient(top, #6bb5ba 5px, #084 15px);
+	background: repeat url("../img/grass.png"),
+		-ms-linear-gradient(top, #6bb5ba 5px, #084 15px);
 	position: relative;
 }
 
