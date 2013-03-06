@@ -40,40 +40,39 @@ ns("Tortuga");
 		return getTopNotification(getHelpTextByHotkey, hotkey)
 	}
 
-	var BR_OTHER   = 0;
-	var BR_CHROME  = 1;
-	var BR_FIREFOX = 2;
-	var BR_SAFARI  = 3;
-	var BR_OPERA   = 4;
+	var BR_OTHER   = {
+		hotkeys : [null, null],
+		helpTextFun : getOtherHelpText,
+		topTextFun : getOtherTopText,
+		showTop : true
+	};
+	var BR_CHROME  = {
+		hotkeys : ["Ctrl + Shift + J", "⌥⌘J"],
+		helpTextFun : getHelpTextByHotkey,
+		topTextFun : getSupportedTopText,
+		showTop : false
+	};
+	var BR_FIREFOX = {
+		hotkeys : ["Ctrl + Shift + K", "⌥⌘K"],
+		helpTextFun : getHelpTextByHotkey,
+		topTextFun : getSupportedTopText,
+		showTop : false
+	};
+	var BR_SAFARI  = {
+		hotkeys : ["Ctrl + Shift + C", "⌥⌘C"],
+		helpTextFun : getSafariHelpText,
+		topTextFun : getSafariTopText,
+		showTop : true
+	};
+	var BR_OPERA   = {
+		hotkeys : ["Ctrl + Shift + I", "⌥⌘I"],
+		helpTextFun : getHelpTextByHotkey,
+		topTextFun : getSupportedTopText,
+		showTop : false
+	};
 
 	var OS_OTHER = 0;
 	var OS_MAC   = 1;
-
-	var HOTKEYS = [
-		[null, null],
-		["Ctrl + Shift + J", "⌥⌘J"],
-		["Ctrl + Shift + K", "⌥⌘K"],
-		[null, "⌥⌘C"],
-		[null, "⌥⌘I"]
-	]
-
-	var SUPPORTED_BROWSERS = [false, true, true, false, true]
-
-	var HELP_TEXTS_FUNS = [
-		getOtherHelpText,
-		getHelpTextByHotkey,
-		getHelpTextByHotkey,
-		getSafariHelpText,
-		getHelpTextByHotkey,
-	]
-
-	var TOP_TEXTS_FUNS = [
-		getOtherTopText,
-		getSupportedTopText,
-		getSupportedTopText,
-		getSafariTopText,
-		getSupportedTopText,
-	]
 
 	var browser = Om.isChrome()
 		? BR_CHROME
@@ -82,15 +81,14 @@ ns("Tortuga");
 			: Om.isSafari()
 				? BR_SAFARI 
 				: Om.isOpera() ? BR_OPERA : BR_OTHER
-
 	var os = Om.isMac() ? OS_MAC : OS_OTHER
 
-	var hotkey = HOTKEYS[browser][os]
+	var hotkey = browser.hotkeys[os]
 
 	Tortuga.Agent = {
 		hotkey   : hotkey,
-		topText  : TOP_TEXTS_FUNS[browser](hotkey),
-		helpText : HELP_TEXTS_FUNS[browser](hotkey),
-		showTop  : !SUPPORTED_BROWSERS[browser]
+		topText  : browser.topTextFun(hotkey),
+		helpText : browser.helpTextFun(hotkey),
+		showTop  : browser.showTop
 	}
 })()
