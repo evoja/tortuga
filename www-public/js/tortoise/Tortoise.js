@@ -34,12 +34,16 @@ var createTortoise;
 		var dy = ttd.offsetHeight * (Math.cos(rad) - Math.sin(rad) / 2);
 		ttd.style.left = (t.x + dx) + "px";
 		ttd.style.top =  (t.y + dy) + "px";
-		ttd.style["webkitTransform"] = "rotate(" + t.rotation + "deg)";
-		ttd.style["webkitTransformOrigin"] = "0% 0%"
-		ttd.style["MozTransform"] = "rotate(" + t.rotation + "deg)";
-		ttd.style["MozTransformOrigin"] = "0% 0%";
-		ttd.style["OTransform"] = "rotate(" + t.rotation + "deg)";
-		ttd.style["OTransformOrigin"] = "0% 0%";
+		var rotate = "rotate(" + t.rotation + "deg)"
+		var rotateOrigin = "0% 0%"
+		ttd.style["webkitTransform"] = rotate
+		ttd.style["webkitTransformOrigin"] = rotateOrigin
+		ttd.style["MozTransform"] = rotate
+		ttd.style["MozTransformOrigin"] = rotateOrigin
+		ttd.style["OTransform"] = rotate
+		ttd.style["OTransformOrigin"] = rotateOrigin
+		ttd.style["msTransform"] = rotate
+		ttd.style["msTransformOrigin"] = rotateOrigin
 
 		ttdi.pointer.style.background = t.isDrawing ? t.color : "none";
 		ttdi.color.style["border-color"] = t.color;
