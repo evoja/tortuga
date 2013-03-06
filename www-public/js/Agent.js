@@ -15,9 +15,14 @@ ns("Tortuga");
 
 	}
 
+	var getOtherHelpText = function()
+	{
+		return "Страница предназначена для работы только в&nbsp;<a href='https://www.google.com/intl/en/chrome/'>Хроме</a> и&nbsp;<a href='http://ru.wikipedia.org/wiki/Chromium#.D0.9F.D1.80.D0.B8.D0.BB.D0.BE.D0.B6.D0.B5.D0.BD.D0.B8.D1.8F.2C_.D0.BE.D1.81.D0.BD.D0.BE.D0.B2.D0.B0.D0.BD.D0.BD.D1.8B.D0.B5_.D0.BD.D0.B0_Chromium'>других</a> хромоподобных <a href='http://browser.yandex.ru'>браузерах</a>."
+	}
+
 	var getOtherTopText = function()
 	{
-		return "<div class='top-warning'>Страница предназначена для работы только в&nbsp;<a href='https://www.google.com/intl/en/chrome/'>Хроме</a> и&nbsp;<a href='http://ru.wikipedia.org/wiki/Chromium#.D0.9F.D1.80.D0.B8.D0.BB.D0.BE.D0.B6.D0.B5.D0.BD.D0.B8.D1.8F.2C_.D0.BE.D1.81.D0.BD.D0.BE.D0.B2.D0.B0.D0.BD.D0.BD.D1.8B.D0.B5_.D0.BD.D0.B0_Chromium'>других</a> хромоподобных <a href='http://browser.yandex.ru'>браузерах</a>.</div>"
+		return "<div class='top-warning'>" + getOtherHelpText() + "</div>"
 	}
 
 	var getTopNotification = function(textFun, hotkey)
@@ -39,6 +44,7 @@ ns("Tortuga");
 	var BR_CHROME  = 1;
 	var BR_FIREFOX = 2;
 	var BR_SAFARI  = 3;
+	var BR_OPERA   = 4;
 
 	var OS_OTHER = 0;
 	var OS_MAC   = 1;
@@ -47,41 +53,44 @@ ns("Tortuga");
 		[null, null],
 		["Ctrl + Shift + J", "⌥⌘J"],
 		["Ctrl + Shift + K", "⌥⌘K"],
-		[null, "⌥⌘C"]
+		[null, "⌥⌘C"],
+		[null, "⌥⌘I"]
 	]
 
-	var SUPPORTED_BROWSERS = [false, true, true, false]
+	var SUPPORTED_BROWSERS = [false, true, true, false, true]
 
 	var HELP_TEXTS_FUNS = [
+		getOtherHelpText,
 		getHelpTextByHotkey,
 		getHelpTextByHotkey,
+		getSafariHelpText,
 		getHelpTextByHotkey,
-		getSafariHelpText
 	]
 
 	var TOP_TEXTS_FUNS = [
 		getOtherTopText,
 		getSupportedTopText,
 		getSupportedTopText,
-		getSafariTopText
+		getSafariTopText,
+		getSupportedTopText,
 	]
 
 	var browser = Om.isChrome()
 		? BR_CHROME
 		: Om.isFirefox()
 			? BR_FIREFOX
-			: Om.isSafari() ? BR_SAFARI : BR_OTHER
+			: Om.isSafari()
+				? BR_SAFARI 
+				: Om.isOpera() ? BR_OPERA : BR_OTHER
 
 	var os = Om.isMac() ? OS_MAC : OS_OTHER
 
 	var hotkey = HOTKEYS[browser][os]
-	var topText = TOP_TEXTS_FUNS[browser](hotkey)
-	var helpText = HELP_TEXTS_FUNS[browser](hotkey) || topText
 
 	Tortuga.Agent = {
-		hotkey : hotkey,
-		topText : topText,
-		helpText : helpText,
-		showTop : !SUPPORTED_BROWSERS[browser]
+		hotkey   : hotkey,
+		topText  : TOP_TEXTS_FUNS[browser](hotkey),
+		helpText : HELP_TEXTS_FUNS[browser](hotkey),
+		showTop  : !SUPPORTED_BROWSERS[browser]
 	}
 })()

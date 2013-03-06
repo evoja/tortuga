@@ -21,6 +21,7 @@ isMac : function(){return isInInUserAgent("Mac")},
 isChrome : function(){return isInInUserAgent("Chrome")},
 isFirefox : function(){return isInInUserAgent("Firefox")},
 isSafari : function(){return isInInUserAgent("Safari")},
+isOpera : function(){return isInInUserAgent("Opera")},
 
 prependArgumentsByObject : function(obj, oargs)
 {
