@@ -11,21 +11,16 @@ var getAppendedClassName = function(prevClasses, className)
 	return prevClasses + " " + className;
 }
 
+var isInInUserAgent = function(str)
+{
+	return navigator.userAgent.indexOf(str) != -1
+}
+
 Om = {
-isMac : function()
-{
-	return navigator.userAgent.indexOf("Mac")!=-1
-},
-
-isChrome : function()
-{
-	return navigator.userAgent.indexOf("Chrome") != -1
-},
-
-isFirefox : function()
-{
-	return navigator.userAgent.indexOf("Firefox") != -1
-},
+isMac : function(){return isInInUserAgent("Mac")},
+isChrome : function(){return isInInUserAgent("Chrome")},
+isFirefox : function(){return isInInUserAgent("Firefox")},
+isSafari : function(){return isInInUserAgent("Safari")},
 
 prependArgumentsByObject : function(obj, oargs)
 {
