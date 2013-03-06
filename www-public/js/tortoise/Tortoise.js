@@ -42,6 +42,7 @@ var createTortoise;
 		ttd.style["OTransformOrigin"] = "0% 0%";
 
 		ttdi.pointer.style.background = t.isDrawing ? t.color : "none";
+		ttdi.color.style["border-color"] = t.color;
 		ttdi.color.style["borderColor"] = t.color;
 	}
 
