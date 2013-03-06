@@ -39,7 +39,7 @@ var selectItem = function(item, itemText, itemDiv,
 	var sic = selectedItemContext;
 	env.setLessonsTitle(item.title);
 	descrDiv.innerHTML = repairLinks(item.description);
-	bg.style["background-image"] = 'url("' + item.src + '")';
+	bg.style["backgroundImage"] = 'url("' + item.src + '")';
 
 	if(sic.itemText)
 	{
