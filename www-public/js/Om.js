@@ -14,12 +14,17 @@ var getAppendedClassName = function(prevClasses, className)
 Om = {
 isMac : function()
 {
-	return navigator.appVersion.indexOf("Mac")!=-1
+	return navigator.userAgent.indexOf("Mac")!=-1
 },
 
 isChrome : function()
 {
-	return navigator.appVersion.indexOf("Chrome") != -1
+	return navigator.userAgent.indexOf("Chrome") != -1
+},
+
+isFirefox : function()
+{
+	return navigator.userAgent.indexOf("Firefox") != -1
 },
 
 prependArgumentsByObject : function(obj, oargs)
