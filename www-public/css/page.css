@@ -104,7 +104,10 @@ p {margin-top:0;}
 .workingArea
 {
 	position: relative;
-	background-color: #6bb5ba;
+	background-color: #49a;
+	background-position:  center center;
+	background-repeat: no-repeat;
+	background-image:url("../img/sky.png");
 	background:	center center no-repeat
 		url("../img/sky.png"),
 		-webkit-linear-gradient(top, #306e69, #8fe3f0 54%, #6bb5ba);
@@ -154,6 +157,7 @@ p {margin-top:0;}
 	border-right: 80px rgba(0, 0, 0, 0) solid;	
 	-webkit-transform: skew(-20deg);
 	-moz-transform: skew(-20deg);
+	-ms-transform: skew(-20deg);
 	z-index: 1;
 }
 
@@ -185,6 +189,7 @@ p {margin-top:0;}
 	font-size: small;
 	padding: 0px 15% 3em 15%;
 	background-color: #084;
+	background-image:url("../img/grass.png");
 	background: repeat url("../img/grass.png"),
 		-webkit-linear-gradient(top, #6bb5ba 5px, #084 15px);
 	background: repeat url("../img/grass.png"),

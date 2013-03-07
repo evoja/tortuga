@@ -70,6 +70,12 @@ ns("Tortuga");
 		topTextFun : getSupportedTopText,
 		showTop : false
 	};
+	var BR_IE     = {
+		hotkeys : ["F12", "F12"],
+		helpTextFun : getHelpTextByHotkey,
+		topTextFun : getSupportedTopText,
+		showTop : false
+	}
 
 	var OS_OTHER = 0;
 	var OS_MAC   = 1;
@@ -80,7 +86,9 @@ ns("Tortuga");
 			? BR_FIREFOX
 			: Om.isSafari()
 				? BR_SAFARI 
-				: Om.isOpera() ? BR_OPERA : BR_OTHER
+				: Om.isOpera()
+					? BR_OPERA
+					: Om.isIE() ? BR_IE : BR_OTHER
 	var os = Om.isMac() ? OS_MAC : OS_OTHER
 
 	var hotkey = browser.hotkeys[os]
