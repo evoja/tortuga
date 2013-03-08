@@ -120,8 +120,8 @@ var createTortoise;
 		var ttdi = createTortoiseDiv(tortoiseContainer);
 		var ttd = ttdi.main;
 
-		this.x = xx || 0;
-		this.y = yy || 0;
+		this.x = xx || tortoiseContainer.offsetWidth / 2;
+		this.y = yy || tortoiseContainer.offsetHeight / 2;
 		this.color = color || "#0a0";
 		this.rotation = 180;
 		this.isDrawing = false;
