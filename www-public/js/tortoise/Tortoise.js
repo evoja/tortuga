@@ -18,11 +18,15 @@ var createTortoise;
 		color.className = "om-tortoise-color";
 		ttd.appendChild(color);
 
+		var width = document.createElement("DIV");
+		width.className = "om-tortoise-width";
+		ttd.appendChild(width);
+
 		var image = document.createElement("DIV");
 		image.className = "om-tortoise-image";
 		ttd.appendChild(image);
 
-		return {main:ttd, pointer:pointer, color:color};
+		return {main:ttd, pointer:pointer, color:color, width:width};
 	}
 
 	var updateDiv = function(t)
@@ -46,8 +50,11 @@ var createTortoise;
 		ttd.style["msTransformOrigin"] = rotateOrigin
 
 		ttdi.pointer.style.background = t.isDrawing ? t.color : "none";
+		ttdi.pointer.style.width = t.isDrawing ? t.width : "none";            // ?
 		ttdi.color.style["border-color"] = t.color;
 		ttdi.color.style["borderColor"] = t.color;
+		ttdi.width.style["border-width"] = t.width;
+		ttdi.width.style["borderWidth"] = t.width;
 	}
 
 
@@ -98,15 +105,18 @@ var createTortoise;
 			if(t.isDrawing)
 			{
 				oldColor = setColor(t.color);
+				oldWidth = setWidth(t.width);
 				drawLine(ox, oy, t.x, t.y);
 				setColor(oldColor);
+				setWidth(oldWidth);
 			}
 		},
 
 		rotate : function(t, deg){t.rotation -= (deg || 0)},
 		tailUp : function(t){t.isDrawing = false},
 		tailDown : function(t){t.isDrawing = true},
-		setColor : function(t, c){t.color = c || t.color}
+		setColor : function(t, c){t.color = c || t.color},
+		setWidth : function(t, w){t.width = w || t.width}
 	}
 	proto.fw = proto.go;
 	proto.forward = proto.go;
@@ -115,7 +125,7 @@ var createTortoise;
 	proto.up = proto.tailUp;
 	proto.dw = proto.tailDown;
 
-	var Tortoise = function(xx, yy, color, tortoiseContainer)
+	var Tortoise = function(xx, yy, color, width, tortoiseContainer)
 	{		
 		var ttdi = createTortoiseDiv(tortoiseContainer);
 		var ttd = ttdi.main;
@@ -123,6 +133,7 @@ var createTortoise;
 		this.x = xx || tortoiseContainer.offsetWidth / 2;
 		this.y = yy || tortoiseContainer.offsetHeight / 2;
 		this.color = color || "#0a0";
+		this.width = width || 1;
 		this.rotation = 180;
 		this.isDrawing = false;
 
@@ -140,9 +151,9 @@ var createTortoise;
 	Tortuga.Tortoise = Tortoise;
 	Tortuga.initTortoise = function(tortoiseContainer)
 	{
-		createTortoise = function(xx, yy, color)
+		createTortoise = function(xx, yy, color, width)
 		{
-			return new Tortoise(xx, yy, color, tortoiseContainer);
+			return new Tortoise(xx, yy, color, width, tortoiseContainer);
 		}
 	}
 })()

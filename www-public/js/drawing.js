@@ -3,6 +3,7 @@ var drawLine;
 var drawCircle;
 var setColor;
 var drawPolyLine;
+var setWidth;
 
 Tortuga.initDrawing = function(canvas)
 {
@@ -56,6 +57,11 @@ Tortuga.initDrawing = function(canvas)
 	setColor = function(color)
 	{
 		ctx.strokeStyle = color;
+	}
+
+	setWidth = function(width)
+	{
+		ctx.lineWidth = width;
 	}
 
 	setPointRadius = function(r)
