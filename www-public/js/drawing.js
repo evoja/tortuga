@@ -4,6 +4,7 @@ var drawCircle;
 var setColor;
 var drawPolyLine;
 var setWidth;
+var clearCanvas;
 
 Tortuga.initDrawing = function(canvas)
 {
@@ -67,5 +68,8 @@ Tortuga.initDrawing = function(canvas)
 	setPointRadius = function(r)
 	{
 		pointSize = r;
+	}
+	clearCanvas = function(){
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
 	}
 }
