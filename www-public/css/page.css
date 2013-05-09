@@ -40,10 +40,10 @@ p {margin-top:0;}
 {
 	background: url("../img/title_font.png") no-repeat center 30px,
 		url("../img/titlebackground.png") no-repeat top center;
-	background-size: 460px auto, auto 310px;
-	height:150px;
+	background-size: 460px auto, auto 200px;
+	height:200px;
 	width: 100%;
-	padding:75px 0 75px 0;
+	padding:0px 0 0px 0;
 	position: absolute;
 	z-index: 2;
 }
@@ -52,6 +52,22 @@ p {margin-top:0;}
 	width:800px;
 	height:150px;
 	margin: 0 auto 0 auto;
+}
+.header-link a
+{
+	display:block;
+	width:100%;
+	height:100%;
+}
+.snake
+{
+	width: 741px;
+	height:1300px;
+	background: right top no-repeat url("../img/snake.png");
+	background-size: 70% 70%;
+	position: absolute;
+	top: 0px;
+	right: 0px;
 }
 
 .balloon-shadow
@@ -107,9 +123,9 @@ p {margin-top:0;}
 	background-color: #49a;
 	background-position:  center center;
 	background-repeat: no-repeat;
-	background-image:url("../img/sky.png");
+	background-image:url("../img/clouds.png");
 	background:	center center no-repeat
-		url("../img/sky.png"),
+		url("../img/clouds.png"),
 		-webkit-linear-gradient(top, #306e69, #8fe3f0 54%, #6bb5ba);
 	background: center center no-repeat
 		url("../img/sky.png"),
@@ -117,10 +133,19 @@ p {margin-top:0;}
 	background:	center center no-repeat
 		url("../img/sky.png"),
 		-ms-linear-gradient(top, #306e69, #8fe3f0 54%, #6bb5ba);
-	padding: 230px 0 340px 0;
+	background-size: 80% 80%, 100% 100%;
+	padding: 230px 0 100px 0;
 	text-align: center;
 	font-size: large;
 	z-index: 1;
+}
+.workingArea:after
+{
+	content:"";
+	display: block;
+	float:left;
+	width:0px;
+	height:270px;
 }
 
 #canvasContainer
@@ -175,27 +200,23 @@ p {margin-top:0;}
 
 .tortoiseMan
 {
-	width:216px;
-	height: 384px;
-	background: right top no-repeat url("../img/tortoiseMan.png");
+	width: 280px;
+	height:400px;
+	background: left top no-repeat url("../img/tortoiseMan.png");
 	background-size: 100% 100%;
 	position: absolute;
-	bottom: -384px;
-	left: -60px;
+	bottom: -424px;
+	left: -80px;
 }
-
 .bottomContent
 {
 	font-size: small;
 	padding: 0px 15% 3em 15%;
-	background-color: #084;
-	background-image:url("../img/grass.png");
-	background: repeat url("../img/grass.png"),
-		-webkit-linear-gradient(top, #6bb5ba 5px, #084 15px);
-	background: repeat url("../img/grass.png"),
-		-moz-linear-gradient(top, #6bb5ba 5px, #084 15px);
-	background: repeat url("../img/grass.png"),
-		-ms-linear-gradient(top, #6bb5ba 5px, #084 15px);
+	background-color: #278a2f;
+	background: repeat-x center top url("../img/green_background.png"),
+		-webkit-linear-gradient(top, #6bb5ba 190px, #278a2f 190px, #278a2f 200px, #278a2f 250px);
+	background:	-moz-linear-gradient(top, #6bb5ba 5px, #278a2f 15px);
+	background:	-ms-linear-gradient(top, #6bb5ba 5px, #278a2f 15px);
 	position: relative;
 }
 
@@ -204,7 +225,7 @@ p {margin-top:0;}
 	content:"";
 	display:block;
 	clear:both;
-	padding-top: 44px;
+	padding-top: 144px;
 	height:2em;
 }
 .bottomContent:after
