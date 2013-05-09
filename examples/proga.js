@@ -46,5 +46,5 @@
 	     }
 	     event.preventDefault();
 	}
+	selectTortoise(createTortoise())
 })()
-
