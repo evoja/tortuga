@@ -137,7 +137,7 @@ i {font-style: italic;}
 
 .balloon-blue a{color:#00f;}
 .balloon-blue a:link{color:#00f;}
-/*.balloon-blue a:visited{color:#72B;}*/
+.balloon-blue a:visited{color:#72B;}
 /*.balloon-blue a:hover{color:#00e;}*/
 
 
@@ -269,6 +269,16 @@ i {font-style: italic;}
 {
 	width: 25%;
 	float:left;
+	color:#003000;
+}
+
+.bottomContent-block a:link
+{
+	color:#008;
+}
+.bottomContent-block a:visited
+{
+	color:#407;
 }
 
 .bottomContent-block li
