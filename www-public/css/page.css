@@ -1,8 +1,11 @@
 
 h1 {font-size: 1.2em; font-weight: bold;}
 h2 {font-size: 1em;padding:0px;margin: 1em 0 1ex 0; font-weight: bold;}
-ul {margin-top: 0;}
-p {margin-top:0;}
+ul {margin-top: 0; margin-bottom: 1ex;}
+li {display:list-item;list-style-type:disc;list-style-position: inside;}
+p {margin-top:0; margin-bottom:1ex;}
+b {font-weight: bold;}
+i {font-style: italic;}
 
 .pointer
 {
