@@ -1,64 +1,26 @@
-<!DOCTYPE html>
 <html>
 <head>
 <title>Черепашандия</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="css/reset.css">
 <link rel="stylesheet" type="text/css" href="css/tortuga.css">
 <link rel="stylesheet" type="text/css" href="css/tortoise.css">
 <link rel="stylesheet" type="text/css" href="css/page.css">
-<script src="js/lib/rawdeflate.js"></script>
-<script src="js/lib/rawinflate.js"></script>
-<script src="js/Helper.js"></script>
-<script src="js/Om.js"></script>
-<script src="js/drawing.js"></script>
-<script src="js/files.js"></script>
-<script src="js/help.js"></script>
-<script src="js/Agent.js"></script>
-<script src="js/lessons/lessons.js"></script>
-<script src="js/lessons/ParamsUtil.js"></script>
-<script src="js/lessons/SimpleBgAnalyser.js"></script>
-<script src="js/tortuga.js"></script>
-<script src="js/tortoise/Tortoise.js"></script>
-<script src="js/tortoise/RepeatTortoise.js"></script>
 
-<script>
-var init;
-(function()
-{
-	var gebid = function(id){return document.getElementById(id)}
-	init = function()
-	{
-		Tortuga.initApp(gebid("canvasContainer"),
-			gebid("lessonsList"),
-			gebid("lessonItemDescription"),
-			[gebid("lessonsContainer")],
-			gebid("files"))
-
-		Tortuga.initHelp([gebid("tortoiseMan"), gebid("help-help")],
-			[gebid("help-help"), gebid("help-underHelp"), gebid("canvasBalloon")])
-	}
-
-	if(Tortuga.Agent.showTop)
-	{
-		document.write(Tortuga.Agent.topText)
-	}
-})()
-</script>
 </head>
-
-
 <body onLoad="init()">
-	<div class="header">
-		<div class="snake" ></div>
+<div id="topTextArea"></div>
+<div class="skyGradient"><div class="skyObjects">
+	<div class="workingArea-wrapper"><div class="workingArea">
 		<div class="header-link">
 			<a href="http://progschool-ru.github.com/org.omich.tortoise/"></a>
 		</div>
-	</div>
-	<div class="workingArea">
+
 		<div class="balloon-shadow balloon-blue" id="lessonsContainer">
 			<div id="lessonsList"></div>
 			<div id="lessonItemDescription"></div>
 		</div>
+
 		<div class="balloon-shadow balloon" id="canvasBalloon">
 			<div id="help-underHelp">
 				<div id="canvasContainer"></div>
@@ -98,7 +60,11 @@ var init;
 			</div></div>
 			<div class="tortoiseMan" id="tortoiseMan"></div>
 		</div>
-	</div>
+	</div></div>
+</div></div>
+<div class="grass">
+	<div class="middleContent"></div>
+
 	<div class="bottomContent"><div class="bottomContent-inner">
 		<div class="bottomContent-block">
 			<h2>Общие функции рисования</h2>
@@ -139,5 +105,49 @@ var init;
 			</ul>
 		</div>
 	</div></div>
+</div>
+
+
+
+
+
+<script src="js/lib/rawdeflate.js"></script>
+<script src="js/lib/rawinflate.js"></script>
+<script src="js/Helper.js"></script>
+<script src="js/Om.js"></script>
+<script src="js/drawing.js"></script>
+<script src="js/files.js"></script>
+<script src="js/help.js"></script>
+<script src="js/Agent.js"></script>
+<script src="js/lessons/lessons.js"></script>
+<script src="js/lessons/ParamsUtil.js"></script>
+<script src="js/lessons/SimpleBgAnalyser.js"></script>
+<script src="js/tortuga.js"></script>
+<script src="js/tortoise/Tortoise.js"></script>
+<script src="js/tortoise/RepeatTortoise.js"></script>
+
+<script>
+var init;
+(function()
+{
+	var gebid = function(id){return document.getElementById(id)}
+	init = function()
+	{
+		Tortuga.initApp(gebid("canvasContainer"),
+			gebid("lessonsList"),
+			gebid("lessonItemDescription"),
+			[gebid("lessonsContainer")],
+			gebid("files"))
+
+		Tortuga.initHelp([gebid("tortoiseMan"), gebid("help-help")],
+			[gebid("help-help"), gebid("help-underHelp"), gebid("canvasBalloon")])
+	}
+
+	if(Tortuga.Agent.showTop)
+	{
+		gebid("topTextArea").innerHTML = Tortuga.Agent.topText;
+	}
+})()
+</script>
 </body>
 </html>
