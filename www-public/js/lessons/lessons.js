@@ -136,6 +136,18 @@ Tortuga.initLessons = function(bg, list, descrDiv, env, allContainers)
 		}
 		return
 	}
+	else
+	{
+		if(allContainers != null)
+		{
+			allContainers.forEach(function(item)
+			{
+				removeClass(item, CL_ALL_EMPTY);
+			})
+		}
+	}
+
+
 
 	var header = document.createElement("DIV");
 	appendClass(header, CL_HEADER);
