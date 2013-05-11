@@ -1,171 +1,32 @@
-<!DOCTYPE html>
 <html>
 <head>
 <title>Черепашандия</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="css/tortuga.css">
-<link rel="stylesheet" type="text/css" href="css/tortoise.css">
-<script src="js/lib/rawdeflate.js"></script>
-<script src="js/lib/rawinflate.js"></script>
-<script src="js/Helper.js"></script>
-<script src="js/Om.js"></script>
-<script src="js/drawing.js"></script>
-<script src="js/files.js"></script>
-<script src="js/lessons/lessons.js"></script>
-<script src="js/lessons/ParamsUtil.js"></script>
-<script src="js/lessons/SimpleBgAnalyser.js"></script>
-<script src="js/tortuga.js"></script>
-<script src="js/tortoise/Tortoise.js"></script>
-<script src="js/tortoise/RepeatTortoise.js"></script>
+<meta http-equiv="refresh" content="0; http://www.trtg.org">
+<link rel="stylesheet" type="text/css" href="css/reset.css">
+<link rel="stylesheet" type="text/css" href="css/page.css">
 
-<style type="text/css">
-body
-{
-	background-color:#cccccc;
-	width: 1120px;
-	margin-left:auto;
-	margin-right:auto;
-}
-h1 {font-size: 20px}
-h2 {font-size: 16px;padding:0px;margin: 1em 0 1ex 0;}
-ul {margin-top: 0;}
-p {margin-top:0;}
-#canvasContainer{width:800px;height: 400px;}
-
-.tortuga-lessonsListContainer-header:after
-{
-	content:"Задачи";
-	font-weight: bold;
-}
-.tortuga-lessonsListContainer-list
-{
-	/*background-color: #fff;*/
-	margin:0;
-	padding:0;
-}
-.tortuga-lessonItemDescription
-{
-	margin-bottom: 1em;
-	margin-top: 1ex;
-}
-.tortuga-lessonsListContainer-item
-{
-	padding: 1ex;
-	padding-left: 0;
-	display:inline-block;
-}
-.tortuga-lessonsListContainer-item-number
-{
-	display: inline;
-}
-.tortuga-lessonsListContainer-item-number:after
-{
-	content: ". ";
-}
-.tortuga-lessonsListContainer-item-text:after
-{
-	content:";";
-}
-.tortuga-lessonsListContainer-item:last-child .tortuga-lessonsListContainer-item-text:after
-{
-	content:".";
-}
-.tortuga-lessonsListContainer-itemSelected.tortuga-lessonsListContainer-item
-{
-	background-color: rgba(0, 0, 0, 0);
-}
-
-
-
-.sideHelp
-{
-	float:left;
-	background-color:#bbb;
-	width: 300px;
-	margin-right:20px;
-}
-.sideHelp-inner
-{
-	padding:0 1em .5em 1em;			
-}
-</style>
-
-<script>
-	var init = function()
-	{
-		Tortuga.initApp(document.getElementById("canvasContainer"),
-			document.getElementById("lessonsList"),
-			document.getElementById("lessonItemDescription"),
-			document.getElementById("files"))
-	}
-</script>
 </head>
-
-
 <body onLoad="init()">
-	<div class="sideHelp"><div class="sideHelp-inner">
-		<h1><a href="http://progschool-ru.github.com/org.omich.tortoise/">Черепашандия</a></h1>
-		<h2>Работа из консоли</h2>
-		<p>Работать будет только в Хроме и хромоподобных браузерах.</p>
-		<p>
-		<script>
-			(function()
-			{
-				var key = Om.isMac() ? "⌥⌘J" : "Ctrl + Shif + J";
-				document.write("Нажмите " + key + ", чтобы открыть консоль.");
-			})()
-		</script>
-		</p>
-		<p>Хотя в новых Иешниках, наверное, тоже будет работать. Но там консоль как-то по-другому открывается.</p>
-		<h2>Ваши файлы</h2>
-		<div id="files"></div>
-		<h2>Черепашка</h2>
-		<ul>
-			<li>var t = createTortoise(x, y, color)</li>
-			<li>t.tailDown()</li>
-			<li>t.tailUp()</li>
-			<li>t.go(length)</li>
-			<li>t.rotate(degrees)</li>
-			<li>t.setColor(color)</li>
-		</ul>
-		Цвет задаётся стандартным образом: "#f0f" или "#ff00ff";
-		<h2>Общие функции рисования</h2>
-		<ul>
-			<li>setColor("#ff00ff")</li>
-			<li>drawLine(x1, y1, x2, y2)</li>
-			<li>drawCircle(x, y, r)</li>
-			<li>setPointRadius(r)</li>
-			<li>drawPoint(x, y)</li>
-		</ul>
-		<h2>Уроки:</h2>
-		<ul>
-			<li><a href="?nVRNb9NAEP0rKx845auFCyEECa5QwQkJyiEpJokUOWnsCCqElDoqBaWoatUTghMHrolbN26aOH9h5x/xZtZOUlGK4NConp2dee/N23n53vIaXtO2ipb+oU/1JQ2sjOV2thBo2q7bcty81+p43VolW1jLrmUrTg3xXNupIe+17W51Gm2v0XK4wDHt6lChRp/2daR0QAPa07E+o0PylY70+JZTddv3OKRn+L1Q5OsYyRNOn3NcyWGE4yGiMdfQU5xSn9EhyB+o2OOA0pOkYhKgfq5U7eTLm44+QbaUQRKunaNqjBLxAh+HFfVwFnCaKXSnkBZYqUOHCszmSS6wFpNDc8f8liqq3rHf3N+06p7XLubzO62u181V7fzd+vY7u7blbDTeblpl/ZM5M3FDMEyo0UAxs1PpcgaIuzR4UMpXyv/Uy9l++vzZo+b6i4dPuNdXbsIkIxCAmHpIPh0o4ZIoPsUAPrPA+zpENERwSJ+YpXS3PmRWLPJNxgYVBXMM1AeIsJTRTbZZz7ZbzZ0aotcbZzkrsGZH9FB7xoqMTBMAwrkcBjzR6R9xgOR1Q1X6OHUKLNWnPZ6oMcIQ7tyDpZYY+uKYMf7EPos6Rkccz5AAo0cLOzPMMSeyiubWSMoE7HKT9nhhzWMdJzcDfjHXgJmIAlNukr4VsS7zA0yZlREjTl8GE+dhwukzTsVskQKfs9Nk6mgylHEbjfEmgdUoF2dUSlIHKSuxDDObruBjSH9BcUW/+L/0w61xemsjd9WDJ6IMZn2T425n662ua9+4p7CPuLW45ZyO0BaWE8khF7+EsdlLvy2kBfLUaDQw3+uFxfrQ30Em5XvBUiv6iNwQ/5rVJwtJiJiHyGc944VQxi8TTzVairjLetOR4hUh4zRg2f6hKTpiVHg03HR5kYeCBr5wmVDf5M5lljOxSeIGEYG+IByyBRHwaVBkHSbGKtwRrOBw2OZSJJAlLt9nyRoJVtCTn0swzDHMV78A">Знакомство с&nbsp;черепахой и&nbsp;измерением углов</a></li>
-			<li><a href="?lVRbbtNQEN2KlQ++7DRNEUIFdSOAUB9RiFTsKE6FEELKQ+WhFCIgEhIfILECN8SJk8bpFuZugZVwZu6NX01T8ZHI9p05M+ecmfvkTandaJ/WSvsl+q06FFk0oRUtKSjZJb91jO+nNd/3XH+n7bXaZ/VDp1J1dp29F96ZX/PLTbeOwJOaf9xqNNsNz2WgEV1RRLEaWDRWXQrVuUUr1QN8SDNaAH+Mk3vukd98RJd4vVIX6gNFHGeq4xHhAY0ZRkdWK5Wy9X/YAEJ4iPALOVqu8SO8hjcq7KJC6a2dkWSEAozMQcNtilSdl4fu6+fbVPlqmkoZAhbw6pxilPhDKzSkhjgPuM27aRbbv1+xHx+1DlL6GS27kjlZV9IBfzsj/fBAZ25IREJE01vSHlbKnCapX5AibeGnlUXNruqh66GAhBYgQ2BNVD+xma1IeEAAuuZpEJiIi+aEyPIPCkZ9w2kHeZNtJu05da/lnWy25wea4OYGNDftSTfMQZAxRfIBWspMgYb6rD6iOQ7k1UGX7/B/zbT2IcrOgfw9dbVa+t9hQwfAABs2mlWL+WFsyItkUETLMuOjdEUgiJkUXhddc1DeWOZOC0xlsYAVpYXmx/gCPUNIzF2yBbYlT4iJTJge3p7skoTkjExJhkmpzY3m9TCDkScNFn18Xep1MNHZ3VCfpLsp2M0trWdukphvLjHXkWmLfrHRWoviJLAaTJjlFPiiDRTYjBprT7n5Gb+o9zw4/DHWlkbCJZb7hy7xuJCVmVuvcLl9l5Rh1t10V2x2byXLuBI4mrP6heAoS7SfkEEi95vwTmvlw835bbXywaaxvIijtYHaBTMTWkRLNke/FbXA7mod9TXCJkU3vsodyXOd2DuV630AQj/RIaYQigdYzB6whzyzMkWcnZt4XB/P/gE=">Повторения и свои команды</a></li>
-		</ul>
-		<h2>Видеоинструкции для взрослых:</h2>
-		<ul>
-			<li><a href="http://screencast.com/t/ESGwonG6d2a" target="_blank">Работа в консоли</a></li>
-			<li><a href="http://screencast.com/t/6pxKFQHpCV" target="_blank">Программирование</a></li>
-			<li><a href="http://screencast.com/t/nejrq4z4klQ" target="_blank">Файлы</a></li>
-			<li><a href="http://screencast.com/t/cZpxHdJG" target="_blank">События браузера</a></li>
-			<li><a href="http://screencast.com/t/A9omEEKtCZL8" target="_blank">Циклы в стиле Logo</a></li>
-			<li><a href="http://screencast.com/t/NgzrcuzgVqp" target="_blank">Создание уроков</a></li>
-		</ul>
-		<h2>Аналоги</h2>
-		<ul>
-			<li><a href="http://andyhd.github.com/Logo-Tortoise/">Logo-Tortoise</a>, и <a href="https://github.com/andyhd/Logo-Tortoise">код</a></li>
-			<li><a href="http://www.calormen.com/logo/">Logo Interpreter</a></li>
-			<li><a href="http://www.transum.org/software/Logo/">Online Logo</a></li> от <a href="http://www.transum.org/">Transum</a>
-			<li><a href="http://tortue-logo.fr/en/logo-turtle">Tortue-logo</a> от французов. С многострочным редактором и возможностью сохранять свои проги на сервере.</a></li>
-			<li><a href="http://logo.twentygototen.org/">Papert</a> с возможностью сохранять рисунки(!) и замедленного проигрывания программы</li>
-			<li>Совсем не аналог в смысле ссылок выше, а вообще альтернатива черепахам: <a href="http://en.wikipedia.org/wiki/Scratch_(programming_language)">Scratch</a></li>
-		</ul>
-		<a href="http://lgr.su/lg/54342572"><img src="http://cs10990.userapi.com/u51344610/-14/x_d88b741c.jpg" width="100%"/></a>
+<div class="skyGradient"><div class="skyObjects">
+	<div class="workingArea-wrapper"><div class="workingArea">
+		<div class="header-link">
+			<a href="http://www.trtg.org/"></a>
+		</div>
+
+		<div class="balloon-shadow balloon sideHelp-shown" id="canvasBalloon">
+			<div id="help-help" class="sideHelp sideHelp-shown"><div class="sideHelp-inner">
+				<p>
+				Сайт переехал. Но&nbsp;компьютер автоматически перенаправит вас по&nbsp;его новому адресу.
+				<p>
+				Если этого не&nbsp;произошло, то&nbsp;просто нажмите на&nbsp;эту ссылку: <a href="http://www.trtg.org">www.trtg.org</a>
+			</div></div>
+			<div class="tortoiseMan" id="tortoiseMan"></div>
+		</div>
 	</div></div>
-
-
-	<div id="lessonsList"></div>
-	<div id="lessonItemDescription"></div>
-	<div id="canvasContainer"></div>
+</div></div>
+<div class="grass">
+	<div class="bottomContent"></div>
+</div>
 </body>
 </html>
