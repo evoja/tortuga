@@ -24,6 +24,7 @@
 		<div class="balloon-shadow balloon" id="canvasBalloon">
 			<div id="help-underHelp">
 				<div id="canvasContainer"></div>
+				<div class="help-hint" id="help-hint">Помощь</div>
 				<div id="files"></div>
 			</div>
 
@@ -141,7 +142,7 @@ var init;
 			[gebid("lessonsContainer")],
 			gebid("files"))
 
-		Tortuga.initHelp([gebid("tortoiseMan"), gebid("help-help")],
+		Tortuga.initHelp([gebid("tortoiseMan"), gebid("help-help"), gebid("help-hint")],
 			[gebid("help-help"), gebid("help-underHelp"), gebid("canvasBalloon")])
 	}
 

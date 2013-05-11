@@ -186,9 +186,18 @@ i {font-style: italic;}
 }
 
 
+.help-hint
+{
+	float:left;
+	margin-top:1em;
+	color:#00f;
+	border-bottom:dashed 1px #00f;
+}
 .sideHelp
 {
 	display: none;
+	margin-bottom: -600px;
+	padding-bottom: 600px;
 }
 .sideHelp:after
 {
