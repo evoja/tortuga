@@ -30,13 +30,7 @@
 
 			<div id="help-help" class="sideHelp"><div class="sideHelp-inner">
 				<h2>Работа из консоли</h2>
-				<p>
-				<script>
-					(function()
-					{
-						document.write(Tortuga.Agent.helpText);
-					})()
-				</script>
+				<p id="help-hotkey-text">
 				</p>
 				<h2>Основные команды</h2>
 				<ul>
@@ -144,6 +138,8 @@ var init;
 
 		Tortuga.initHelp([gebid("tortoiseMan"), gebid("help-help"), gebid("help-hint")],
 			[gebid("help-help"), gebid("help-underHelp"), gebid("canvasBalloon")])
+
+		gebid("help-hotkey-text").innerHTML = Tortuga.Agent.helpText;
 	}
 
 	if(Tortuga.Agent.showTop)

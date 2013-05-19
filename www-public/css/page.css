@@ -214,13 +214,6 @@ i {font-style: italic;}
 	z-index: 2;
 }
 
-.sideHelp .sideHelp-inner h2
-{
-	margin: 0;
-	padding:0;
-	display: none;
-}
-
 .sideHelp.sideHelp-shown
 {
 	display: block;
