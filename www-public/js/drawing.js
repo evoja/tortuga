@@ -55,6 +55,14 @@ Tortuga.initDrawing = function(canvas)
 		ctx.stroke();
 	}
 
+	getColorAt = function(x, y)
+	{
+		var data = ctx.getImageData(x, y, 1, 1).data;
+		return data[3]
+			? {red: data[0], green: data[1], blue: data[2]}
+			: {red: 255, green: 255, blue: 255};
+	}
+
 	setColor = function(color)
 	{
 		ctx.strokeStyle = color;
