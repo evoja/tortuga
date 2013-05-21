@@ -101,7 +101,8 @@ var createTortoise;
 			{
 				oldColor = setColor(t.color);
 				oldWidth = setWidth(t.width);
-				drawLine(ox, oy, t.x, t.y);
+				canvasHeight = getCanvasHeight();
+				drawLine(ox, canvasHeight - oy, t.x, canvasHeight - t.y);
 				setColor(oldColor);
 				setWidth(oldWidth);
 			}

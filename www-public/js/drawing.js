@@ -63,6 +63,11 @@ Tortuga.initDrawing = function(canvas)
 			: {red: 255, green: 255, blue: 255};
 	}
 
+	getCanvasHeight = function()
+	{
+		return canvas.height;
+	}
+
 	setColor = function(color)
 	{
 		ctx.strokeStyle = color;
@@ -77,7 +82,8 @@ Tortuga.initDrawing = function(canvas)
 	{
 		pointSize = r;
 	}
-	clearCanvas = function(){
+	clearCanvas = function()
+	{
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 	}
 }
