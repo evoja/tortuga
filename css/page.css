@@ -39,9 +39,9 @@ i {font-style: italic;}
 	background-repeat: no-repeat;
 	background:	
 		-webkit-linear-gradient(top, #306e69, #8fe3f0 54%, #6bb5ba);
-	background: center 200px no-repeat
+	background:
 		-moz-linear-gradient(top, #306e69, #8fe3f0 54%, #6bb5ba);
-	background:	center 200px no-repeat
+	background:
 		-ms-linear-gradient(top, #306e69, #8fe3f0 54%, #6bb5ba);
 }
 .skyObjects
