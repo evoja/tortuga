@@ -149,6 +149,11 @@ var createTortoise;
 		return new Tortuga.RepeatTortoise(this, count);
 	}
 
+	Tortoise.prototype.getColorUnderTail = function()
+	{
+		return getColorAt(this.x, this.y)
+	}
+
 	Tortuga.Tortoise = Tortoise;
 	Tortuga.initTortoise = function(tortoiseContainer)
 	{
