@@ -30,10 +30,10 @@ var createTortoise;
 		var ttdi = t.getDivObject();
 		var ttd = ttdi.main;
 		var rad = radRot(t);
-		var dx = ttd.offsetWidth * (Math.cos(rad)/2 + Math.sin(rad));
-		var dy = ttd.offsetHeight * (Math.cos(rad) - Math.sin(rad) / 2);
+		var dx = ttd.offsetWidth * (Math.cos(rad) - Math.sin(rad)/2);
+		var dy = ttd.offsetWidth * (Math.cos(rad)/2 + Math.sin(rad) - 1);
 		ttd.style.left = (t.x + dx) + "px";
-		ttd.style.top =  (t.y + dy) + "px";
+		ttd.style.bottom =  (t.y + dy) + "px";
 		var rotate = "rotate(" + t.rotation + "deg)"
 		var rotateOrigin = "0% 0%"
 		ttd.style["webkitTransform"] = rotate
@@ -59,7 +59,7 @@ var createTortoise;
 
 	var radRot = function(t)
 	{
-		return Math.PI - degToRad(t.rotation);
+		return Math.PI/2 - degToRad(t.rotation);
 	}
 
 	//==== Construction helpers ====
@@ -92,8 +92,10 @@ var createTortoise;
 			var oy = t.y;
 
 			var rad = radRot(t);
-			t.x += length * Math.sin(rad);
-			t.y += length * Math.cos(rad);
+			console.log(t.rotation, rad, Math.sin(rad), Math.cos(rad), t.x, t.y)
+			t.x += length * Math.cos(rad);
+			t.y += length * Math.sin(rad);
+			console.log(t.x, t.y)
 
 			if(t.isDrawing)
 			{
@@ -105,7 +107,7 @@ var createTortoise;
 			}
 		},
 
-		rotate : function(t, deg){t.rotation -= (deg || 0)},
+		rotate : function(t, deg){t.rotation -= (deg || 0); console.log(t.rotation, radRot(t))},
 		tailUp : function(t){t.isDrawing = false},
 		tailDown : function(t){t.isDrawing = true},
 		setColor : function(t, c){t.color = c || t.color},
@@ -124,11 +126,11 @@ var createTortoise;
 		var ttdi = createTortoiseDiv(tortoiseContainer);
 		var ttd = ttdi.main;
 
-		this.x = xx || tortoiseContainer.offsetWidth / 2;
-		this.y = yy || tortoiseContainer.offsetHeight / 2;
+		this.x = xx === undefined ? tortoiseContainer.offsetWidth / 2 : xx;
+		this.y = yy === undefined ? tortoiseContainer.offsetHeight / 2 : yy;
 		this.color = color || "#0a0";
 		this.width = width || 1;
-		this.rotation = 180;
+		this.rotation = 90;
 		this.isDrawing = false;
 
 		this.getDivObject = function(){return ttdi}
