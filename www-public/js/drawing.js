@@ -9,6 +9,8 @@ var clearCanvas;
 Tortuga.initDrawing = function(canvas)
 {
 	var ctx = canvas.getContext("2d");
+	ctx.lineJoin = "round";
+	ctx.lineCap = "round";
 	var pointSize = 5;
 
 	var drawPoly = function(points, processPoint)
