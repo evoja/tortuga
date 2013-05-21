@@ -18,15 +18,11 @@ var createTortoise;
 		color.className = "om-tortoise-color";
 		ttd.appendChild(color);
 
-		var width = document.createElement("DIV");
-		width.className = "om-tortoise-width";
-		ttd.appendChild(width);
-
 		var image = document.createElement("DIV");
 		image.className = "om-tortoise-image";
 		ttd.appendChild(image);
 
-		return {main:ttd, pointer:pointer, color:color, width:width};
+		return {main:ttd, pointer:pointer, color:color};
 	}
 
 	var updateDiv = function(t)
@@ -50,11 +46,8 @@ var createTortoise;
 		ttd.style["msTransformOrigin"] = rotateOrigin
 
 		ttdi.pointer.style.background = t.isDrawing ? t.color : "none";
-		ttdi.pointer.style.width = t.isDrawing ? t.width : "none";            // ?
 		ttdi.color.style["border-color"] = t.color;
 		ttdi.color.style["borderColor"] = t.color;
-		ttdi.width.style["border-width"] = t.width;
-		ttdi.width.style["borderWidth"] = t.width;
 	}
 
 
