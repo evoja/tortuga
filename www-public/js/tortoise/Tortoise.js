@@ -92,10 +92,8 @@ var createTortoise;
 			var oy = t.y;
 
 			var rad = radRot(t);
-			console.log(t.rotation, rad, Math.sin(rad), Math.cos(rad), t.x, t.y)
 			t.x += length * Math.cos(rad);
 			t.y += length * Math.sin(rad);
-			console.log(t.x, t.y)
 
 			if(t.isDrawing)
 			{
@@ -108,7 +106,7 @@ var createTortoise;
 			}
 		},
 
-		rotate : function(t, deg){t.rotation -= (deg || 0); console.log(t.rotation, radRot(t))},
+		rotate : function(t, deg){t.rotation -= (deg || 0)},
 		tailUp : function(t){t.isDrawing = false},
 		tailDown : function(t){t.isDrawing = true},
 		setColor : function(t, c){t.color = c || t.color},
