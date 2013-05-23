@@ -49,10 +49,9 @@ i {font-style: italic;}
 	position: relative;
 	background:
 		url("../img/titlebackground.png") no-repeat center top,
-		url("../img/green_back_opaque.png") repeat-x center bottom,
-		url("../img/green_back_transparent.png") repeat-x center bottom,
+		url("../img/green_back_trees.png") repeat-x center bottom,
 		url("../img/clouds.png") center 300px no-repeat;
-	background-size: auto 200px, auto auto, auto auto, auto auto;
+	background-size: auto 200px, auto auto, auto auto;
 	min-width: 760px;
 }
 
@@ -74,9 +73,8 @@ i {font-style: italic;}
 {
 	text-align: left;
 	background:
-		url("../img/snake_opaque.png") right top no-repeat,
-		url("../img/snake_transparent.png") right top no-repeat;
-	background-size: 519px 910px, 519px 910px;
+		url("../img/snake.png") right top no-repeat;
+	background-size: 519px 910px;
 	padding-bottom:424px;
 
 	position: relative;
@@ -227,10 +225,8 @@ i {font-style: italic;}
 {
 	width: 280px;
 	height:400px;
-	background:
-		left top no-repeat url("../img/tortoiseman_opaque.png"),
-		left top no-repeat url("../img/tortoiseman_transparent.png");
-	background-size: 100% 100%, 100% 100%;
+	background: left top no-repeat url("../img/tortoiseman.png");
+	background-size: 100% 100%;
 	position: absolute;
 	bottom: -424px;
 	left: -80px;
