@@ -21,7 +21,11 @@ Tortuga.initFiles = function(filesSelector)
 		reader.onload = function(e)
 		{
 			console.log(e.target.result);
-			eval(e.target.result);
+			var scriptElement = document.createElement("script");
+			scriptElement.innerHTML = e.target.result;
+
+			var headElement = document.getElementsByTagName("head")[0];
+			headElement.appendChild(scriptElement);
 		};
 
 		reader.readAsText(file);
