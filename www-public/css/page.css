@@ -194,6 +194,12 @@ i {font-style: italic;}
 	color:#00f;
 	border-bottom:dashed 1px #00f;
 }
+
+#help-hint.sideHelp-shown
+{
+	display:none;
+}
+
 .sideHelp
 {
 	display: none;
