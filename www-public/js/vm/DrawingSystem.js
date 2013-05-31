@@ -58,16 +58,21 @@ ns("Tortuga.Vm");
 		return {main:ttd, pointer:pointer, color:color}
 	}
 
-	var radRot = function(rotation)
+	//=== Math ===
+	var degToRotation = function(deg)
 	{
-		return Math.PI/2 - degToRad(rotation)
+		return 90 - deg;
+	}
+	var degToRad = function(deg)
+	{
+		return deg / 180 * Math.PI;
 	}
 
 
 	var createTortoise = function(drawingSystem)
 	{
 		var id = drawingSystem.tortoiseCounter
-		drawingSystem.tortoses[id] = 
+		drawingSystem.tortoises[id] = 
 			createTortoiseDiv(drawingSystem.tortoiseContainer)
 		drawingSystem.tortoiseCounter++
 
@@ -81,12 +86,13 @@ ns("Tortuga.Vm");
 		drawingSystem.tortoiseContainer.removeChild(ttdi.main)
 	}
 
-	var placeTortoise = function(drawingSystem, dsTortoiseId, x, y, rotation, 
+	var placeTortoise = function(drawingSystem, dsTortoiseId, x, y, deg, 
 		isDrawing, color)
 	{
 		var ttdi = drawingSystem.tortoises[dsTortoiseId]
 		var ttd = ttdi.main;
-		var rad = radRot(rotation);
+		var rad = degToRad(deg);
+		var rotation = degToRotation(deg);
 
 		var dx = ttd.offsetWidth * (Math.cos(rad) - Math.sin(rad)/2);
 		var dy = ttd.offsetWidth * (Math.cos(rad)/2 + Math.sin(rad) - 1);
@@ -123,17 +129,17 @@ ns("Tortuga.Vm");
 		setColor:     function(color){            setColor(this.ctx, color) },
 		getColorAt:   function(x, y){             return getColorAt(this.ctx, x, y, false) },
 		getColorWithAlphaAt: function(x, y){      return getColorAt(this.ctx, x, y, true) },
-		setWidth:     function(){                 setWidth(this.ctx, width) },
+		setWidth:     function(width){            setWidth(this.ctx, width) },
 		moveTo:       function(x, y){             this.ctx.moveTo(x, y) },
-		lineTo:       function(){                 this.ctx.lineTo(x, y) },
+		lineTo:       function(x, y){             this.ctx.lineTo(x, y) },
 		beginPath:    function(){                 this.ctx.beginPath() },
 		stroke:       function(){                 this.ctx.stroke() },
 		clearCanvas:  function(){                 ctx.clearRect(0, 0, canvas.width, canvas.height)},
 
-		createTortoise: function(){ createTortoise(this) },
-		placeTortoise: function(dsTortoiseId, x, y, rotation, isDrawing, color)
+		createTortoise: function(){ return createTortoise(this) },
+		placeTortoise: function(dsTortoiseId, x, y, deg, isDrawing, color)
 		{
-			placeTortoise(this, dsTortoiseId, x, y, rotation, isDrawing, color)
+			placeTortoise(this, dsTortoiseId, x, y, deg, isDrawing, color)
 		},
 		destroyTortoise: function(dsTortoiseId){ destroyTortoise(this, dsTortoiseId) },
 
@@ -143,9 +149,5 @@ ns("Tortuga.Vm");
 		show: function(){},
 	}
 
-
-	Tortuga.Vm.initDrawingSystem = function(canvas)
-	{
-
-	}
+	Tortuga.Vm.DrawingSystem = DrawingSystem
 })()

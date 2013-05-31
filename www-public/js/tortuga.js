@@ -95,6 +95,7 @@ var initApp = function(
 	var lessonsObjects = configureLessonsAreas(lessonsListContainer, lessonItemDescription);
 
 	Tortuga.initDrawing(canvasObjects.canvas)
+	Tortuga.Vm.initVm(canvasObjects.canvas, canvasObjects.canvasContainer)
 	Tortuga.initTortoise(canvasObjects.canvasContainer)
 	Tortuga.initFiles(filesObjects.button)
 	Tortuga.initLessons(canvasObjects.bg, lessonsListContainer, lessonItemDescription,
