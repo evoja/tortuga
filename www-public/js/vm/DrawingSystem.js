@@ -142,11 +142,6 @@ ns("Tortuga.Vm");
 			placeTortoise(this, dsTortoiseId, x, y, deg, isDrawing, color)
 		},
 		destroyTortoise: function(dsTortoiseId){ destroyTortoise(this, dsTortoiseId) },
-
-		resetSystem: function(){},
-
-		hide: function(){},
-		show: function(){},
 	}
 
 	Tortuga.Vm.DrawingSystem = DrawingSystem
