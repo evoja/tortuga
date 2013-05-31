@@ -36,10 +36,86 @@ ns("Tortuga.Vm");
 			return color
 	}
 
+	//==== Tortoise functions ==================================================
+	var createTortoiseDiv = function(container)
+	{
+		var ttd = document.createElement("DIV")
+		ttd.className = "om-tortoise-div"
+		container.appendChild(ttd)
+
+		var pointer = document.createElement("DIV")
+		pointer.className = "om-tortoise-pointer"
+		ttd.appendChild(pointer)
+
+		var color = document.createElement("DIV")
+		color.className = "om-tortoise-color"
+		ttd.appendChild(color)
+
+		var image = document.createElement("DIV")
+		image.className = "om-tortoise-image"
+		ttd.appendChild(image)
+
+		return {main:ttd, pointer:pointer, color:color}
+	}
+
+	var radRot = function(rotation)
+	{
+		return Math.PI/2 - degToRad(rotation)
+	}
+
+
+	var createTortoise = function(drawingSystem)
+	{
+		var id = drawingSystem.tortoiseCounter
+		drawingSystem.tortoses[id] = 
+			createTortoiseDiv(drawingSystem.tortoiseContainer)
+		drawingSystem.tortoiseCounter++
+
+		return id
+	}
+
+	var destroyTortoise = function(drawingSystem, dsTortoiseId)
+	{
+		var ttdi = drawingSystem.tortoises[dsTortoiseId]
+		delete drawingSystem.tortoises[dsTortoiseId]
+		drawingSystem.tortoiseContainer.removeChild(ttdi.main)
+	}
+
+	var placeTortoise = function(drawingSystem, dsTortoiseId, x, y, rotation, 
+		isDrawing, color)
+	{
+		var ttdi = drawingSystem.tortoises[dsTortoiseId]
+		var ttd = ttdi.main;
+		var rad = radRot(rotation);
+
+		var dx = ttd.offsetWidth * (Math.cos(rad) - Math.sin(rad)/2);
+		var dy = ttd.offsetWidth * (Math.cos(rad)/2 + Math.sin(rad) - 1);
+
+		ttd.style.left = (x + dx) + "px";
+		ttd.style.bottom =  (y + dy) + "px";
+		var rotate = "rotate(" + rotation + "deg)"
+		var rotateOrigin = "0% 0%"
+		ttd.style["webkitTransform"] = rotate
+		ttd.style["webkitTransformOrigin"] = rotateOrigin
+		ttd.style["MozTransform"] = rotate
+		ttd.style["MozTransformOrigin"] = rotateOrigin
+		ttd.style["OTransform"] = rotate
+		ttd.style["OTransformOrigin"] = rotateOrigin
+		ttd.style["msTransform"] = rotate
+		ttd.style["msTransformOrigin"] = rotateOrigin
+
+		ttdi.pointer.style.background = isDrawing ? color : "none";
+		ttdi.color.style["border-color"] = color;
+		ttdi.color.style["borderColor"] = color;
+	}
+
 	//==== DrawingSystem =======================================================
-	var DrawingSystem = function(canvas)
+	var DrawingSystem = function(canvas, tortoiseContainer)
 	{
 		this.ctx = extractCtxFromCanvasAndConfigure(canvas)
+		this.tortoiseContainer = tortoiseContainer
+		this.tortoises = {}
+		this.tortoiseCounter = 0;
 	}
 
 	DrawingSystem.prototype = {
@@ -52,11 +128,15 @@ ns("Tortuga.Vm");
 		lineTo:       function(){                 this.ctx.lineTo(x, y) },
 		beginPath:    function(){                 this.ctx.beginPath() },
 		stroke:       function(){                 this.ctx.stroke() },
-		clearCanvas:  function(){ctx.clearRect(0, 0, canvas.width, canvas.height)},
+		clearCanvas:  function(){                 ctx.clearRect(0, 0, canvas.width, canvas.height)},
 
-		createTortoise: function(){},
-		placeTortoise: function(dsTortoiseId, x, y, rotation){},
-		destroyTortoise: function(dsTortoiseId){},
+		createTortoise: function(){ createTortoise(this) },
+		placeTortoise: function(dsTortoiseId, x, y, rotation, isDrawing, color)
+		{
+			placeTortoise(this, dsTortoiseId, x, y, rotation, isDrawing, color)
+		},
+		destroyTortoise: function(dsTortoiseId){ destroyTortoise(this, dsTortoiseId) },
+
 		resetSystem: function(){},
 
 		hide: function(){},
