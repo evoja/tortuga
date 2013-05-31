@@ -119,13 +119,13 @@ ns("Tortuga.Vm");
 	var DrawingSystem = function(canvas, tortoiseContainer)
 	{
 		this.ctx = extractCtxFromCanvasAndConfigure(canvas)
+		this.ctx.setTransform(1, 0, 0, -1, 0, canvas.height)
 		this.tortoiseContainer = tortoiseContainer
 		this.tortoises = {}
 		this.tortoiseCounter = 0;
 	}
 
 	DrawingSystem.prototype = {
-		setTransform: function(a, b, c, d, e, f){ this.ctx.setTransform(a, b, c, d, e, f) },
 		setColor:     function(color){            setColor(this.ctx, color) },
 		getColorAt:   function(x, y){             return getColorAt(this.ctx, x, y, false) },
 		getColorWithAlphaAt: function(x, y){      return getColorAt(this.ctx, x, y, true) },
