@@ -24,14 +24,59 @@ var createLesson = function(text)
 	return {title: title, items: items};
 }
 
+
+var parseShortenedResponse = function(m) {
+			console.log(m, m.content);
+            var url = null;
+            try {                
+                url = JSON.parse(m.content).id;
+                if (typeof url != 'string') url = null;
+            } catch (e) {
+                url = null;
+            }
+            linkarea.innerHTML = "";			
+			var textinput = document.createElement("INPUT");
+			textinput.type = "text";
+			textinput.disabled = true;
+			textinput.value = url;
+
+			var link = document.createElement("A");
+			link.href = url;
+			link.innerHTML = "Try lesson";
+
+			linkarea.appendChild(textinput);
+			linkarea.appendChild(link);
+			textinput.select();
+			
+		            
+        }
+
+var getShortenURL = function(url) {
+    jsonlib.fetch(
+        {
+            url: 'https://www.googleapis.com/urlshortener/v1/url',
+            header: 'Content-Type: application/json',
+            method: 'POST',
+            data: JSON.stringify({longUrl: url})
+        }, 
+        parseShortenedResponse);
+    }
+
+
+
 var updateLinkArea = function(linkarea, areaValue)
 {
-	var url = getLinkAreaText(createLesson(areaValue));
+	var longUrl = getLinkAreaText(createLesson(areaValue));
 
-	linkarea.innerHTML = "";
-	if(url.length < 2000)
+
+
+
+
+	
+	if(longUrl.length < 2000)
 	{
-		var textinput = document.createElement("INPUT");
+		var res = getShortenURL(longUrl);
+	/*	var textinput = document.createElement("INPUT");
 		textinput.type = "text";
 		textinput.disabled = true;
 		textinput.value = url;
@@ -42,7 +87,7 @@ var updateLinkArea = function(linkarea, areaValue)
 
 		linkarea.appendChild(textinput);
 		linkarea.appendChild(link);
-		textinput.select();
+		textinput.select();*/
 	}
 	else
 	{
