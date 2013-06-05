@@ -21,7 +21,7 @@ var getLessonLink = function(lesson)
 {
 	var value = putLessonTextToUriValue(JSON.stringify(lesson));
 	var path = location.pathname.substring(0, location.pathname.lastIndexOf("/")+1);
-	return location.origin + location.host + path + "index.html" +
+	return location.origin + path + "index.html" +
 			"?" + value;
 }
 
