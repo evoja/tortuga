@@ -67,6 +67,8 @@ var getShortenURL = function(url) {
 var updateLinkArea = function(linkarea, areaValue)
 {
 	var longUrl = getLinkAreaText(createLesson(areaValue));
+	var xz = Tortuga.ParamsUtil.getLessonTextFromUriValue();
+	console.log('xz', xz);
 	
 	if(longUrl.length < 2000)
 	{

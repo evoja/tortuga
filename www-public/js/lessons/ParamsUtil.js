@@ -25,9 +25,24 @@ var getLessonLink = function(lesson)
 			"?" + value;
 }
 
+//location.search.substring(1)
+var getUriValue = function(u)
+{
+	//file:///C:/pathToMyProject/tortuga/www-public/index.html?q1YqySzJSVWyUrqw6cKGC5sudgPJ/UASxNuvpKOUWZKaW6xkFV0NVwiThCmG0UDFxUXJMJOwSaekFicXZRaUZOb
+	var str = u;
+	var vhozhd = str.indexOf('?');
+	var result = str.substr(vhozhd + 1);
+	return result;
+}
+
+var getLessonTextFromGetUriValue = function(u)
+{
+	return prezip_to_utf8(RawDeflate.inflate(atob(getUriValue(u))));
+}
+
 var getLessonTextFromUriValue = function()
 {
-	return prezip_to_utf8(RawDeflate.inflate(atob(location.search.substring(1))));
+	return getLessonTextFromGetUriValue(location.search);
 }
 
 var getLesson = function()
@@ -46,7 +61,9 @@ var getLesson = function()
 
 
 Tortuga.ParamsUtil = {
-	getLesson : getLesson,
-	getLessonLink : getLessonLink
+	                   getLesson : getLesson,
+	               getLessonLink : getLessonLink,
+	   getLessonTextFromUriValue : getLessonTextFromUriValue,
+	getLessonTextFromGetUriValue : getLessonTextFromGetUriValue
 }
 })()
