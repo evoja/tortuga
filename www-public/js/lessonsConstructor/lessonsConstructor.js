@@ -25,14 +25,14 @@ var createLesson = function(text)
 }
 
 
-var parseShortenedResponse = function(m) {
+var parseShortenedResponse = function(m, longUrl) {
 			console.log(m, m.content);
             var url = null;
             try {                
                 url = JSON.parse(m.content).id;
-                if (typeof url != 'string') url = null;
+                if (typeof url != 'string') url = longUrl;
             } catch (e) {
-                url = null;
+                url = longUrl;
             }
             linkarea.innerHTML = "";			
 			var textinput = document.createElement("INPUT");
@@ -59,7 +59,7 @@ var getShortenURL = function(url) {
             method: 'POST',
             data: JSON.stringify({longUrl: url})
         }, 
-        parseShortenedResponse);
+        function(m){parseShortenedResponse(m, url)});
     }
 
 
@@ -67,11 +67,6 @@ var getShortenURL = function(url) {
 var updateLinkArea = function(linkarea, areaValue)
 {
 	var longUrl = getLinkAreaText(createLesson(areaValue));
-
-
-
-
-
 	
 	if(longUrl.length < 2000)
 	{

@@ -111,7 +111,7 @@ var createTortoise;
 		tailDown : function(t){t.isDrawing = true},
 		setColor : function(t, c){t.color = c || t.color},
 		setWidth : function(t, w){t.width = w || t.width},
-		clearCanvas : function(t){t.clearCanvas; alert('Clear1!');}
+		clearCanvas : function(t){t.clearCanvas;}
 	}
 	proto.fw = proto.go;
 	proto.forward = proto.go;
