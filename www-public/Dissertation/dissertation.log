@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.6.17)  26 JUN 2013 15:53
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.6.17)  26 JUN 2013 17:08
 entering extended mode
 **dissertation.tex
 
@@ -1026,7 +1026,7 @@ tex" [3
 ] [4])
 ("C:\Users\Р РРўРњ\Desktop\РєСѓСЂСЃР°С‡ РІ РўРµС…Рµ\Dissertation\part1.tex"
 \IeC {\CYRG }\IeC {\cyrl }\IeC {\cyra }\IeC {\cyrv }\IeC {\cyra } 1.
-<images/pic1.jpg, id=66, 621.82312pt x 485.56406pt>
+<images/pic1.jpg, id=88, 621.82312pt x 485.56406pt>
 File: images/pic1.jpg Graphic file (type jpg)
  <use images/pic1.jpg>
 Package pdftex.def Info: images/pic1.jpg used on input line 10.
@@ -1078,55 +1078,62 @@ bbl"
 LaTeX Warning: Empty `thebibliography' environment on input line 10.
 
 )
-Underfull \hbox (badness 10000) in paragraph at lines 8--9
+Underfull \hbox (badness 10000) in paragraph at lines 9--10
 []\T2A/ftm/m/n/14.4 Codecademy. URL: http://www.codecademy.com/ (да-та об-ра-ще
 -ния
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 10--11
+Underfull \hbox (badness 10000) in paragraph at lines 11--12
 []\T2A/ftm/m/n/14.4 Обмен дан-ны-ми для до-ку-мен-тов с раз-ных до-ме-нов. URL:
 
  []
 
 
-Underfull \hbox (badness 2042) in paragraph at lines 11--12
+Underfull \hbox (badness 3148) in paragraph at lines 12--13
 []\T2A/ftm/m/n/14.4 XMLHTTPRequest: опи-са-ние, при-ме-не-ние, ча-стые про-бле-
 мы. URL:
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 16--17
-[]\T2A/ftm/m/n/14.4 URL Shortener API. URL: https://developers.google.com/url-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 17--18
-[]\T2A/ftm/m/n/14.4 Google APIs Client Library for JavaScript (Beta). URL:
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 17--18
-\T2A/ftm/m/n/14.4 https://developers.google.com/api-client-library/javascript/s
-amples/samples
  []
 
 [11
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 24--25
+Underfull \hbox (badness 10000) in paragraph at lines 17--18
+[]\T2A/ftm/m/n/14.4 URL Shortener API. URL: https://developers.google.com/url-
+ []
+
+
+Underfull \hbox (badness 3792) in paragraph at lines 18--19
+[]\T2A/ftm/m/n/14.4 googleapi Google APIs Client Library for JavaScript (Beta).
+ URL:
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 18--19
+\T2A/ftm/m/n/14.4 https://developers.google.com/api-client-library/javascript/s
+amples/samples
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 25--26
 []\T2A/ftm/m/n/14.4 MIT App Inventor. URL:http://appinventor.mit.edu/(дата об-р
 а-ще-ния
  []
 
 
-Underfull \hbox (badness 2119) in paragraph at lines 29--30
+Underfull \hbox (badness 1112) in paragraph at lines 28--29
+[]\T2A/ftm/m/n/14.4 Logo Interpreter. URL: http://www.calormen.com/logo/ (да-та
+ об-ра-ще-ния
+ []
+
+
+Underfull \hbox (badness 3250) in paragraph at lines 30--31
 []\T2A/ftm/m/n/14.4 Tortue Logo. URL: http://tortue-logo.fr/en/logo-turtle (да-
 та об-ра-ще-ния
  []
 
 
-Underfull \hbox (badness 3108) in paragraph at lines 30--31
+Underfull \hbox (badness 4967) in paragraph at lines 31--32
 []\T2A/ftm/m/n/14.4 Papert. URL: http://logo.twentygototen.org/EcsvFC4p (да-та 
 об-ра-ще-ния
  []
@@ -1177,13 +1184,13 @@ Overfull \hbox (17.4231pt too wide) in paragraph at lines 127--127
 ] 
  []
 
-
+[15]
 Overfull \hbox (112.46309pt too wide) in paragraph at lines 134--134
 []    \T2A/fer/m/n/14.4 button.onclick = function(e){updateArea(area.value, inp
 ut.value)}[] 
  []
 
-[15]
+
 Overfull \hbox (147.02309pt too wide) in paragraph at lines 159--159
 []    \T2A/fer/m/n/14.4 var t =  Tortuga.ParamsUtil.getLessonTextFromGetUriValu
 e(inputValue);[] 
@@ -1235,20 +1242,20 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 20.
  ) 
 Here is how much of TeX's memory you used:
- 12950 strings out of 493921
- 179825 string characters out of 3147330
- 261774 words of memory out of 3000000
- 15946 multiletter control sequences out of 15000+200000
+ 12982 strings out of 493921
+ 180341 string characters out of 3147330
+ 262394 words of memory out of 3000000
+ 15977 multiletter control sequences out of 15000+200000
  18351 words of font info for 43 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 38i,7n,38p,2937b,457s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 38i,7n,38p,3029b,457s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/t2/t2a.enc}<C:/Program Files/MiKTeX 2.
 9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/texmf/fonts/type1/public/pscyr/
 ercour.pfb><C:/texmf/fonts/type1/public/pscyr/times.pfb><C:/texmf/fonts/type1/p
 ublic/pscyr/timesbd.pfb><C:/texmf/fonts/type1/public/pscyr/timesi.pfb>
-Output written on dissertation.pdf (16 pages, 222366 bytes).
+Output written on dissertation.pdf (16 pages, 226536 bytes).
 PDF statistics:
- 181 PDF objects out of 1000 (max. 8388607)
- 53 named destinations out of 1000 (max. 500000)
+ 201 PDF objects out of 1000 (max. 8388607)
+ 54 named destinations out of 1000 (max. 500000)
  90 words of extra memory for PDF output out of 10000 (max. 10000000)
 
