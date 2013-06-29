@@ -34,7 +34,7 @@ MyTr.run(goCommand)
 
 fun = function(n)
 {
-	var m1 = new Date().getMilliseconds()
+	var m1 = new Date().getTime()
 	var tr = Tortuga.Vm.TortoiseRunner
 	command = tr.constructCommand(tr.commands.create, 0, 0, "green")
 	var t = MyTr.run(command)
@@ -57,7 +57,7 @@ fun = function(n)
 	}
 	seq = pair(seq, kill)
 	MyTr.run(seq)
-	var m2 = new Date().getMilliseconds()
+	var m2 = new Date().getTime()
 	return m2 - m1
 }
 
@@ -78,13 +78,9 @@ fun2 = function(n)
 	var go = tr.constructCommand(tr.commands.go, t, 3)
 	var kill = tr.constructCommand(tr.commands.kill, t)
 
-	var arr = [td, go]
-	for(var i = 0; i < n;++i)
-	{
-		arr = arr.concat([left, go, right, go])
-	}
-	arr.push(kill)
-	seq = tr.constructCommand(tr.commands.seq, arr)
+	var seq1 = tr.constructCommand(tr.commands.seq, [left, go, right, go])
+    var repeat = tr.constructCommand(tr.commands.repeat, n, seq1)
+    var seq = tr.constructCommand(tr.commands.seq, [td, repeat, kill])
 	MyTr.run(seq)
 	var m2 = new Date().getTime()
 	return m2 - m1
@@ -279,8 +275,18 @@ fun2(10000)
 
 	var runSeq = function(runner, arr)
 	{
-		var result = undefined
+		var result;
 		arr.forEach(function(command){result = command(runner)})
+		return result
+	}
+
+	var runRepeat = function(runner, n, command)
+	{
+		var result;
+		for(var i = 0; i < n; ++i)
+		{
+			result = command(runner)
+		}
 		return result
 	}
 
@@ -330,7 +336,8 @@ fun2(10000)
 		kill     : runKill,
 		nil      : runNil,
 		pair     : runPair,
-		seq      : runSeq
+		seq      : runSeq,
+		repeat   : runRepeat
 	}
 	TortoiseRunner.constructCommand = constructCommand
 
