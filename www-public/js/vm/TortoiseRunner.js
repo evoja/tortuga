@@ -210,6 +210,11 @@ fun2(10000)
 		return trTortoise
 	}
 
+	var runClearCanvas = function(runner)
+	{
+		runner.drawingSystem.clearCanvas()
+	}
+
 	var runGo = function(runner, trTortoise, length)
 	{
 		var isDrawing = trTortoise.isDrawing
@@ -327,6 +332,7 @@ fun2(10000)
 
 	TortoiseRunner.commands = {
 		create   : runCreate,
+		clearCanvas : runClearCanvas,
 		go       : runGo,
 		tailDown : runTailDown,
 		tailUp   : runTailUp,

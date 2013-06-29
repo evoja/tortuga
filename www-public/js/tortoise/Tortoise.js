@@ -49,6 +49,12 @@ var clearCanvas;
 		return t.tortoiseRunner.run(command)
 	}
 
+	var clearCanvasCommand = function(tortoiseRunner)
+	{
+		var command = TR.constructCommand(TR.commands.clearCanvas, t.trTortoise)
+		return t.tortoiseRunner.run(command)
+	}
+
 	//=== Math ===
 	var degToRad = function(deg)
 	{
@@ -117,7 +123,7 @@ var clearCanvas;
 	Tortuga.Tortoise = Tortoise;
 	Tortuga.initTortoise = function(tortoiseContainer, tortoiseRunner)
 	{
-//		clearCanvas = function(){drawingSystem.clearCanvas()}
+		clearCanvas = function(){clearCanvasCommand(tortoiseRunner)}
 
 		createTortoise = function(xx, yy, color, width)
 		{
