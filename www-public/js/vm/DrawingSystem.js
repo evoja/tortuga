@@ -11,9 +11,9 @@ ns("Tortuga.Vm");
 		return ctx;		
 	}
 
-	var clearCtxOfCanvas = function(canvas, ctx)
+	var clearCtx = function(ctx)
 	{
-		ctx.clearRect(0, 0, canvas.width, canvas.height)
+		ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 	}
 
 	var setColor = function(ctx, color)
@@ -131,8 +131,6 @@ ns("Tortuga.Vm");
 		this.tortoiseContainer = tortoiseContainer
 		this.tortoises = {}
 		this.tortoiseCounter = 0;
-
-		this.clearCanvas = function(){clearCtxOfCanvas(canvas, ctx)}
 	}
 
 	DrawingSystem.prototype = {
@@ -144,6 +142,7 @@ ns("Tortuga.Vm");
 		lineTo:       function(x, y){             this.ctx.lineTo(x, y) },
 		beginPath:    function(){                 this.ctx.beginPath() },
 		stroke:       function(){                 this.ctx.stroke() },
+		clearCanvas:  function(){                 clearCtx(this.ctx) },
 
 		createTortoise: function(){ return createTortoise(this) },
 		placeTortoise: function(dsTortoiseId, x, y, deg, isDrawing, color)
