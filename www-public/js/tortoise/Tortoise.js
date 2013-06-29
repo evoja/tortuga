@@ -4,12 +4,50 @@ var clearCanvas;
 
 (function(){
 	var prependArgumentsByObject = Om.prependArgumentsByObject;
+	var TR = Tortuga.Vm.TortoiseRunner
 
-	var updateDiv = function(t)
+	var createTrTortoise = function(tortoiseRunner, x, y, color, width)
 	{
-		t.drawingSystem.placeTortoise(t.getDsTortoise(), t.x, t.y, t.deg, t.isDrawing, t.color)
+		var command = TR.constructCommand(TR.commands.create, x, y, color)
+		return tortoiseRunner.run(command)
 	}
 
+	var go = function(t, length)
+	{
+		var command = TR.constructCommand(TR.commands.go, t.trTortoise, length)
+		return t.tortoiseRunner.run(command)
+	}
+
+	var rotate = function(t, deg)
+	{
+		var command = TR.constructCommand(TR.commands.rotate, t.trTortoise, deg)
+		return t.tortoiseRunner.run(command)
+	}
+
+	var tailUp = function(t)
+	{
+		var command = TR.constructCommand(TR.commands.tailUp, t.trTortoise)
+		return t.tortoiseRunner.run(command)
+	}
+
+	var tailDown = function(t)
+	{
+		var command = TR.constructCommand(TR.commands.tailDown, t.trTortoise)
+		return t.tortoiseRunner.run(command)
+	}
+
+
+	var setWidth = function(t, width)
+	{
+		var command = TR.constructCommand(TR.commands.setWidth, t.trTortoise, width)
+		return t.tortoiseRunner.run(command)
+	}
+
+	var setColor = function(t, color)
+	{
+		var command = TR.constructCommand(TR.commands.setColor, t.trTortoise, color)
+		return t.tortoiseRunner.run(command)
+	}
 
 	//=== Math ===
 	var degToRad = function(deg)
@@ -32,7 +70,6 @@ var clearCanvas;
 		{
 			var args = prependArgumentsByObject(this, arguments);
 			fun.apply(null, args);
-			updateDiv(this);
 			return this;
 		}
 	}
@@ -40,34 +77,12 @@ var clearCanvas;
 
 
 	var proto = {
-		go : function(t, length)
-		{
-			length = length || 0;
-			var ox = t.x;
-			var oy = t.y;
-
-			var rad = degToRad(t.deg);
-			t.x += length * Math.cos(rad);
-			t.y += length * Math.sin(rad);
-
-			if(t.isDrawing)
-			{
-				var ds = t.drawingSystem
-
-				ds.setColor(t.color)
-				ds.setWidth(t.width)
-				ds.beginPath()
-				ds.moveTo(ox, oy)
-				ds.lineTo(t.x, t.y)
-				ds.stroke()
-			}
-		},
-
-		rotate : function(t, deg){t.deg += (deg || 0)},
-		tailUp : function(t){t.isDrawing = false},
-		tailDown : function(t){t.isDrawing = true},
-		setColor : function(t, c){t.color = c || t.color},
-		setWidth : function(t, w){t.width = w || t.width}
+		go : go,
+		rotate : rotate,
+		tailUp : tailUp,
+		tailDown : tailDown,
+		setColor : setColor,
+		setWidth : setWidth
 	}
 	proto.fw = proto.go;
 	proto.forward = proto.go;
@@ -76,21 +91,16 @@ var clearCanvas;
 	proto.up = proto.tailUp;
 	proto.dw = proto.tailDown;
 
-	var Tortoise = function(xx, yy, color, width, tortoiseContainer, drawingSystem)
-	{		
-		this.drawingSystem = drawingSystem
+	var Tortoise = function(xx, yy, color, width, tortoiseContainer, tortoiseRunner)
+	{
+		xx = xx === undefined ? tortoiseContainer.offsetWidth / 2 : xx;
+		yy = yy === undefined ? tortoiseContainer.offsetHeight / 2 : yy;
+		color = color || "#0a0";
+		width = width || 1;
 
-		this.x = xx === undefined ? tortoiseContainer.offsetWidth / 2 : xx;
-		this.y = yy === undefined ? tortoiseContainer.offsetHeight / 2 : yy;
-		this.color = color || "#0a0";
-		this.width = width || 1;
-		this.deg = 0;
-		this.isDrawing = false;
 
-		var dsTortoise = drawingSystem.createTortoise()
-		this.getDsTortoise = function(){return dsTortoise}
-
-		updateDiv(this);
+		this.tortoiseRunner = tortoiseRunner
+		this.trTortoise = createTrTortoise(tortoiseRunner, xx, yy, color, width)
 	}
 	applyMethodsToProto(proto, Tortoise.prototype,
 		wrapTortoisProtoMethod);
@@ -105,13 +115,13 @@ var clearCanvas;
 	}
 
 	Tortuga.Tortoise = Tortoise;
-	Tortuga.initTortoise = function(tortoiseContainer, drawingSystem)
+	Tortuga.initTortoise = function(tortoiseContainer, tortoiseRunner)
 	{
-		clearCanvas = function(){drawingSystem.clearCanvas()}
+//		clearCanvas = function(){drawingSystem.clearCanvas()}
 
 		createTortoise = function(xx, yy, color, width)
 		{
-			return new Tortoise(xx, yy, color, width, tortoiseContainer, drawingSystem);
+			return new Tortoise(xx, yy, color, width, tortoiseContainer, tortoiseRunner);
 		}
 	}
 })()

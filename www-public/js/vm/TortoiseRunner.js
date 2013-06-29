@@ -103,7 +103,7 @@ fun2(10000)
 	}
 
 	//==== TortoiseRunner's language =====
-	var TrTortoise = function(x, y, color, dsTortoise)
+	var TrTortoise = function(x, y, color, width, dsTortoise)
 	{
 		this.dsTortoise = dsTortoise
 		this.x = x
@@ -111,7 +111,7 @@ fun2(10000)
 		this.deg = 0
 		this.isDrawing = false
 		this.color = color
-		this.width = 1
+		this.width = width || 1
 	}
 
 
@@ -202,10 +202,10 @@ fun2(10000)
 	}
 
 
-	var runCreate = function(runner, x, y, color)
+	var runCreate = function(runner, x, y, color, width)
 	{
 		var dsTortoise = runner.drawingSystem.createTortoise()
-		var trTortoise = new TrTortoise(x, y, color, dsTortoise)
+		var trTortoise = new TrTortoise(x, y, color, width, dsTortoise)
 		runner.tortoises.push(trTortoise)
 		return trTortoise
 	}
