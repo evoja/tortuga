@@ -7,17 +7,24 @@ ns("Tortuga.Vm");
 var tr = Tortuga.Vm.TortoiseRunner
 
 // создаём команду, создающую черепаху:
-command = tr.constructCommand(tr.commands.create, 100, 200, "green")
+var command = tr.constructCommand(tr.commands.create, 100, 200, "green")
+
+// создаём команды опускания и поднимания хвоста:
+var td = tr.constructCommand(tr.commands.tailDown, t)
+var tu = tr.constructCommand(tr.commands.tailUp, t)
 
 // выполняем команду, черепаха создаётся:
 var t = MyTr.run(command)
 
 // создаём комадну, двигающую черепаху вперёд:
-goCommand = tr.constructCommand(tr.commands.go, t, 100)
+var goCommand = tr.constructCommand(tr.commands.go, t, 100)
 
 // выполняем движение черепахи.
+MyTr.run(td)
 MyTr.run(goCommand)
+MyTr.run(tu)
 MyTr.run(goCommand)
+MyTr.run(td)
 MyTr.run(goCommand)
 
 */
@@ -126,7 +133,10 @@ MyTr.run(goCommand)
 				ds.lineTo(trPoint.x, trPoint.y)
 			}
 		})
-		ds.stroke()
+		if(moved)
+		{
+			ds.stroke()
+		}
 	}
 
 
@@ -140,7 +150,7 @@ MyTr.run(goCommand)
 
 	var runGo = function(runner, trTortoise, length)
 	{
-		var isDrawing = true;//trTortoise.isDrawing
+		var isDrawing = trTortoise.isDrawing
 		if(isDrawing && runner.lastTortoise != trTortoise)
 		{
 			appendPointToRunner(runner, new TrPoint(trTortoise, TR_POINT_MOVE))
@@ -155,6 +165,16 @@ MyTr.run(goCommand)
 			appendPointToRunner(runner, new TrPoint(trTortoise, TR_POINT_LINE))
 			runner.lastTortoise = trTortoise
 		}
+	}
+
+	var runTailDown = function(runner, trTortoise)
+	{
+		trTortoise.isDrawing = true
+	}
+
+	var runTailUp = function(runner, trTortoise)
+	{
+		trTortoise.isDrawing = false
 	}
 
 	var constructCommand = function()
@@ -194,8 +214,10 @@ MyTr.run(goCommand)
 	}
 
 	TortoiseRunner.commands = {
-		create : runCreate,
-		go     : runGo
+		create   : runCreate,
+		go       : runGo,
+		tailDown : runTailDown,
+		tailUp   : runTailUp
 	}
 	TortoiseRunner.constructCommand = constructCommand
 
