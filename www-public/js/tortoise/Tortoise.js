@@ -3,51 +3,9 @@ var createTortoise;
 (function(){
 	var prependArgumentsByObject = Om.prependArgumentsByObject;
 
-	//=== Graph and HTML =====
-	var createTortoiseDiv = function(container)
-	{
-		var ttd = document.createElement("DIV");
-		ttd.className = "om-tortoise-div";
-		container.appendChild(ttd);
-
-		var pointer = document.createElement("DIV");
-		pointer.className = "om-tortoise-pointer";
-		ttd.appendChild(pointer);
-
-		var color = document.createElement("DIV");
-		color.className = "om-tortoise-color";
-		ttd.appendChild(color);
-
-		var image = document.createElement("DIV");
-		image.className = "om-tortoise-image";
-		ttd.appendChild(image);
-
-		return {main:ttd, pointer:pointer, color:color};
-	}
-
 	var updateDiv = function(t)
 	{
-		var ttdi = t.getDivObject();
-		var ttd = ttdi.main;
-		var rad = radRot(t);
-		var dx = ttd.offsetWidth * (Math.cos(rad) - Math.sin(rad)/2);
-		var dy = ttd.offsetWidth * (Math.cos(rad)/2 + Math.sin(rad) - 1);
-		ttd.style.left = (t.x + dx) + "px";
-		ttd.style.bottom =  (t.y + dy) + "px";
-		var rotate = "rotate(" + t.rotation + "deg)"
-		var rotateOrigin = "0% 0%"
-		ttd.style["webkitTransform"] = rotate
-		ttd.style["webkitTransformOrigin"] = rotateOrigin
-		ttd.style["MozTransform"] = rotate
-		ttd.style["MozTransformOrigin"] = rotateOrigin
-		ttd.style["OTransform"] = rotate
-		ttd.style["OTransformOrigin"] = rotateOrigin
-		ttd.style["msTransform"] = rotate
-		ttd.style["msTransformOrigin"] = rotateOrigin
-
-		ttdi.pointer.style.background = t.isDrawing ? t.color : "none";
-		ttdi.color.style["border-color"] = t.color;
-		ttdi.color.style["borderColor"] = t.color;
+		t.drawingSystem.placeTortoise(t.getDsTortoise(), t.x, t.y, t.deg, t.isDrawing, t.color)
 	}
 
 
@@ -55,11 +13,6 @@ var createTortoise;
 	var degToRad = function(deg)
 	{
 		return deg / 180 * Math.PI;
-	}
-
-	var radRot = function(t)
-	{
-		return Math.PI/2 - degToRad(t.rotation);
 	}
 
 	//==== Construction helpers ====
@@ -91,27 +44,29 @@ var createTortoise;
 			var ox = t.x;
 			var oy = t.y;
 
-			var rad = radRot(t);
+			var rad = degToRad(t);
 			t.x += length * Math.cos(rad);
 			t.y += length * Math.sin(rad);
 
 			if(t.isDrawing)
 			{
-				oldColor = setColor(t.color);
-				oldWidth = setWidth(t.width);
-				canvasHeight = getCanvasHeight();
-				drawLine(ox, canvasHeight - oy, t.x, canvasHeight - t.y);
-				setColor(oldColor);
-				setWidth(oldWidth);
+				var ds = t.drawingSystem
+
+				ds.setColor(t.color)
+				ds.setWidth(t.width)
+				ds.beginPath()
+				ds.moveTo(ox, oy)
+				ds.lineTo(t.x, t.y)
+				ds.stroke()
 			}
 		},
 
-		rotate : function(t, deg){t.rotation -= (deg || 0)},
+		rotate : function(t, deg){t.deg += (deg || 0)},
 		tailUp : function(t){t.isDrawing = false},
 		tailDown : function(t){t.isDrawing = true},
 		setColor : function(t, c){t.color = c || t.color},
 		setWidth : function(t, w){t.width = w || t.width},
-		clearCanvas : function(t){t.clearCanvas; alert('Clear1!');}
+		clearCanvas : function(t){t.drawingSystem.clearCanvas()}
 	}
 	proto.fw = proto.go;
 	proto.forward = proto.go;
@@ -120,19 +75,19 @@ var createTortoise;
 	proto.up = proto.tailUp;
 	proto.dw = proto.tailDown;
 
-	var Tortoise = function(xx, yy, color, width, tortoiseContainer)
+	var Tortoise = function(xx, yy, color, width, tortoiseContainer, drawingSystem)
 	{		
-		var ttdi = createTortoiseDiv(tortoiseContainer);
-		var ttd = ttdi.main;
+		this.drawingSystem = drawingSystem
 
 		this.x = xx === undefined ? tortoiseContainer.offsetWidth / 2 : xx;
 		this.y = yy === undefined ? tortoiseContainer.offsetHeight / 2 : yy;
 		this.color = color || "#0a0";
 		this.width = width || 1;
-		this.rotation = 90;
+		this.deg = 0;
 		this.isDrawing = false;
 
-		this.getDivObject = function(){return ttdi}
+		var dsTortoise = drawingSystem.createTortoise()
+		this.getDsTortoise = function(){return dsTortoise}
 
 		updateDiv(this);
 	}
@@ -149,11 +104,11 @@ var createTortoise;
 	}
 
 	Tortuga.Tortoise = Tortoise;
-	Tortuga.initTortoise = function(tortoiseContainer)
+	Tortuga.initTortoise = function(tortoiseContainer, drawingSystem)
 	{
 		createTortoise = function(xx, yy, color, width)
 		{
-			return new Tortoise(xx, yy, color, width, tortoiseContainer);
+			return new Tortoise(xx, yy, color, width, tortoiseContainer, drawingSystem);
 		}
 	}
 })()
