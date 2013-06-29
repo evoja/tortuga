@@ -193,6 +193,18 @@ MyTr.run(goCommand)
 		trTortoise.width = width
 	}
 
+	var runKill = function(runner, trTortoise)
+	{
+		var tortoises = runner.tortoises
+		var index = tortoises.indexOf(trTortoise)
+
+		if(index == -1)
+			return
+
+		tortoises.splice(index, 1)
+		runner.drawingSystem.destroyTortoise(trTortoise.dsTortoise)
+	}
+
 	var constructCommand = function()
 	{
 		var command = arguments[0]
@@ -236,7 +248,8 @@ MyTr.run(goCommand)
 		tailUp   : runTailUp,
 		rotate   : runRotate,
 		setColor : runSetColor,
-		setWidth : runSetWidth
+		setWidth : runSetWidth,
+		kill     : runKill
 	}
 	TortoiseRunner.constructCommand = constructCommand
 
