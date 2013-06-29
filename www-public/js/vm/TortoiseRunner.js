@@ -1,5 +1,28 @@
 ns("Tortuga.Vm");
 
+/**
+Пример использования:
+
+//короткий доступ к библиотеке:
+var tr = Tortuga.Vm.TortoiseRunner
+
+// создаём команду, создающую черепаху:
+command = tr.constructCommand(tr.commands.create, 100, 200, "green")
+
+// выполняем команду, черепаха создаётся:
+var t = MyTr.run(command)
+
+// создаём комадну, двигающую черепаху вперёд:
+goCommand = tr.constructCommand(tr.commands.go, t, 100)
+
+// выполняем движение черепахи.
+MyTr.run(goCommand)
+MyTr.run(goCommand)
+MyTr.run(goCommand)
+
+*/
+
+
 (function()
 {
 	var TR_POINT_MOVE = {};
@@ -107,7 +130,7 @@ ns("Tortuga.Vm");
 	}
 
 
-	var runCreate = function(x, y, color, runner)
+	var runCreate = function(runner, x, y, color)
 	{
 		var dsTortoise = runner.drawingSystem.createTortoise()
 		var trTortoise = new TrTortoise(x, y, color, dsTortoise)
@@ -115,7 +138,7 @@ ns("Tortuga.Vm");
 		return trTortoise
 	}
 
-	var runGo = function(trTortoise, length, runner)
+	var runGo = function(runner, trTortoise, length)
 	{
 		var isDrawing = true;//trTortoise.isDrawing
 		if(isDrawing && runner.lastTortoise != trTortoise)
@@ -134,14 +157,17 @@ ns("Tortuga.Vm");
 		}
 	}
 
-	var constructCreate = function(x, y, color)
+	var constructCommand = function()
 	{
-		return function(runner){return runCreate(x, y, color, runner)}
-	}
-
-	var constructGo = function(trTortoise, length)
-	{
-		return function(runner){return runGo(trTortoise, length, runner)}
+		var command = arguments[0]
+		var args = arguments
+		return function(runner)
+		{
+			args[0] = runner
+			var result = command.apply(null, args)
+			args[0] = command
+			return result
+		}
 	}
 
 	//==== TortoiseRunner =======================================================
@@ -168,9 +194,10 @@ ns("Tortuga.Vm");
 	}
 
 	TortoiseRunner.commands = {
-		constructCreate : constructCreate,
-		constructGo : constructGo
+		create : runCreate,
+		go     : runGo
 	}
+	TortoiseRunner.constructCommand = constructCommand
 
 	Tortuga.Vm.TortoiseRunner = TortoiseRunner
 })()
