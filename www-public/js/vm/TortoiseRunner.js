@@ -29,6 +29,41 @@ MyTr.run(goCommand)
 
 */
 
+/**
+Пример использования последовательностей:
+
+fun = function(n)
+{
+	var m1 = new Date().getMilliseconds()
+	var tr = Tortuga.Vm.TortoiseRunner
+	command = tr.constructCommand(tr.commands.create, 0, 0, "green")
+	var t = MyTr.run(command)
+	var pair = function(f, s){return tr.constructCommand(tr.commands.pair, f, s)}
+
+
+	var td = tr.constructCommand(tr.commands.tailDown, t)
+	var tu = tr.constructCommand(tr.commands.tailUp, t)
+	var right = tr.constructCommand(tr.commands.rotate, t, -90)
+	var left = tr.constructCommand(tr.commands.rotate, t, 90)
+
+	var go = tr.constructCommand(tr.commands.go, t, 3)
+	var kill = tr.constructCommand(tr.commands.kill, t)
+	var nil = tr.constructCommand(tr.commands.nil)
+
+	var seq = pair(td, go)
+	for(var i = 0; i < n;++i)
+	{
+	   seq = pair(pair(pair(pair(seq, left), go), right), go)
+	}
+	seq = pair(seq, kill)
+	MyTr.run(seq)
+	var m2 = new Date().getMilliseconds()
+	return m2 - m1
+}
+
+fun(500)
+*/
+
 
 (function()
 {
@@ -152,7 +187,7 @@ MyTr.run(goCommand)
 	var runGo = function(runner, trTortoise, length)
 	{
 		var isDrawing = trTortoise.isDrawing
-		if(isDrawing && runner.lastTortoise != trTortoise)
+		if(isDrawing)
 		{
 			appendPointToRunner(runner, new TrPoint(trTortoise, TR_POINT_MOVE))
 		}
@@ -164,7 +199,6 @@ MyTr.run(goCommand)
 		if(isDrawing)
 		{
 			appendPointToRunner(runner, new TrPoint(trTortoise, TR_POINT_LINE))
-			runner.lastTortoise = trTortoise
 		}
 	}
 
@@ -205,6 +239,14 @@ MyTr.run(goCommand)
 		runner.drawingSystem.destroyTortoise(trTortoise.dsTortoise)
 	}
 
+	var runNil = function(runner){}
+
+	var runPair = function(runner, first, second)
+	{
+		first(runner)
+		return second(runner)
+	}
+
 	var constructCommand = function()
 	{
 		var command = arguments[0]
@@ -231,7 +273,6 @@ MyTr.run(goCommand)
 		{
 			var runner = this
 			runner.points = []
-			this.lastTortoise = null
 			var ds = runner.drawingSystem
 
 			var result = command(runner)
@@ -249,7 +290,9 @@ MyTr.run(goCommand)
 		rotate   : runRotate,
 		setColor : runSetColor,
 		setWidth : runSetWidth,
-		kill     : runKill
+		kill     : runKill,
+		nil      : runNil,
+		pair     : runPair
 	}
 	TortoiseRunner.constructCommand = constructCommand
 
