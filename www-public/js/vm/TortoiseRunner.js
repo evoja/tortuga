@@ -50,6 +50,7 @@ MyTr.run(goCommand)
 		this.deg = 0
 		this.isDrawing = false
 		this.color = color
+		this.width = 1
 	}
 
 
@@ -177,6 +178,21 @@ MyTr.run(goCommand)
 		trTortoise.isDrawing = false
 	}
 
+	var runRotate = function(runner, trTortoise, deg)
+	{
+		trTortoise.deg += deg
+	}
+
+	var runSetColor = function(runner, trTortoise, color)
+	{
+		trTortoise.color = color
+	}
+
+	var runSetWidth = function(runner, trTortoise, width)
+	{
+		trTortoise.width = width
+	}
+
 	var constructCommand = function()
 	{
 		var command = arguments[0]
@@ -217,7 +233,10 @@ MyTr.run(goCommand)
 		create   : runCreate,
 		go       : runGo,
 		tailDown : runTailDown,
-		tailUp   : runTailUp
+		tailUp   : runTailUp,
+		rotate   : runRotate,
+		setColor : runSetColor,
+		setWidth : runSetWidth
 	}
 	TortoiseRunner.constructCommand = constructCommand
 
