@@ -20,9 +20,9 @@ ns("Tortuga.Vm");
 		return trTortoise
 	}
 
-	var constructCreate = function(x, y, color)
+	var constructCreate = function(fun, x, y, color)
 	{
-		return function(runner){runCreate(x, y, color, runner)}
+		return function(runner){return runCreate(x, y, color, runner)}
 	}
 
 	//==== TortoiseRunner =======================================================
@@ -37,12 +37,14 @@ ns("Tortuga.Vm");
 		run : function(command)
 		{
 			var runner = this;
-			command(runner)
+			var result = command(runner)
 			runner.tortoises.forEach(function(trt)
 			{
 				runner.drawingSystem.placeTortoise(
 					trt.dsTortoise, trt.x, trt.y, trt.deg, trt.isDrawing, trt.color)
 			})
+
+			return result
 		}
 	}
 
