@@ -258,6 +258,15 @@ fun2(10000)
 		trTortoise.width = width
 	}
 
+	var runGetColorUnderTail = function(runner, trTortoise, forward)
+	{
+		forward = forward || 0
+		var rad = degToRad(trTortoise.deg)
+		var x = trTortoise.x + forward * Math.cos(rad)
+		var y = trTortoise.y + forward * Math.sin(rad)
+		return runner.drawingSystem.getColorAt(x, y)
+	}
+
 	var runKill = function(runner, trTortoise)
 	{
 		var tortoises = runner.tortoises
@@ -343,7 +352,8 @@ fun2(10000)
 		nil      : runNil,
 		pair     : runPair,
 		seq      : runSeq,
-		repeat   : runRepeat
+		repeat   : runRepeat,
+		getColorUnderTail : runGetColorUnderTail
 	}
 	TortoiseRunner.constructCommand = constructCommand
 

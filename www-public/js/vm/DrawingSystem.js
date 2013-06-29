@@ -28,7 +28,9 @@ ns("Tortuga.Vm");
 
 	var getColorAt = function(ctx, x, y, withAlpha)
 	{
-			var data = this.ctx.getImageData(x, y, 1, 1).data
+			y = ctx.canvas.height - y
+
+			var data = ctx.getImageData(x, y, 1, 1).data
 			var color = data[3]
 				? {red: data[0], green: data[1], blue: data[2]}
 				: {red: 255, green: 255, blue: 255}

@@ -51,7 +51,13 @@ var clearCanvas;
 
 	var clearCanvasCommand = function(tortoiseRunner)
 	{
-		var command = TR.constructCommand(TR.commands.clearCanvas, t.trTortoise)
+		var command = TR.constructCommand(TR.commands.clearCanvas)
+		return tortoiseRunner.run(command)
+	}
+
+	var getColorUnderTail = function(t, forward)
+	{
+		var command = TR.constructCommand(TR.commands.getColorUnderTail, t.trTortoise, forward)
 		return t.tortoiseRunner.run(command)
 	}
 
@@ -114,10 +120,9 @@ var clearCanvas;
 	{
 		return new Tortuga.RepeatTortoise(this, count);
 	}
-
-	Tortoise.prototype.getColorUnderTail = function()
+	Tortoise.prototype.getColorUnderTail = function(forward)
 	{
-		return getColorAt(this.x, this.y)
+		return getColorUnderTail(this, forward)
 	}
 
 	Tortuga.Tortoise = Tortoise;
