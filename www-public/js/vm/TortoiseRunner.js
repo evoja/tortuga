@@ -50,7 +50,7 @@ fun = function(n)
 	var kill = tr.constructCommand(tr.commands.kill, t)
 	var nil = tr.constructCommand(tr.commands.nil)
 
-	var seq = pair(td, go)
+	var seq = pair(nil, td)
 	for(var i = 0; i < n;++i)
 	{
 	   seq = pair(pair(pair(pair(seq, left), go), right), go)
@@ -62,6 +62,36 @@ fun = function(n)
 }
 
 fun(500)
+
+fun2 = function(n)
+{
+	var m1 = new Date().getTime()
+	var tr = Tortuga.Vm.TortoiseRunner
+	command = tr.constructCommand(tr.commands.create, 0, 0, "green")
+	var t = MyTr.run(command)
+
+	var td = tr.constructCommand(tr.commands.tailDown, t)
+	var tu = tr.constructCommand(tr.commands.tailUp, t)
+	var right = tr.constructCommand(tr.commands.rotate, t, -90)
+	var left = tr.constructCommand(tr.commands.rotate, t, 90)
+
+	var go = tr.constructCommand(tr.commands.go, t, 3)
+	var kill = tr.constructCommand(tr.commands.kill, t)
+
+	var arr = [td, go]
+	for(var i = 0; i < n;++i)
+	{
+		arr = arr.concat([left, go, right, go])
+	}
+	arr.push(kill)
+	seq = tr.constructCommand(tr.commands.seq, arr)
+	MyTr.run(seq)
+	var m2 = new Date().getTime()
+	return m2 - m1
+}
+
+fun2(10000)
+
 */
 
 
@@ -247,6 +277,13 @@ fun(500)
 		return second(runner)
 	}
 
+	var runSeq = function(runner, arr)
+	{
+		var result = undefined
+		arr.forEach(function(command){result = command(runner)})
+		return result
+	}
+
 	var constructCommand = function()
 	{
 		var command = arguments[0]
@@ -292,7 +329,8 @@ fun(500)
 		setWidth : runSetWidth,
 		kill     : runKill,
 		nil      : runNil,
-		pair     : runPair
+		pair     : runPair,
+		seq      : runSeq
 	}
 	TortoiseRunner.constructCommand = constructCommand
 
