@@ -8,7 +8,7 @@ var clearCanvas;
 
 	var createTrTortoise = function(tortoiseRunner, x, y, color, width)
 	{
-		var command = TR.constructCommand(TR.commands.create, x, y, color)
+		var command = TR.constructCommand(TR.commands.create, x, y, color, width)
 		return tortoiseRunner.run(command)
 	}
 
