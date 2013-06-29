@@ -8,6 +8,7 @@
 <script src="js/lib/rawinflate.js"></script>
 <script src="js/lessons/ParamsUtil.js"></script>
 <script src="js/lessonsConstructor/lessonsConstructor.js"></script>
+<script src="js/lib/jsonlib.js"></script>
 
 <style>
 textarea {width: 50%; height: 10em;}
@@ -24,11 +25,16 @@ var init = function()
 	Tortuga.initLessonConstructor(document.getElementById("area"),
 		document.getElementById("createbutton"),
 		document.getElementById("linkarea"));
+	Tortuga.givLessonArea(document.getElementById("area"),
+		document.getElementById("changebutton"),
+		document.getElementById("lessonInput"));
 }
 </script>
 
 </head>
 <body onload="init()">
+	<input type="text" id="lessonInput">
+	<button id="changebutton">Изменить урок</button><br>
 	<textarea id="area"></textarea><br>
 	<button id="createbutton">Создать урок</button><br>
 	<div id="linkarea"></div>

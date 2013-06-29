@@ -1,5 +1,7 @@
 ns("Tortuga");
 var createTortoise;
+var clearCanvas;
+
 (function(){
 	var prependArgumentsByObject = Om.prependArgumentsByObject;
 
@@ -44,7 +46,7 @@ var createTortoise;
 			var ox = t.x;
 			var oy = t.y;
 
-			var rad = degToRad(t);
+			var rad = degToRad(t.deg);
 			t.x += length * Math.cos(rad);
 			t.y += length * Math.sin(rad);
 
@@ -65,8 +67,7 @@ var createTortoise;
 		tailUp : function(t){t.isDrawing = false},
 		tailDown : function(t){t.isDrawing = true},
 		setColor : function(t, c){t.color = c || t.color},
-		setWidth : function(t, w){t.width = w || t.width},
-		clearCanvas : function(t){t.drawingSystem.clearCanvas()}
+		setWidth : function(t, w){t.width = w || t.width}
 	}
 	proto.fw = proto.go;
 	proto.forward = proto.go;
@@ -106,6 +107,8 @@ var createTortoise;
 	Tortuga.Tortoise = Tortoise;
 	Tortuga.initTortoise = function(tortoiseContainer, drawingSystem)
 	{
+		clearCanvas = function(){drawingSystem.clearCanvas()}
+
 		createTortoise = function(xx, yy, color, width)
 		{
 			return new Tortoise(xx, yy, color, width, tortoiseContainer, drawingSystem);
