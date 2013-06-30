@@ -86,7 +86,7 @@ var end;
 		proto.fw = proto.go;
 		proto.forward = proto.go;
 		proto.lt = proto.rotate;
-		proto.rt = function(deg){this.rotate(deg ? -deg : 0)}
+		proto.rt = function(deg){return this.rotate(deg ? -deg : 0)}
 		proto.up = proto.tailUp;
 		proto.dw = proto.tailDown;
 
