@@ -78,11 +78,51 @@ var fun = function(n)
 	}
 	SimpleNode.prototype.process = function(jsConverter, jcNode)
 	{
-		var zeroParam = jcNode.params[0]
-		jcNode.params[0] = this.command
-		var nextCommand = constructCommand(jcNode.params)
-		jcNode.params[0] = zeroParam
+		var params = jcNode.params
+		var zeroParam = params[0]
+		params[0] = this.command
+		var nextCommand = constructCommand(params)
+		params[0] = zeroParam
 		jsConverter.currentCommand = pair(jsConverter.currentCommand, nextCommand)
+	}
+
+	var SimpleVariableNode = function(command)
+	{
+		this.command = command
+	}
+	SimpleVariableNode.prototype.process = function(jsConverter, jcNode)
+	{
+		var params = jcNode.params
+		var zeroParam = params[0]
+		var firstParam = params[1]
+		params[0] = this.command
+		params[1] = firstParam.value
+		var nextCommand = constructCommand(params)
+		params[0] = zeroParam
+		params[1] = firstParam
+		jsConverter.currentCommand = pair(jsConverter.currentCommand, nextCommand)
+	}
+
+	var ResultNode = function(command)
+	{
+		this.command = command
+	}
+	ResultNode.prototype.process = function(jsConverter, jcNode)
+	{
+		var jsVar = new JsVariable()
+		var args = [this.command]
+		var params = jcNode.params
+		var paramsLen = params.length
+		for(var i = 1; i < paramsLen; ++i)
+		{
+			args.push(params[i])
+		}
+		args.push(function(result){jsVar.value = result})
+
+		var command = constructCommand(args)
+
+		jsConverter.currentCommand = pair(jsConverter.currentCommand, command)
+		jsConverter.result = jsVar
 	}
 
 	var NODE_BEGIN  = {
@@ -125,17 +165,22 @@ var fun = function(n)
 		}
 	}
 
-	var NODE_CREATE     = new SimpleNode(TR.commands.create)
-	var NODE_GO         = new SimpleNode(TR.commands.go)
-	var NODE_ROTATE     = new SimpleNode(TR.commands.rotate)
-	var NODE_TAIL_UP    = new SimpleNode(TR.commands.tailUp)
-	var NODE_TAIL_DOWN  = new SimpleNode(TR.commands.tailDown)
-	var NODE_SET_WIDTH  = new SimpleNode(TR.commands.setWidth)
-	var NODE_SET_COLOR  = new SimpleNode(TR.commands.setColor)
+	var NODE_CREATE     = new ResultNode(TR.commands.create)
+	var NODE_GET_COLOR_UNDER_TAIL = new ResultNode(TR.commands.getColorUnderTail)
+
+	var NODE_GO         = new SimpleVariableNode(TR.commands.go)
+	var NODE_ROTATE     = new SimpleVariableNode(TR.commands.rotate)
+	var NODE_TAIL_UP    = new SimpleVariableNode(TR.commands.tailUp)
+	var NODE_TAIL_DOWN  = new SimpleVariableNode(TR.commands.tailDown)
+	var NODE_SET_WIDTH  = new SimpleVariableNode(TR.commands.setWidth)
+	var NODE_SET_COLOR  = new SimpleVariableNode(TR.commands.setColor)
 	var NODE_CLEAR_CANVAS = new SimpleNode(TR.commands.clearCanvas)
-	var NODE_GET_COLOR_UNDER_TAIL = new SimpleNode(TR.commands.getColorUnderTail)
 
 	//==== JsConverter =======================================================
+	var JsVariable = function(value)
+	{
+		this.value = value
+	}
 
 	var JsConverter = function(tortoiseRunner)
 	{
@@ -146,14 +191,16 @@ var fun = function(n)
 	}
 	JsConverter.prototype.parseNode = function(node, _otherParams)
 	{
+		this.result = null
 		var jcNode = new JcNode(node, arguments)
 		jcNode.process(this, jcNode)
 		if(this.nodesStack.length == 0)
 		{
-			var result = this.tortoiseRunner.run(this.currentCommand)
+			this.tortoiseRunner.run(this.currentCommand)
 			this.currentCommand = nil()
-			return result
 		}
+
+		return this.result
 	}
 	JsConverter.prototype.nodes = {
 		begin    : NODE_BEGIN,
