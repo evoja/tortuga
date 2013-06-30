@@ -36,8 +36,13 @@ fun = function(n)
 {
 	var m1 = new Date().getTime()
 	var tr = Tortuga.Vm.TortoiseRunner
-	command = tr.constructCommand(tr.commands.create, 0, 0, "green")
-	var t = MyTr.run(command)
+	var t;
+	var command = tr.constructCommand(tr.commands.create, 0, 0, "green", 1,
+		function(trTortoise)
+		{
+			t = trTortoise
+		})
+	MyTr.run(command)
 	var pair = function(f, s){return tr.constructCommand(tr.commands.pair, f, s)}
 
 
@@ -67,8 +72,10 @@ fun2 = function(n)
 {
 	var m1 = new Date().getTime()
 	var tr = Tortuga.Vm.TortoiseRunner
-	command = tr.constructCommand(tr.commands.create, 0, 0, "green")
-	var t = MyTr.run(command)
+	var t
+	var command = tr.constructCommand(tr.commands.create, 0, 0, "green", 1,
+		function(trTortoise){t = trTortoise})
+	MyTr.run(command)
 
 	var td = tr.constructCommand(tr.commands.tailDown, t)
 	var tu = tr.constructCommand(tr.commands.tailUp, t)
@@ -202,12 +209,12 @@ fun2(10000)
 	}
 
 
-	var runCreate = function runCreate(runner, x, y, color, width)
+	var runCreate = function runCreate(runner, x, y, color, width, handler)
 	{
 		var dsTortoise = runner.drawingSystem.createTortoise()
 		var trTortoise = new TrTortoise(x, y, color, width, dsTortoise)
 		runner.tortoises.push(trTortoise)
-		return trTortoise
+		handler(trTortoise)
 	}
 
 	var runClearCanvas = function runClearCanvas(runner)
@@ -258,13 +265,13 @@ fun2(10000)
 		trTortoise.width = width
 	}
 
-	var runGetColorUnderTail = function runGetColorUnderTail(runner, trTortoise, forward)
+	var runGetColorUnderTail = function runGetColorUnderTail(runner, trTortoise, forward, handler)
 	{
 		forward = forward || 0
 		var rad = degToRad(trTortoise.deg)
 		var x = trTortoise.x + forward * Math.cos(rad)
 		var y = trTortoise.y + forward * Math.sin(rad)
-		return runner.drawingSystem.getColorAt(x, y)
+		handler(runner.drawingSystem.getColorAt(x, y))
 	}
 
 	var runKill = function runKill(runner, trTortoise)
@@ -284,24 +291,20 @@ fun2(10000)
 	var runPair = function runPair(runner, first, second)
 	{
 		first(runner)
-		return second(runner)
+		second(runner)
 	}
 
 	var runSeq = function runSeq(runner, arr)
 	{
-		var result;
-		arr.forEach(function(command){result = command(runner)})
-		return result
+		arr.forEach(function(command){command(runner)})
 	}
 
 	var runRepeat = function runRepeat(runner, n, command)
 	{
-		var result;
 		for(var i = 0; i < n; ++i)
 		{
-			result = command(runner)
+			command(runner)
 		}
-		return result
 	}
 
 	var constructCommand = function()
@@ -311,9 +314,8 @@ fun2(10000)
 		return function(runner)
 		{
 			args[0] = runner
-			var result = realCommand.apply(null, args)
+			realCommand.apply(null, args)
 			args[0] = realCommand
-			return result
 		}
 	}
 
@@ -332,10 +334,9 @@ fun2(10000)
 			runner.points = []
 			var ds = runner.drawingSystem
 
-			var result = command(runner)
+			command(runner)
 			drawAllLines(runner)
 			placeAllTortoises(runner)
-			return result
 		}
 	}
 
@@ -358,4 +359,40 @@ fun2(10000)
 	TortoiseRunner.constructCommand = constructCommand
 
 	Tortuga.Vm.TortoiseRunner = TortoiseRunner
+
+
+	fun = function(n)
+{
+	var m1 = new Date().getTime()
+	var tr = Tortuga.Vm.TortoiseRunner
+	var t;
+	var command = tr.constructCommand(tr.commands.create, 0, 0, "green", 1,
+		function(trTortoise)
+		{
+			t = trTortoise
+		})
+	MyTr.run(command)
+	var pair = function(f, s){return tr.constructCommand(tr.commands.pair, f, s)}
+
+
+	var td = tr.constructCommand(tr.commands.tailDown, t)
+	var tu = tr.constructCommand(tr.commands.tailUp, t)
+	var right = tr.constructCommand(tr.commands.rotate, t, -90)
+	var left = tr.constructCommand(tr.commands.rotate, t, 90)
+
+	var go = tr.constructCommand(tr.commands.go, t, 3)
+	var kill = tr.constructCommand(tr.commands.kill, t)
+	var nil = tr.constructCommand(tr.commands.nil)
+
+	var seq = pair(nil, td)
+	for(var i = 0; i < n;++i)
+	{
+	   seq = pair(pair(pair(pair(seq, left), go), right), go)
+	}
+	seq = pair(seq, kill)
+	MyTr.run(seq)
+	var m2 = new Date().getTime()
+	return m2 - m1
+}
+
 })()
