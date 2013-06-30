@@ -1,4 +1,4 @@
-ns("Tortuga");
+ns("Tortuga.Vm");
 var createTortoise;
 var clearCanvas;
 var repeat;
@@ -14,67 +14,11 @@ var end;
 		return jsConverter.parseNode(jsConverter.nodes.create, x, y, color, width)
 	}
 
-	var go = function(t, length)
+	var getColorUnderTail = function(jsConverter, jsTortoise, forward)
 	{
-		return t.jsConverter.parseNode(t.jsConverter.nodes.go, t.jsTortoise, length)
+		return jsConverter.parseNode(jsConverter.nodes.getColorUnderTail, jsTortoise, forward)
 	}
 
-	var rotate = function(t, deg)
-	{
-		return t.jsConverter.parseNode(t.jsConverter.nodes.rotate, t.jsTortoise, deg)
-	}
-
-	var tailUp = function(t)
-	{
-		return t.jsConverter.parseNode(t.jsConverter.nodes.tailUp, t.jsTortoise)
-	}
-
-	var tailDown = function(t)
-	{
-		return t.jsConverter.parseNode(t.jsConverter.nodes.tailDown, t.jsTortoise)
-	}
-
-
-	var setWidth = function(t, width)
-	{
-		return t.jsConverter.parseNode(t.jsConverter.nodes.setWidth, t.jsTortoise, width)
-	}
-
-	var setColor = function(t, color)
-	{
-		return t.jsConverter.parseNode(t.jsConverter.nodes.setColor, t.jsTortoise, color)
-	}
-
-	var clearCanvasCommand = function(jsConverter)
-	{
-		return jsConverter.parseNode(jsConverter.nodes.clearCanvas)
-	}
-
-	var getColorUnderTail = function(t, forward)
-	{
-		return t.jsConverter.parseNode(t.jsConverter.nodes.getColorUnderTail, t.jsTortoise, forward)
-	}
-
-	var beginCommand = function(jsConverter)
-	{
-		return jsConverter.parseNode(jsConverter.nodes.begin)
-	}
-
-	var endCommand = function(jsConverter)
-	{
-		return jsConverter.parseNode(jsConverter.nodes.end)
-	}
-
-	var repeatCommand = function(jsConverter, count)
-	{
-		return jsConverter.parseNode(jsConverter.nodes.repeat, count)
-	}
-
-	//=== Math ===
-	var degToRad = function(deg)
-	{
-		return deg / 180 * Math.PI;
-	}
 
 	//==== Construction helpers ====
 	var applyMethodsToProto = function (methods, proto, wrapMethod)
@@ -85,62 +29,72 @@ var end;
 		}
 	}
 
-	var wrapTortoisProtoMethod = function(fun)
+	var wrapTortoiseProtoMethod = function(node, jsConverter)
 	{
 		return function()
 		{
-			var args = prependArgumentsByObject(this, arguments);
-			fun.apply(null, args);
+			var args = prependArgumentsByObject(this.jsTortoise, arguments);
+			args = prependArgumentsByObject(node, args)
+			jsConverter.parseNode.apply(jsConverter, args)
 			return this;
 		}
 	}
 
-
-
-	var proto = {
-		go : go,
-		rotate : rotate,
-		tailUp : tailUp,
-		tailDown : tailDown,
-		setColor : setColor,
-		setWidth : setWidth
-	}
-	proto.fw = proto.go;
-	proto.forward = proto.go;
-	proto.lt = proto.rotate;
-	proto.rt = function(t, deg){t.rotate(deg ? -deg : 0)}
-	proto.up = proto.tailUp;
-	proto.dw = proto.tailDown;
-
-	var Tortoise = function(xx, yy, color, width, tortoiseContainer, jsConverter)
+	var wrapNode = function(node, jsConverter)
 	{
-		xx = xx === undefined ? tortoiseContainer.offsetWidth / 2 : xx;
-		yy = yy === undefined ? tortoiseContainer.offsetHeight / 2 : yy;
-		color = color || "#0a0";
-		width = width || 1;
-
-
-		this.jsConverter = jsConverter
-		this.jsTortoise = createJsTortoise(jsConverter, xx, yy, color, width)
-	}
-	applyMethodsToProto(proto, Tortoise.prototype,
-		wrapTortoisProtoMethod);
-	Tortoise.prototype.repeat = function(count)
-	{
-		return new Tortuga.RepeatTortoise(this, count);
-	}
-	Tortoise.prototype.getColorUnderTail = function(forward)
-	{
-		return getColorUnderTail(this, forward)
+		return function()
+		{
+			var args = prependArgumentsByObject(node, arguments)
+			return jsConverter.parseNode.apply(jsConverter, args)
+		}
 	}
 
-	Tortuga.Tortoise = Tortoise;
-	Tortuga.initTortoise = function(tortoiseContainer, jsConverter)
+	var constructProto = function(jsConverter)
 	{
-		clearCanvas = function(){clearCanvasCommand(jsConverter)}
-		begin = function(){beginCommand(jsConverter)}
-		repeat = function(count){repeatCommand(jsConverter, count)}
-		end = function(){endCommand(jsConverter)}
+		return {
+			go: jsConverter.nodes.go,
+			rotate: jsConverter.nodes.rotate,
+			tailUp: jsConverter.nodes.tailUp,
+			tailDown: jsConverter.nodes.tailDown,
+			setColor: jsConverter.nodes.setColor,
+			setWidth: jsConverter.nodes.setWidth,
+		}
+	}
+
+
+	Tortuga.Vm.initTortoise = function(tortoiseContainer, jsConverter)
+	{
+		var Tortoise = function(xx, yy, color, width)
+		{
+			xx = xx === undefined ? tortoiseContainer.offsetWidth / 2 : xx;
+			yy = yy === undefined ? tortoiseContainer.offsetHeight / 2 : yy;
+			color = color || "#0a0";
+			width = width || 1;
+
+			this.jsTortoise = createJsTortoise(jsConverter, xx, yy, color, width)			
+		}
+
+		applyMethodsToProto(constructProto(jsConverter), Tortoise.prototype,
+			function(node){return wrapTortoiseProtoMethod(node, jsConverter)});
+
+		Tortoise.prototype.getColorUnderTail = function(forward)
+		{
+			return getColorUnderTail(jsConverter, this.jsTortoise, forward)
+		}
+
+		var proto = Tortoise.prototype
+		proto.fw = proto.go;
+		proto.forward = proto.go;
+		proto.lt = proto.rotate;
+		proto.rt = function(deg){this.rotate(deg ? -deg : 0)}
+		proto.up = proto.tailUp;
+		proto.dw = proto.tailDown;
+
+
+		clearCanvas = wrapNode(jsConverter.nodes.clearCanvas, jsConverter)
+		begin = wrapNode(jsConverter.nodes.begin, jsConverter)
+		repeat = wrapNode(jsConverter.nodes.repeat, jsConverter)
+		end = wrapNode(jsConverter.nodes.end, jsConverter)
 
 		createTortoise = function(xx, yy, color, width)
 		{
