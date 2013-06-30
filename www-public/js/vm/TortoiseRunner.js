@@ -314,12 +314,25 @@ fun2(10000)
 	{
 		var realCommand = arguments[0]
 		var args = arguments
-		return function(runner)
+		var command = function(runner)
 		{
 			args[0] = runner
 			realCommand.apply(null, args)
 			args[0] = realCommand
 		}
+		command.args = args
+		return command
+	}
+
+	var appendCommandToSeq = function(seq, command)
+	{
+		seq.args[1].push(command)
+	}
+
+	var concatSeqs = function(seq1, seq2)
+	{
+		var commands = seq1.args[1].concat(seq2.args[1])
+		return constructCommand(runSeq, commands)
 	}
 
 	//==== TortoiseRunner =======================================================
@@ -360,6 +373,8 @@ fun2(10000)
 		getColorUnderTail : runGetColorUnderTail
 	}
 	TortoiseRunner.constructCommand = constructCommand
+	TortoiseRunner.appendCommandToSeq = appendCommandToSeq
+	TortoiseRunner.concatSeqs = concatSeqs
 
 	Tortuga.Vm.TortoiseRunner = TortoiseRunner
 

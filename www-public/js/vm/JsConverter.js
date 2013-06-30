@@ -46,14 +46,19 @@ var fun = function(n)
 		return TR.constructCommand.apply(TR, params)
 	}
 
-	var nil = function()
+	var seq = function()
 	{
-		return constructCommand([TR.commands.nil])
+		return constructCommand([TR.commands.seq, []])
 	}
 
-	var pair = function(first, second)
+	var appendCommandToSeq = function(seq, command)
 	{
-		return constructCommand([TR.commands.pair, first, second])
+		TR.appendCommandToSeq(seq, command)
+	}
+
+	var concatSeqs = function(seq1, seq2)
+	{
+		return TR.concatSeqs(seq1, seq2)
 	}
 
 	var repeat = function(count, command)
@@ -83,7 +88,7 @@ var fun = function(n)
 		params[0] = this.command
 		var nextCommand = constructCommand(params)
 		params[0] = zeroParam
-		jsConverter.currentCommand = pair(jsConverter.currentCommand, nextCommand)
+		appendCommandToSeq(jsConverter.currentCommand, nextCommand)
 	}
 
 	var SimpleVariableNode = function(command)
@@ -100,7 +105,7 @@ var fun = function(n)
 		var nextCommand = constructCommand(params)
 		params[0] = zeroParam
 		params[1] = firstParam
-		jsConverter.currentCommand = pair(jsConverter.currentCommand, nextCommand)
+		appendCommandToSeq(jsConverter.currentCommand, nextCommand)
 	}
 
 	var ResultNode = function(command)
@@ -119,9 +124,9 @@ var fun = function(n)
 		}
 		args.push(function(result){jsVar.value = result})
 
-		var command = constructCommand(args)
+		var nextCommand = constructCommand(args)
 
-		jsConverter.currentCommand = pair(jsConverter.currentCommand, command)
+		appendCommandToSeq(jsConverter.currentCommand, nextCommand)
 		jsConverter.result = jsVar
 	}
 
@@ -130,7 +135,7 @@ var fun = function(n)
 		{
 			jsConverter.commandsStack.push(jsConverter.currentCommand)
 			jsConverter.nodesStack.push(jcNode)
-			jsConverter.currentCommand = nil()
+			jsConverter.currentCommand = seq()
 		}
 	}
 
@@ -139,7 +144,7 @@ var fun = function(n)
 		{
 			jsConverter.commandsStack.push(jsConverter.currentCommand)
 			jsConverter.nodesStack.push(jcNode)
-			jsConverter.currentCommand = nil()
+			jsConverter.currentCommand = seq()
 		}		
 	}
 
@@ -152,7 +157,9 @@ var fun = function(n)
 			{
 				case NODE_REPEAT:
 				{
-					currentCommand = repeat(prevJcNode.params[1], currentCommand)
+					var repeatCommand = repeat(prevJcNode.params[1], currentCommand)
+					currentCommand = seq()
+					appendCommandToSeq(currentCommand, repeatCommand)
 					break;
 				}
 				case NODE_BEGIN:
@@ -161,7 +168,7 @@ var fun = function(n)
 
 			var prevCommand = jsConverter.commandsStack.pop()
 			
-			jsConverter.currentCommand = pair(prevCommand, currentCommand)
+			jsConverter.currentCommand = concatSeqs(prevCommand, currentCommand)
 		}
 	}
 
@@ -187,7 +194,7 @@ var fun = function(n)
 		this.tortoiseRunner = tortoiseRunner
 		this.nodesStack = []
 		this.commandsStack = []
-		this.currentCommand = nil()
+		this.currentCommand = seq()
 	}
 	JsConverter.prototype.parseNode = function(node, _otherParams)
 	{
@@ -197,7 +204,7 @@ var fun = function(n)
 		if(this.nodesStack.length == 0)
 		{
 			this.tortoiseRunner.run(this.currentCommand)
-			this.currentCommand = nil()
+			this.currentCommand = seq()
 		}
 
 		return this.result
