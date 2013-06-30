@@ -17,6 +17,22 @@ MyJc.parseNode(MyJc.nodes.go, t, 100)
 //Обрываем цепочку, выполняются все три команды
 MyJc.parseNode(MyJc.nodes.end)
 
+//Повторения:
+var fun = function(n)
+{
+	var m1 = new Date().getTime()
+	var t = MyJc.parseNode(MyJc.nodes.create, 0, 0, "green", 1)
+	MyJc.parseNode(MyJc.nodes.tailDown, t)
+	
+	MyJc.parseNode(MyJc.nodes.repeat, n)
+		MyJc.parseNode(MyJc.nodes.go, t, 3)
+		MyJc.parseNode(MyJc.nodes.rotate, t, 90)
+		MyJc.parseNode(MyJc.nodes.go, t, 3)
+		MyJc.parseNode(MyJc.nodes.rotate, t, -90)
+	MyJc.parseNode(MyJc.nodes.end)
+	var m2 = new Date().getTime()
+	return m2 - m1
+}
 
 */
 
@@ -38,6 +54,11 @@ MyJc.parseNode(MyJc.nodes.end)
 	var pair = function(first, second)
 	{
 		return constructCommand([TR.commands.pair, first, second])
+	}
+
+	var repeat = function(count, command)
+	{
+		return constructCommand([TR.commands.repeat, count, command])
 	}
 
 	var JcNode = function(node, args)
@@ -72,14 +93,35 @@ MyJc.parseNode(MyJc.nodes.end)
 			jsConverter.currentCommand = nil()
 		}
 	}
+
+	var NODE_REPEAT = {
+		process: function(jsConverter, jcNode)
+		{
+			jsConverter.commandsStack.push(jsConverter.currentCommand)
+			jsConverter.nodesStack.push(jcNode)
+			jsConverter.currentCommand = nil()
+		}		
+	}
+
 	var NODE_END = {
 		process: function(jsConverter, jcNode)
 		{
-			var node = jsConverter.nodesStack.pop()
+			var prevJcNode = jsConverter.nodesStack.pop()
+			var currentCommand = jsConverter.currentCommand
+			switch(prevJcNode.node)
+			{
+				case NODE_REPEAT:
+				{
+					currentCommand = repeat(prevJcNode.params[1], currentCommand)
+					break;
+				}
+				case NODE_BEGIN:
+				default:
+			}
 
 			var prevCommand = jsConverter.commandsStack.pop()
 			
-			jsConverter.currentCommand = pair(prevCommand, jsConverter.currentCommand)
+			jsConverter.currentCommand = pair(prevCommand, currentCommand)
 		}
 	}
 
@@ -114,6 +156,7 @@ MyJc.parseNode(MyJc.nodes.end)
 	}
 	JsConverter.prototype.nodes = {
 		begin    : NODE_BEGIN,
+		repeat   : NODE_REPEAT,
 		end      : NODE_END,
 		create   : NODE_CREATE,
 		go       : NODE_GO,
@@ -121,7 +164,7 @@ MyJc.parseNode(MyJc.nodes.end)
 		tailUp   : NODE_TAIL_UP,
 		tailDown : NODE_TAIL_DOWN,
 		setWidth : NODE_SET_WIDTH,
-		setColor : NODE_SET_COLOR
+		setColor : NODE_SET_COLOR,
 	}
 
 	Tortuga.Vm.JsConverter = JsConverter
