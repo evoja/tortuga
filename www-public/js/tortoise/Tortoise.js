@@ -42,18 +42,15 @@ var clearCanvas;
 		return t.jsConverter.parseNode(t.jsConverter.nodes.setColor, t.jsTortoise, color)
 	}
 
-	// var clearCanvasCommand = function(tortoiseRunner)
-	// {
-	// 	var command = TR.constructCommand(TR.commands.clearCanvas)
-	// 	return tortoiseRunner.run(command)
-	// 	return 
-	// }
+	var clearCanvasCommand = function(jsConverter)
+	{
+		return jsConverter.parseNode(jsConverter.nodes.clearCanvas)
+	}
 
-	// var getColorUnderTail = function(t, forward)
-	// {
-	// 	var command = TR.constructCommand(TR.commands.getColorUnderTail, t.trTortoise, forward)
-	// 	return t.tortoiseRunner.run(command)
-	// }
+	var getColorUnderTail = function(t, forward)
+	{
+		return t.jsConverter.parseNode(t.jsConverter.nodes.getColorUnderTail, t.jsTortoise, forward)
+	}
 
 	//=== Math ===
 	var degToRad = function(deg)
@@ -122,7 +119,7 @@ var clearCanvas;
 	Tortuga.Tortoise = Tortoise;
 	Tortuga.initTortoise = function(tortoiseContainer, jsConverter)
 	{
-//		clearCanvas = function(){clearCanvasCommand(tortoiseRunner)}
+		clearCanvas = function(){clearCanvasCommand(jsConverter)}
 
 		createTortoise = function(xx, yy, color, width)
 		{

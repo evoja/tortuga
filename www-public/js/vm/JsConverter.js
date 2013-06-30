@@ -132,6 +132,8 @@ var fun = function(n)
 	var NODE_TAIL_DOWN  = new SimpleNode(TR.commands.tailDown)
 	var NODE_SET_WIDTH  = new SimpleNode(TR.commands.setWidth)
 	var NODE_SET_COLOR  = new SimpleNode(TR.commands.setColor)
+	var NODE_CLEAR_CANVAS = new SimpleNode(TR.commands.clearCanvas)
+	var NODE_GET_COLOR_UNDER_TAIL = new SimpleNode(TR.commands.getColorUnderTail)
 
 	//==== JsConverter =======================================================
 
@@ -165,6 +167,8 @@ var fun = function(n)
 		tailDown : NODE_TAIL_DOWN,
 		setWidth : NODE_SET_WIDTH,
 		setColor : NODE_SET_COLOR,
+		clearCanvas : NODE_CLEAR_CANVAS,
+		getColorUnderTail : NODE_GET_COLOR_UNDER_TAIL
 	}
 
 	Tortuga.Vm.JsConverter = JsConverter
