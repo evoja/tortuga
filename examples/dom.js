@@ -8,7 +8,9 @@ var okno1 = function(t, width)
 	var height = getHeight(width);
 
 	t.tailDown()
-	t.repeat(2).go(height).rotate(90).go(width).rotate(90).end()
+	repeat(2)
+		t.go(height).rotate(90).go(width).rotate(90)
+	end()
 	t.tailUp()
 
 	return height
@@ -30,21 +32,21 @@ var okno2 = function(t, width)
 	var w = width/2;
 	var h = okno1(t, width)
 	t.rotate(-90)
-	t.repeat(2)
-		.tailDown()
+	repeat(2)
+		t.tailDown()
 		.go(w).rotate(90).go(h).rotate(90).go(w)
 		.tailUp()
 		.go(width)
-	.end()
+	end()
 	t.rotate(90)
 
 	var l = w / Math.cos(Math.PI / 6);
-	t.repeat(2)
-		.tailDown()
+	repeat(2)
+		t.tailDown()
 		.rotate(120).go(l).rotate(-60).go(l)
 		.tailUp()
 		.rotate(-60).go(h).rotate(180)
-	.end()
+	end()
 }
 
 var domik = function(t, l)
@@ -69,7 +71,9 @@ var obshaga = function(t, width, rows, cols, okno)
 	var height = rows * h1 + hgap / 2;
 
 	t.tailDown()
-	t.repeat(2).go(height).rotate(90).go(width).rotate(90).end()
+	repeat(2)
+		t.go(height).rotate(90).go(width).rotate(90)
+	end()
 	t.tailUp()
 
 	var row = function()
@@ -98,15 +102,18 @@ var obshaga = function(t, width, rows, cols, okno)
 
 var gorod = function(offset, okno, color)
 {
-	var t = createTortoise(offset, 20, color);
+	var t = createTortoise(offset, 380, color);
+	t.rotate(-90)
 	obshaga(t, 250, 3, 7, okno);
 	t.go(1000)
 
-	var t = createTortoise(offset, 180, color);
+	var t = createTortoise(offset, 220, color);
+	t.rotate(-90)
 	obshaga(t, 100, 5, 3, okno);
 	t.go(1000)
 
-	var t = createTortoise(offset + 120, 230, color);
+	var t = createTortoise(offset + 120, 170, color);
+	t.rotate(-90)
 	obshaga(t, 130, 10, 10, okno);
 	t.go(1000)
 }
