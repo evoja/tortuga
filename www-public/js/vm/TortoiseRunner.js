@@ -93,8 +93,8 @@ fun2(10000)
 
 (function()
 {
-	var TR_POINT_MOVE = {};
-	var TR_POINT_LINE = {};
+	var TR_POINT_MOVE = {__move:1};
+	var TR_POINT_LINE = {__line:1};
 
 	//=== Math ===
 	var degToRad = function(deg)
@@ -202,7 +202,7 @@ fun2(10000)
 	}
 
 
-	var runCreate = function(runner, x, y, color, width)
+	var runCreate = function runCreate(runner, x, y, color, width)
 	{
 		var dsTortoise = runner.drawingSystem.createTortoise()
 		var trTortoise = new TrTortoise(x, y, color, width, dsTortoise)
@@ -210,12 +210,12 @@ fun2(10000)
 		return trTortoise
 	}
 
-	var runClearCanvas = function(runner)
+	var runClearCanvas = function runClearCanvas(runner)
 	{
 		runner.drawingSystem.clearCanvas()
 	}
 
-	var runGo = function(runner, trTortoise, length)
+	var runGo = function runGo(runner, trTortoise, length)
 	{
 		var isDrawing = trTortoise.isDrawing
 		if(isDrawing)
@@ -233,32 +233,32 @@ fun2(10000)
 		}
 	}
 
-	var runTailDown = function(runner, trTortoise)
+	var runTailDown = function runTailDown(runner, trTortoise)
 	{
 		trTortoise.isDrawing = true
 	}
 
-	var runTailUp = function(runner, trTortoise)
+	var runTailUp = function runTailUp(runner, trTortoise)
 	{
 		trTortoise.isDrawing = false
 	}
 
-	var runRotate = function(runner, trTortoise, deg)
+	var runRotate = function runRotate(runner, trTortoise, deg)
 	{
 		trTortoise.deg += deg
 	}
 
-	var runSetColor = function(runner, trTortoise, color)
+	var runSetColor = function runSetColor(runner, trTortoise, color)
 	{
 		trTortoise.color = color
 	}
 
-	var runSetWidth = function(runner, trTortoise, width)
+	var runSetWidth = function runSetWidth(runner, trTortoise, width)
 	{
 		trTortoise.width = width
 	}
 
-	var runGetColorUnderTail = function(runner, trTortoise, forward)
+	var runGetColorUnderTail = function runGetColorUnderTail(runner, trTortoise, forward)
 	{
 		forward = forward || 0
 		var rad = degToRad(trTortoise.deg)
@@ -267,7 +267,7 @@ fun2(10000)
 		return runner.drawingSystem.getColorAt(x, y)
 	}
 
-	var runKill = function(runner, trTortoise)
+	var runKill = function runKill(runner, trTortoise)
 	{
 		var tortoises = runner.tortoises
 		var index = tortoises.indexOf(trTortoise)
@@ -279,22 +279,22 @@ fun2(10000)
 		runner.drawingSystem.destroyTortoise(trTortoise.dsTortoise)
 	}
 
-	var runNil = function(runner){}
+	var runNil = function runNil(runner){}
 
-	var runPair = function(runner, first, second)
+	var runPair = function runPair(runner, first, second)
 	{
 		first(runner)
 		return second(runner)
 	}
 
-	var runSeq = function(runner, arr)
+	var runSeq = function runSeq(runner, arr)
 	{
 		var result;
 		arr.forEach(function(command){result = command(runner)})
 		return result
 	}
 
-	var runRepeat = function(runner, n, command)
+	var runRepeat = function runRepeat(runner, n, command)
 	{
 		var result;
 		for(var i = 0; i < n; ++i)
@@ -306,13 +306,13 @@ fun2(10000)
 
 	var constructCommand = function()
 	{
-		var command = arguments[0]
+		var realCommand = arguments[0]
 		var args = arguments
 		return function(runner)
 		{
 			args[0] = runner
-			var result = command.apply(null, args)
-			args[0] = command
+			var result = realCommand.apply(null, args)
+			args[0] = realCommand
 			return result
 		}
 	}
