@@ -222,8 +222,9 @@ fun2(10000)
 		runner.drawingSystem.clearCanvas()
 	}
 
-	var runGo = function runGo(runner, trTortoise, length)
+	var runGo = function runGo(runner, getTrTortoise, length)
 	{
+		var trTortoise = getTrTortoise()
 		var isDrawing = trTortoise.isDrawing
 		if(isDrawing)
 		{
@@ -240,33 +241,34 @@ fun2(10000)
 		}
 	}
 
-	var runTailDown = function runTailDown(runner, trTortoise)
+	var runTailDown = function runTailDown(runner, getTrTortoise)
 	{
-		trTortoise.isDrawing = true
+		getTrTortoise().isDrawing = true
 	}
 
-	var runTailUp = function runTailUp(runner, trTortoise)
+	var runTailUp = function runTailUp(runner, getTrTortoise)
 	{
-		trTortoise.isDrawing = false
+		getTrTortoise().isDrawing = false
 	}
 
-	var runRotate = function runRotate(runner, trTortoise, deg)
+	var runRotate = function runRotate(runner, getTrTortoise, deg)
 	{
-		trTortoise.deg += deg
+		getTrTortoise().deg += deg
 	}
 
-	var runSetColor = function runSetColor(runner, trTortoise, color)
+	var runSetColor = function runSetColor(runner, getTrTortoise, color)
 	{
-		trTortoise.color = color
+		getTrTortoise().color = color
 	}
 
-	var runSetWidth = function runSetWidth(runner, trTortoise, width)
+	var runSetWidth = function runSetWidth(runner, getTrTortoise, width)
 	{
-		trTortoise.width = width
+		getTrTortoise().width = width
 	}
 
-	var runGetColorUnderTail = function runGetColorUnderTail(runner, trTortoise, forward, handler)
+	var runGetColorUnderTail = function runGetColorUnderTail(runner, getTrTortoise, forward, handler)
 	{
+		var trTortoise = getTrTortoise()
 		forward = forward || 0
 		var rad = degToRad(trTortoise.deg)
 		var x = trTortoise.x + forward * Math.cos(rad)
@@ -274,8 +276,9 @@ fun2(10000)
 		handler(runner.drawingSystem.getColorAt(x, y))
 	}
 
-	var runKill = function runKill(runner, trTortoise)
+	var runKill = function runKill(runner, getTrTortoise)
 	{
+		var trTortoise = getTrTortoise()
 		var tortoises = runner.tortoises
 		var index = tortoises.indexOf(trTortoise)
 

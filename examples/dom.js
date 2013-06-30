@@ -118,8 +118,10 @@ var gorod = function(offset, okno, color)
 	t.go(1000)
 }
 
+begin()
 gorod(100, okno1, "#777")
 gorod(500, okno3, "#777")
+end()
 
 /*
 var t=createTortoise(300, 180, "#777")

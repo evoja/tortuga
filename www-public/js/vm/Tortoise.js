@@ -16,7 +16,7 @@ var end;
 
 	var getColorUnderTail = function(jsConverter, jsTortoise, forward)
 	{
-		return jsConverter.parseNode(jsConverter.nodes.getColorUnderTail, jsTortoise, forward)
+		return jsConverter.parseNode(jsConverter.nodes.getColorUnderTail, jsTortoise, forward).value
 	}
 
 
