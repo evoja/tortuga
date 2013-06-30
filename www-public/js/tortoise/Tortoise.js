@@ -1,6 +1,9 @@
 ns("Tortuga");
 var createTortoise;
 var clearCanvas;
+var repeat;
+var begin;
+var end;
 
 (function(){
 	var prependArgumentsByObject = Om.prependArgumentsByObject;
@@ -50,6 +53,21 @@ var clearCanvas;
 	var getColorUnderTail = function(t, forward)
 	{
 		return t.jsConverter.parseNode(t.jsConverter.nodes.getColorUnderTail, t.jsTortoise, forward)
+	}
+
+	var beginCommand = function(jsConverter)
+	{
+		return jsConverter.parseNode(jsConverter.nodes.begin)
+	}
+
+	var endCommand = function(jsConverter)
+	{
+		return jsConverter.parseNode(jsConverter.nodes.end)
+	}
+
+	var repeatCommand = function(jsConverter, count)
+	{
+		return jsConverter.parseNode(jsConverter.nodes.repeat, count)
 	}
 
 	//=== Math ===
@@ -120,6 +138,9 @@ var clearCanvas;
 	Tortuga.initTortoise = function(tortoiseContainer, jsConverter)
 	{
 		clearCanvas = function(){clearCanvasCommand(jsConverter)}
+		begin = function(){beginCommand(jsConverter)}
+		repeat = function(count){repeatCommand(jsConverter, count)}
+		end = function(){endCommand(jsConverter)}
 
 		createTortoise = function(xx, yy, color, width)
 		{
