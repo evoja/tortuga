@@ -24,10 +24,6 @@ MyJc.parseNode(MyJc.nodes.end)
 (function()
 {
 	var TR = Tortuga.Vm.TortoiseRunner
-	var TR_CREATE = TR.commands.create
-	var TR_GO = TR.commands.go
-	var TR_PAIR = TR.commands.pair
-	var TR_NIL = TR.commands.nil
 
 	var constructCommand = function(params)
 	{
@@ -36,12 +32,12 @@ MyJc.parseNode(MyJc.nodes.end)
 
 	var nil = function()
 	{
-		return constructCommand([TR_NIL])
+		return constructCommand([TR.commands.nil])
 	}
 
 	var pair = function(first, second)
 	{
-		return constructCommand([TR_PAIR, first, second])
+		return constructCommand([TR.commands.pair, first, second])
 	}
 
 	var JcNode = function(node, args)
@@ -55,8 +51,20 @@ MyJc.parseNode(MyJc.nodes.end)
 		this.node.process.apply(this.node, arguments)
 	}
 
+	var SimpleNode = function(command)
+	{
+		this.command = command
+	}
+	SimpleNode.prototype.process = function(jsConverter, jcNode)
+	{
+		var zeroParam = jcNode.params[0]
+		jcNode.params[0] = this.command
+		var nextCommand = constructCommand(jcNode.params)
+		jcNode.params[0] = zeroParam
+		jsConverter.currentCommand = pair(jsConverter.currentCommand, nextCommand)
+	}
+
 	var NODE_BEGIN  = {
-		name:"begin",
 		process: function(jsConverter, jcNode)
 		{
 			jsConverter.commandsStack.push(jsConverter.currentCommand)
@@ -65,7 +73,6 @@ MyJc.parseNode(MyJc.nodes.end)
 		}
 	}
 	var NODE_END = {
-		name:"end",
 		process: function(jsConverter, jcNode)
 		{
 			var node = jsConverter.nodesStack.pop()
@@ -76,29 +83,13 @@ MyJc.parseNode(MyJc.nodes.end)
 		}
 	}
 
-	var NODE_CREATE = {
-		name:"create",
-		process: function(jsConverter, jcNode)
-		{
-			var zeroParam = jcNode.params[0]
-			jcNode.params[0] = TR_CREATE
-			var nextCommand = constructCommand(jcNode.params)
-			jcNode.params[0] = zeroParam
-			jsConverter.currentCommand = pair(jsConverter.currentCommand, nextCommand)
-		}
-	}
-
-	var NODE_GO = {
-		name:"go",
-		process: function(jsConverter, jcNode)
-		{
-			var zeroParam = jcNode.params[0]
-			jcNode.params[0] = TR_GO
-			var nextCommand = constructCommand(jcNode.params)
-			jcNode.params[0] = zeroParam
-			jsConverter.currentCommand = pair(jsConverter.currentCommand, nextCommand)
-		}
-	}
+	var NODE_CREATE     = new SimpleNode(TR.commands.create)
+	var NODE_GO         = new SimpleNode(TR.commands.go)
+	var NODE_ROTATE     = new SimpleNode(TR.commands.rotate)
+	var NODE_TAIL_UP    = new SimpleNode(TR.commands.tailUp)
+	var NODE_TAIL_DOWN  = new SimpleNode(TR.commands.tailDown)
+	var NODE_SET_WIDTH  = new SimpleNode(TR.commands.setWidth)
+	var NODE_SET_COLOR  = new SimpleNode(TR.commands.setColor)
 
 	//==== JsConverter =======================================================
 
@@ -122,10 +113,15 @@ MyJc.parseNode(MyJc.nodes.end)
 		console.log("After: ", this)
 	}
 	JsConverter.prototype.nodes = {
-		begin : NODE_BEGIN,
-		end   : NODE_END,
-		create: NODE_CREATE,
-		go    : NODE_GO
+		begin    : NODE_BEGIN,
+		end      : NODE_END,
+		create   : NODE_CREATE,
+		go       : NODE_GO,
+		rotate   : NODE_ROTATE,
+		tailUp   : NODE_TAIL_UP,
+		tailDown : NODE_TAIL_DOWN,
+		setWidth : NODE_SET_WIDTH,
+		setColor : NODE_SET_COLOR
 	}
 
 	Tortuga.Vm.JsConverter = JsConverter
