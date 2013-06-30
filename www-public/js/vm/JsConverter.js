@@ -154,7 +154,6 @@ var fun = function(n)
 			this.currentCommand = nil()
 			return result
 		}
-		console.log("After: ", this)
 	}
 	JsConverter.prototype.nodes = {
 		begin    : NODE_BEGIN,
