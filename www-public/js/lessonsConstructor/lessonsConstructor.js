@@ -25,31 +25,29 @@ var createLesson = function(text)
 }
 
 
-var parseShortenedResponse = function(m, longUrl) {
-			console.log(m, m.content);
-            var url = null;
-            try {                
-                url = JSON.parse(m.content).id;
-                if (typeof url != 'string') url = longUrl;
-            } catch (e) {
-                url = longUrl;
-            }
-            linkarea.innerHTML = "";			
-			var textinput = document.createElement("INPUT");
-			textinput.type = "text";
-			textinput.disabled = true;
-			textinput.value = url;
+var parseShortenedResponse = function(receivedData, longUrl) {
+    var url = null;
+    try {                
+        url = JSON.parse(receivedData.content).id;
+        if (typeof url != 'string') url = longUrl;
+    } catch (e) {
+        url = longUrl;
+    }
 
-			var link = document.createElement("A");
-			link.href = url;
-			link.innerHTML = "Try lesson";
+    linkarea.innerHTML = "";			
+	var textinput = document.createElement("INPUT");
+	textinput.type = "text";
+	textinput.disabled = true;
+	textinput.value = url;
 
-			linkarea.appendChild(textinput);
-			linkarea.appendChild(link);
-			textinput.select();
-			
-		            
-        }
+	var link = document.createElement("A");
+	link.href = url;
+	link.innerHTML = "Try lesson";
+
+	linkarea.appendChild(textinput);
+	linkarea.appendChild(link);
+	textinput.select();        
+}
 
 var getShortenURL = function(url) {
     jsonlib.fetch(
@@ -59,7 +57,7 @@ var getShortenURL = function(url) {
             method: 'POST',
             data: JSON.stringify({longUrl: url})
         }, 
-        function(m){parseShortenedResponse(m, url)});
+        function(receivedData){parseShortenedResponse(receivedData, url)});
     }
 
 var updateArea = function (areaValue, inputValue)
