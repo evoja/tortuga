@@ -62,23 +62,20 @@ var getShortenURL = function(url) {
 
 var updateArea = function (inputValue, area)
 {
-	var t =  Tortuga.ParamsUtil.getLessonTextFromGetUriValue(inputValue);
-	var paramBegin = null;
-	var paramAnd = null;
-	var paramText = null;
-	var resultText = "";
+	var jsonOfText =  Tortuga.ParamsUtil.getLessonTextFromGetUriValue(inputValue);
+	var resultText="";
+	objLesson = JSON.parse(jsonOfText);
 
-	paramBegin = t.indexOf(':"');
-	paramAnd = t.indexOf('"', paramBegin + 2);
+	resultText = objLesson.title;
 
+	var size = objLesson.items.length;
+	var items = objLesson.items;
 	
-	while (paramBegin > 0)
+	for(var i = 0; i < size; i += 1)
 	{
-		paramText = t.substr(paramBegin + 2, paramAnd - paramBegin - 2);
-		resultText = resultText + paramText + '\n\n';
-		t = t.substr(paramAnd + 2);
-		paramBegin = t.indexOf(':"');
-		paramAnd = t.indexOf('"', paramBegin + 2);
+		for (key in items[i]){
+			resultText = resultText + '\n\n' + items[i][key];
+		}
 	}
 
 	area.value = resultText;

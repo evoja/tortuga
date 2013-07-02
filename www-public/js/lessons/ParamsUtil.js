@@ -22,7 +22,7 @@ var getLessonLink = function(lesson)
 	var value = putLessonTextToUriValue(JSON.stringify(lesson));
 	var path = location.pathname.substring(0, location.pathname.lastIndexOf("/")+1);
 	return location.origin + path + "index.html" +
-			"?" + value;
+			"?" + "001" + value;
 }
 
 //location.search.substring(1)
@@ -30,7 +30,7 @@ var getUriValue = function(url)
 {
 	//file:///C:/pathToMyProject/tortuga/www-public/index.html?q1YqySzJSVWyUrqw6cKGC5sudgPJ/UASxNuvpKOUWZKaW6xkFV0NVwiThCmG0UDFxUXJMJOwSaekFicXZRaUZOb
 	var vhozhd = url.indexOf('?');
-	var result = url.substr(vhozhd + 1);
+	var result = url.substr(vhozhd + 4);
 	return result;
 }
 
