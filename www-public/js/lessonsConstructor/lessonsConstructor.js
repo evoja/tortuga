@@ -60,7 +60,7 @@ var getShortenURL = function(url) {
         function(receivedData){parseShortenedResponse(receivedData, url)});
     }
 
-var updateArea = function (areaValue, inputValue)
+var updateArea = function (inputValue, area)
 {
 	var t =  Tortuga.ParamsUtil.getLessonTextFromGetUriValue(inputValue);
 	var paramBegin = null;
@@ -81,7 +81,7 @@ var updateArea = function (areaValue, inputValue)
 		paramAnd = t.indexOf('"', paramBegin + 2);
 	}
 
-	document.getElementById('area').value = resultText;
+	area.value = resultText;
 }
 
 var updateLinkArea = function(linkarea, areaValue)
@@ -98,15 +98,9 @@ var updateLinkArea = function(linkarea, areaValue)
 	}
 }
 
-Tortuga.initLessonConstructor = function(area, button, linkarea)
+Tortuga.initLessonConstructor = function(area, createbutton, linkarea, changebutton, input)
 {
-	button.onclick = function(e){updateLinkArea(linkarea, area.value)}
-
-}
-
-Tortuga.givLessonArea = function(area, button, input)
-{
-	button.onclick = function(e){updateArea(area.value, input.value)}
-
+	createbutton.onclick = function(e){updateLinkArea(linkarea, area.value)}
+	changebutton.onclick = function(e){updateArea(input.value, area)}
 }
 })()
