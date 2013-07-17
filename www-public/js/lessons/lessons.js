@@ -16,6 +16,16 @@ var CL_ITEM_TEXT = "tortuga-lessonsListContainer-item-text"
 var CL_ITEM_TEXT_SELECTED = "tortuga-lessonsListContainer-item-textSelected"
 
 
+var getNumberLesson = function()
+{
+	var position = document.URL.indexOf('#');
+	if (position != -1) 
+		{
+			var number = document.URL.slice(position + 1);
+			return number;
+		} else return '';
+}
+
 var repairLinks = function (text)
 {
 	var answer = '<a href="$1">$2</a>';
@@ -33,13 +43,17 @@ var repairLineBreaks = function (text)
 	return text.replace(/&lt;br&gt;/gi, "<br/>").replace(/&lt;br\/&gt;/gi, "<br/>")
 }
 
-var selectItem = function(item, itemText, itemDiv,
+var selectItem = function(item, itemText, itemDiv, itemIndex,
 	selectedItemContext, bg, descrDiv, env)
 {
 	var sic = selectedItemContext;
 	env.setLessonsTitle(item.title);
 	descrDiv.innerHTML = repairLinks(item.description);
 	bg.style["backgroundImage"] = 'url("' + item.src + '")';
+	
+	if (itemIndex !== undefined){
+		window.location.hash = itemIndex;
+	}
 
 	if(sic.itemText)
 	{
@@ -78,7 +92,7 @@ var applyItem = function(list, inputItem, bg, selectedItemContext,
 	appendClass(itemDiv, CL_ITEM);
 	itemDiv.onclick = function(e)
 	{
-		selectItem(item, itemText, itemDiv, sic, bg, descrDiv, env);
+		selectItem(item, itemText, itemDiv, itemIndex, sic, bg, descrDiv, env);
 	}
 	itemDiv.appendChild(itemNumber);
 	itemDiv.appendChild(itemText);
@@ -107,7 +121,7 @@ var createList = function(lesson, bg, descrDiv, env)
 	{
 		aifun(lesson[i], i+1)
 	}
-	selectItem(firstObject.item, firstObject.itemText, firstObject.itemDiv,
+	selectItem(firstObject.item, firstObject.itemText, firstObject.itemDiv, firstObject.itemIndex,
 		selectedItemContext, bg, descrDiv, env);
 	return ul;
 }
