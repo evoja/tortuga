@@ -94,14 +94,11 @@ var initApp = function(
 	var filesObjects = configureFilesArea(filesArea)
 	var lessonsObjects = configureLessonsAreas(lessonsListContainer, lessonItemDescription);
 
-	Tortuga.initDrawing(canvasObjects.canvas)
-	Tortuga.initTortoise(canvasObjects.canvasContainer)
+	var jsConverter = Tortuga.Vm.initVm(canvasObjects.canvas, canvasObjects.canvasContainer)
+	Tortuga.Vm.initTortoise(canvasObjects.canvasContainer, jsConverter)
 	Tortuga.initFiles(filesObjects.button)
 	Tortuga.initLessons(canvasObjects.bg, lessonsListContainer, lessonItemDescription,
 		new TortugaEnv(), lessonsContainers);
-/*
-		initTortoiseCanvasBackground(document.getElementById("canvasContainer-bg"));
-*/
 }
 
 

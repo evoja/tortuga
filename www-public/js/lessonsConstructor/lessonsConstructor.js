@@ -25,31 +25,29 @@ var createLesson = function(text)
 }
 
 
-var parseShortenedResponse = function(m) {
-			console.log(m, m.content);
-            var url = null;
-            try {                
-                url = JSON.parse(m.content).id;
-                if (typeof url != 'string') url = null;
-            } catch (e) {
-                url = null;
-            }
-            linkarea.innerHTML = "";			
-			var textinput = document.createElement("INPUT");
-			textinput.type = "text";
-			textinput.disabled = true;
-			textinput.value = url;
+var parseShortenedResponse = function(receivedData, longUrl) {
+    var url = null;
+    try {                
+        url = JSON.parse(receivedData.content).id;
+        if (typeof url != 'string') url = longUrl;
+    } catch (e) {
+        url = longUrl;
+    }
 
-			var link = document.createElement("A");
-			link.href = url;
-			link.innerHTML = "Try lesson";
+    linkarea.innerHTML = "";			
+	var textinput = document.createElement("INPUT");
+	textinput.type = "text";
+	textinput.disabled = true;
+	textinput.value = url;
 
-			linkarea.appendChild(textinput);
-			linkarea.appendChild(link);
-			textinput.select();
-			
-		            
-        }
+	var link = document.createElement("A");
+	link.href = url;
+	link.innerHTML = "Try lesson";
+
+	linkarea.appendChild(textinput);
+	linkarea.appendChild(link);
+	textinput.select();        
+}
 
 var getShortenURL = function(url) {
     jsonlib.fetch(
@@ -59,35 +57,37 @@ var getShortenURL = function(url) {
             method: 'POST',
             data: JSON.stringify({longUrl: url})
         }, 
-        parseShortenedResponse);
+        function(receivedData){parseShortenedResponse(receivedData, url)});
     }
 
+var updateArea = function (inputValue, area)
+{
+	var jsonOfText =  Tortuga.ParamsUtil.getLessonTextFromGetUriValue(inputValue);
+	var resultText="";
+	objLesson = JSON.parse(jsonOfText);
 
+	resultText = objLesson.title;
+
+	var size = objLesson.items.length;
+	var items = objLesson.items;
+	
+	for(var i = 0; i < size; i += 1)
+	{
+		for (key in items[i]){
+			resultText = resultText + '\n\n' + items[i][key];
+		}
+	}
+
+	area.value = resultText;
+}
 
 var updateLinkArea = function(linkarea, areaValue)
 {
 	var longUrl = getLinkAreaText(createLesson(areaValue));
-
-
-
-
-
-	
+		
 	if(longUrl.length < 2000)
 	{
 		var res = getShortenURL(longUrl);
-	/*	var textinput = document.createElement("INPUT");
-		textinput.type = "text";
-		textinput.disabled = true;
-		textinput.value = url;
-
-		var link = document.createElement("A");
-		link.href = url;
-		link.innerHTML = "Try lesson";
-
-		linkarea.appendChild(textinput);
-		linkarea.appendChild(link);
-		textinput.select();*/
 	}
 	else
 	{
@@ -95,9 +95,9 @@ var updateLinkArea = function(linkarea, areaValue)
 	}
 }
 
-Tortuga.initLessonConstructor = function(area, button, linkarea)
+Tortuga.initLessonConstructor = function(area, createbutton, linkarea, changebutton, input)
 {
-	button.onclick = function(e){updateLinkArea(linkarea, area.value)}
-
+	createbutton.onclick = function(e){updateLinkArea(linkarea, area.value)}
+	changebutton.onclick = function(e){updateArea(input.value, area)}
 }
 })()

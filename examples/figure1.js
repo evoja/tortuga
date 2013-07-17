@@ -1,3 +1,4 @@
+begin()
 var t = createTortoise(400, 200)
 t.tailDown();
 for(var i = 0; i < 36; ++i)
@@ -9,3 +10,4 @@ for(var i = 0; i < 36; ++i)
 		t.rotate(-1)
 	}
 }
+end()

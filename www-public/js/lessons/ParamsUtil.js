@@ -1,6 +1,10 @@
 ns("Tortuga");
 (function()
 {
+var VERSION_LENGTH = 3
+var CURRENT_VERSION = "001"
+
+
 var utf8_to_prezip = function(str)
 {
 	return unescape(encodeURIComponent( str ))
@@ -22,12 +26,26 @@ var getLessonLink = function(lesson)
 	var value = putLessonTextToUriValue(JSON.stringify(lesson));
 	var path = location.pathname.substring(0, location.pathname.lastIndexOf("/")+1);
 	return location.origin + path + "index.html" +
-			"?" + value;
+			"?" + CURRENT_VERSION + value;
+}
+
+//location.search.substring(1)
+var getUriValue = function(url)
+{
+	//file:///C:/pathToMyProject/tortuga/www-public/index.html?q1YqySzJSVWyUrqw6cKGC5sudgPJ/UASxNuvpKOUWZKaW6xkFV0NVwiThCmG0UDFxUXJMJOwSaekFicXZRaUZOb
+	var vhozhd = url.indexOf('?');
+	var result = url.substr(vhozhd + 1 + VERSION_LENGTH);
+	return result;
+}
+
+var getLessonTextFromGetUriValue = function(url)
+{
+	return prezip_to_utf8(RawDeflate.inflate(atob(getUriValue(url))));
 }
 
 var getLessonTextFromUriValue = function()
 {
-	return prezip_to_utf8(RawDeflate.inflate(atob(location.search.substring(1))));
+	return getLessonTextFromGetUriValue(location.search);
 }
 
 var getLesson = function()
@@ -46,7 +64,9 @@ var getLesson = function()
 
 
 Tortuga.ParamsUtil = {
-	getLesson : getLesson,
-	getLessonLink : getLessonLink
+	getLesson:getLesson,
+	getLessonLink:getLessonLink,
+	getLessonTextFromUriValue:getLessonTextFromUriValue,
+	getLessonTextFromGetUriValue:getLessonTextFromGetUriValue
 }
 })()

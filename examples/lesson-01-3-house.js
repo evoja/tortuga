@@ -1,4 +1,5 @@
-var t = createTortoise(300, 380, "#888");
+var t = createTortoise(300, 20, "#888");
+t.rotate(-90)
 t.tailDown();
 t.rotate(90);
 t.go(200);
