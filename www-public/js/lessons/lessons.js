@@ -121,12 +121,12 @@ var createList = function(lesson, bg, descrDiv, env)
 		return applyItem(ul, item, bg, selectedItemContext, descrDiv, index, env)
 	}
 
-	var selectedObject = aifun(lesson[0], 1);
-	var selectedIndex = getNumberLesson - 1;
+	var selectedObject = aifun(lesson[0], 0);
+	var selectedIndex = getNumberLesson();
 
 	for(var i = 1; i < size; ++i)
 	{
-		var item = aifun(lesson[i], i+1)
+		var item = aifun(lesson[i], i)
 		if(selectedIndex == i)
 		{
 			selectedObject = item;
