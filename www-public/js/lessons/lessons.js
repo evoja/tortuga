@@ -1,4 +1,7 @@
 ns("Tortuga");
+
+Tortuga.initLessons;
+
 (function()
 {
 var htmlspecialchars = Om.htmlspecialchars

@@ -1,4 +1,7 @@
 ns("Tortuga");
+
+Tortuga.Agent;
+
 (function()
 {
 	var getHelpTextByHotkey = function(hotkey)

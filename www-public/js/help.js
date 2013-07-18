@@ -13,6 +13,8 @@
 */
 ns("Tortuga");
 
+Tortuga.initHelp;
+
 (function()
 {
 	var appendClass = Om.appendClass

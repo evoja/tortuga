@@ -1,4 +1,7 @@
 ns("Torguta");
+
+Tortuga.initLessonConstructor;
+
 (function(){
 var getLinkAreaText = function(areaValue)
 {

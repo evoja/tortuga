@@ -1,5 +1,7 @@
 ns("Tortuga.Vm");
 
+Tortuga.Vm.JsConverter;
+
 /**
 Пример использования:
 

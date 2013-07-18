@@ -8,6 +8,7 @@
 */
 ns("Tortuga");
 var SQ2 = Math.sqrt(2);
+Tortuga.initApp;
 
 (function(){
 var getAppendedClassName = Om.getAppendedClassName

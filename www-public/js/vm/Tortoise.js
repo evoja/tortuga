@@ -1,9 +1,11 @@
 ns("Tortuga.Vm");
+
 var createTortoise;
 var clearCanvas;
 var repeat;
 var begin;
 var end;
+Tortuga.Vm.initTortoise;
 
 (function(){
 	var prependArgumentsByObject = Om.prependArgumentsByObject;

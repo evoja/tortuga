@@ -1,5 +1,7 @@
 ns("Tortuga.Vm");
 
+Tortuga.Vm.DrawingSystem;
+
 (function()
 {
 	//==== Context functions ==================================================
