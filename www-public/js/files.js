@@ -1,6 +1,9 @@
 /*
 За возможность создания этого файла спасибо статье:
 http://www.html5rocks.com/en/tutorials/file/dndfiles/
+
+Файл отвечает за возможность выполнить скрипт,
+который пользователь выбирает на своём компьютере.
 */
 ns("Tortuga");
 Tortuga.initFiles = function(filesSelector)

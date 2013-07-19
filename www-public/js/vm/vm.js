@@ -1,3 +1,7 @@
+/**
+Функция инициализации графического исполнителя.
+*/
+
 ns("Tortuga.Vm.");
 
 Tortuga.Vm.initVm = function(canvas, tortoiseContainer)
