@@ -1,3 +1,6 @@
+/**
+Этот файл, кажется, нигде не используется.
+*/
 ns("Tortuga");
 Tortuga.initTortoiseCanvasBackground = function(div)
 {
