@@ -6,7 +6,7 @@ http://www.html5rocks.com/en/tutorials/file/dndfiles/
 который пользователь выбирает на своём компьютере.
 */
 ns("Tortuga");
-Tortuga.initFiles = function(filesSelector)
+Tortuga.initFiles = function(filesSelector,preAction,postAction)
 {
 	var mapFileList = function(list, fun)
 	{
@@ -24,11 +24,13 @@ Tortuga.initFiles = function(filesSelector)
 		reader.onload = function(e)
 		{
 			console.log(e.target.result);
+			preAction();
 			var scriptElement = document.createElement("script");
-			scriptElement.innerHTML = e.target.result;
+		    scriptElement.innerHTML = e.target.result;
 
 			var headElement = document.getElementsByTagName("head")[0];
 			headElement.appendChild(scriptElement);
+			postAction();
 		};
 
 		reader.readAsText(file);
