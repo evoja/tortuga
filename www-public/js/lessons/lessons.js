@@ -37,6 +37,16 @@ var getNumberLesson = function()
 		} else return '';
 }
 
+var getVersionLesson = function()
+{
+	var position = document.URL.indexOf('?');
+	if (position != -1) 
+		{
+			var version = document.URL.slice(position + 1, position + 1 + Tortuga.ParamsUtil.givCurrentVersion().length);
+			return version;
+		} else return '';
+}
+
 var repairLinks = function (text)
 {
 	var answer = '<a href="$1">$2</a>';
@@ -183,8 +193,9 @@ Tortuga.initLessons = function(bg, list, descrDiv, env, allContainers)
 			})
 		}
 	}
-
-
+	
+	var CURRENT_VERSION = Tortuga.ParamsUtil.givCurrentVersion();
+	if (getVersionLesson() != CURRENT_VERSION ) { alert('Некорректная версия урока.');}
 
 	var header = document.createElement("DIV");
 	appendClass(header, CL_HEADER);
