@@ -1,6 +1,7 @@
+var Om;
+
 (function()
 {
-
 var getAppendedClassName = function(prevClasses, className)
 {
 	if(! prevClasses)
@@ -44,6 +45,11 @@ isIE : function(versions)
 		|| versions && any(versions, function(version){return isInInUserAgent("MSIE " + version)});
 },
 
+/**
+Метод для работы с объектом arguments.
+Это такие упрощённые массивы, у которых нету некоторых полезных методов, 
+вот и приходится извращаться.
+*/
 prependArgumentsByObject : function(obj, oargs)
 {
 	var size = oargs.length;

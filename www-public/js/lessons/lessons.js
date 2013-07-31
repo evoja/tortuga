@@ -1,4 +1,15 @@
+/**
+Работоспособность урока:
+
+* анализ адресной строки,
+* переключение вкладок,
+* задний фон.
+
+*/
 ns("Tortuga");
+
+Tortuga.initLessons;
+
 (function()
 {
 var htmlspecialchars = Om.htmlspecialchars

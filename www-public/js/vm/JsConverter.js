@@ -1,6 +1,18 @@
+/**
+В абстрактном плане, это больше похоже на синтаксический анализатор.
+JsConverter принимает объекты-лексемы,
+а на выходе получается дерево программы, которое потом скармливается
+в исполнитель - TortoiseRunner.
+
+В нашей программе команды для JsConverter формируются и вызываются 
+в Tortoise.
+
+*/
 ns("Tortuga.Vm");
 
-/**
+Tortuga.Vm.JsConverter;
+
+/** 
 Пример использования:
 
 //Создаём черепаху
@@ -129,7 +141,6 @@ var fun = function(n)
 		appendCommandToSeq(jsConverter.currentCommand, nextCommand)
 		jsConverter.result = jsVar
 	}
-
 	var NODE_BEGIN  = {
 		process: function(jsConverter, jcNode)
 		{
@@ -138,13 +149,12 @@ var fun = function(n)
 			jsConverter.currentCommand = seq()
 		}
 	}
-
 	var NODE_REPEAT = {
 		process: function(jsConverter, jcNode)
 		{
-			jsConverter.commandsStack.push(jsConverter.currentCommand)
-			jsConverter.nodesStack.push(jcNode)
-			jsConverter.currentCommand = seq()
+			    jsConverter.commandsStack.push(jsConverter.currentCommand)
+			    jsConverter.nodesStack.push(jcNode)
+			    jsConverter.currentCommand = seq()
 		}		
 	}
 
@@ -223,6 +233,5 @@ var fun = function(n)
 		clearCanvas : NODE_CLEAR_CANVAS,
 		getColorUnderTail : NODE_GET_COLOR_UNDER_TAIL
 	}
-
 	Tortuga.Vm.JsConverter = JsConverter
 })()

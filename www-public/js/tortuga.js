@@ -1,5 +1,23 @@
+/**
+В этом файле определяется функция Tortuga.initApp()
+
+При её вызове связываются существующие html-элементы
+создаются нужные данные,
+вспомогательные html-элементы, 
+на элементы навешиваются разные обработчики событий, 
+ну и вообще, всё опутывается некоторой логикой, распределённой по разным файлам.
+
+Вообще на данный момент, здесь два основных компонента:
+
+* поле с черепашкой
+* список и текст уроков.
+
+Стилизуются эти элементы в CSS, а JS отвечает за заполнение содержимым
+и навешивание правильных классов.
+*/
 ns("Tortuga");
 var SQ2 = Math.sqrt(2);
+Tortuga.initApp;
 
 (function(){
 var getAppendedClassName = Om.getAppendedClassName
@@ -83,11 +101,14 @@ var configureLessonsAreas = function(lessonsListContainer, lessonItemDescription
 
 //===== App ============
 var initApp = function(
-	canvasContainer,
-	lessonsListContainer,
-	lessonItemDescription,
-	lessonsContainers,
-	filesArea
+	canvasContainer, //контейнер поля с черепашкой, в котором создаётся canvas, 
+	                 //задний фон, а также будут складываться объекты,
+	                 //соответствующие каждой черепашке.
+	lessonsListContainer, //контейнер для списка задач урока, куда поместятся заголовки задач
+	                      //и будут переключаться стили выделенной/невыделенной задачи.
+	lessonItemDescription, //контейнер для текста урока, куда будет помещаться текст выделенной задачи
+	lessonsContainers, //все элементы, которые нужно будет стирать.
+	filesArea //блок, куда будет добавлен элемент выбора файла.
 	)
 {
 	var canvasObjects = configureCanvasContainer(canvasContainer)
@@ -96,7 +117,7 @@ var initApp = function(
 
 	var jsConverter = Tortuga.Vm.initVm(canvasObjects.canvas, canvasObjects.canvasContainer)
 	Tortuga.Vm.initTortoise(canvasObjects.canvasContainer, jsConverter)
-	Tortuga.initFiles(filesObjects.button)
+	Tortuga.initFiles(filesObjects.button,begin,end)
 	Tortuga.initLessons(canvasObjects.bg, lessonsListContainer, lessonItemDescription,
 		new TortugaEnv(), lessonsContainers);
 }

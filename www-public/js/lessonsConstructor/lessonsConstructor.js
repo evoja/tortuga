@@ -1,4 +1,14 @@
+/**
+Код, обеспечивающий работу страницы constructor.html
+
+Работает по тем же принципам, что и index.html+tortuga.js
+В него передаются элементы вебстраницы, которые должны быть задействованы
+в обеспечении функциональности, а в этом файле они связываются программной логикой.
+*/
 ns("Torguta");
+
+Tortuga.initLessonConstructor;
+
 (function(){
 var getLinkAreaText = function(areaValue)
 {
