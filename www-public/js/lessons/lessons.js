@@ -170,6 +170,7 @@ Tortuga.initLessons = function(bg, list, descrDiv, env, allContainers)
 				appendClass(item, CL_ALL_EMPTY);
 			})
 		}
+		alert('Некорректная ссылка. Ошибка открытия урока.');
 		return
 	}
 	else
