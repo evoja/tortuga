@@ -108,6 +108,14 @@ var applyItem = function(list, inputItem, bg, selectedItemContext,
 	}
 
 	itemDiv.onclick = selectCurrentItem;
+	
+	// window.onhashchange = function () {
+ //        if (location.hash.toString().slice(1) == itemIndex.toString()){
+ //        	selectCurrentItem;
+ //        }        
+ //        console.log(location.hash.toString().slice(1));
+ //        console.log(itemIndex);
+ //    }
 
 	itemDiv.appendChild(itemNumber);
 	itemDiv.appendChild(itemText);
@@ -182,15 +190,39 @@ Tortuga.initLessons = function(bg, list, descrDiv, env, allContainers)
 			})
 		}
 	}
+ var BuildListOfTabs = function(bg, list, descrDiv, env, lesson)
+ {
+ 	list.appendChild(createList(lesson.items, bg, descrDiv,
+	new LessonEnv(env, lesson.title))); 
+ }
+ var replacementDOMListOfTabs = function(bg, list, descrDiv, env, lesson)
+ {
+ 	for(var i=1; i<=list.children.length; i++) {
+        var child = list.children[i];
+        list.removeChild(child);
+	}
 
-
+	BuildListOfTabs(bg, list, descrDiv, env, lesson);
+ }
+	
+	if ("onhashchange" in window){
+		window.onhashchange = function () {
+			replacementDOMListOfTabs(bg, list, descrDiv, env, lesson);
+	    }
+	} else { 
+	    var storedHash = window.location.hash;
+	    window.setInterval(function () {
+	        if (window.location.hash != storedHash) {
+	            replacementDOMListOfTabs(bg, list, descrDiv, env, lesson);
+	        }
+	    }, 100);
+	}
 
 	var header = document.createElement("DIV");
 	appendClass(header, CL_HEADER);
 	list.appendChild(header);
 
-	list.appendChild(createList(lesson.items, bg, descrDiv,
-		new LessonEnv(env, lesson.title)));
+	BuildListOfTabs(bg, list, descrDiv, env, lesson);
 }
 
 })()
