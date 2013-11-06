@@ -287,7 +287,7 @@ fun2(10000)
 
 	var runCapsSquare = function runCapsSquare(runner, getTrTortoise)
 	{
-		getTrTortoise().style_caps = "square"
+		getTrTortoise().style_caps = "butt"
 	}
 
 	var runCapsRound = function runCapsRound(runner, getTrTortoise)
