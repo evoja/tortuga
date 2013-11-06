@@ -125,7 +125,7 @@ fun2(10000)
 	}
 
 	//==== TortoiseRunner's language =====
-	var TrTortoise = function(x, y, color, width, dsTortoise)
+	var TrTortoise = function(x, y, color, width, style_caps, dsTortoise)
 	{
 		this.dsTortoise = dsTortoise
 		this.x = x
@@ -134,6 +134,7 @@ fun2(10000)
 		this.isDrawing = false
 		this.color = color
 		this.width = width || 1
+		this.style_caps = style_caps || "round"
 	}
 
 
@@ -144,12 +145,14 @@ fun2(10000)
 		this.y = trTortoise.y
 		this.color = trTortoise.color
 		this.width = trTortoise.width
+		this.style_caps = trTortoise.style_caps
 		this.moveOrLine = moveOrLine
 	}
 	TrPoint.prototype.equals = function(that)
 	{
 		return this.x == that.x && this.y == that.y && 
-			this.color == that.color && this.width == that.width
+			this.color == that.color && this.width == that.width &&
+			this.style_caps == that.style_caps
 			this.trTortoise == that.trTortoise
 	}
 
@@ -210,7 +213,11 @@ fun2(10000)
 				ds.beginPath()
 				ds.setColor(trPoint.color)
 				ds.setWidth(trPoint.width)
+				//ds.capsSquare()
+				ds.setCapsStyle(trPoint.style_caps)
 				ds.moveTo(trPoint.x, trPoint.y)
+				//ds.capsRound(trPoint.capsRound)
+				//ds.capsSquare(trPoint.capsSquare)
 			}
 			else
 			{
@@ -224,10 +231,10 @@ fun2(10000)
 	}
 
 
-	var runCreate = function runCreate(runner, x, y, color, width, handler)
+	var runCreate = function runCreate(runner, x, y, color, width, style_caps, handler)
 	{
 		var dsTortoise = runner.drawingSystem.createTortoise()
-		var trTortoise = new TrTortoise(x, y, color, width, dsTortoise)
+		var trTortoise = new TrTortoise(x, y, color, width, style_caps, dsTortoise)
 		runner.tortoises.push(trTortoise)
 		handler(trTortoise)
 	}
@@ -241,6 +248,7 @@ fun2(10000)
 	{
 		var trTortoise = getTrTortoise()
 		var isDrawing = trTortoise.isDrawing
+
 		if(isDrawing)
 		{
 			appendPointToRunner(runner, new TrPoint(trTortoise, TR_POINT_MOVE))
@@ -274,6 +282,22 @@ fun2(10000)
 	var runSetColor = function runSetColor(runner, getTrTortoise, color)
 	{
 		getTrTortoise().color = color
+	}
+
+
+	var runCapsSquare = function runCapsSquare(runner, getTrTortoise)
+	{
+		getTrTortoise().style_caps = "square"
+	}
+
+	var runCapsRound = function runCapsRound(runner, getTrTortoise)
+	{
+		getTrTortoise().style_caps = "round"
+	}
+
+	var runSetCapsStyle = function runSetCapsStyle(runner, getTrTortoise, style_caps)
+	{
+		getTrTortoise().style_caps = style_caps
 	}
 
 	var runSetWidth = function runSetWidth(runner, getTrTortoise, width)
@@ -380,6 +404,9 @@ fun2(10000)
 		rotate   : runRotate,
 		setColor : runSetColor,
 		setWidth : runSetWidth,
+		capsRound : runCapsRound,
+		capsSquare : runCapsSquare,
+		setCapsStyle : runSetCapsStyle,
 		kill     : runKill,
 		nil      : runNil,
 		pair     : runPair,
@@ -410,6 +437,9 @@ fun2(10000)
 
 	var td = tr.constructCommand(tr.commands.tailDown, t)
 	var tu = tr.constructCommand(tr.commands.tailUp, t)
+	var tcr = tr.constructCommand(tr.commands.capsRound,t)
+	var tcs = tr.constructCommand(tr.commands.capsSquare, t)
+	var scs = tr.constructCommand(tr.commands.setCapsStyle, t)
 	var right = tr.constructCommand(tr.commands.rotate, t, -90)
 	var left = tr.constructCommand(tr.commands.rotate, t, 90)
 
