@@ -191,6 +191,8 @@ var fun = function(n)
 	var NODE_TAIL_DOWN  = new SimpleVariableNode(TR.commands.tailDown)
 	var NODE_SET_WIDTH  = new SimpleVariableNode(TR.commands.setWidth)
 	var NODE_SET_COLOR  = new SimpleVariableNode(TR.commands.setColor)
+	var NODE_CAPS_ROUND = new SimpleVariableNode(TR.commands.capsRound)
+	var NODE_CAPS_SQUARE = new SimpleVariableNode(TR.commands.capsSquare)
 	var NODE_CLEAR_CANVAS = new SimpleNode(TR.commands.clearCanvas)
 
 	//==== JsConverter =======================================================
@@ -230,6 +232,8 @@ var fun = function(n)
 		tailDown : NODE_TAIL_DOWN,
 		setWidth : NODE_SET_WIDTH,
 		setColor : NODE_SET_COLOR,
+		capsRound : NODE_CAPS_ROUND,
+		capsSquare : NODE_CAPS_SQUARE,
 		clearCanvas : NODE_CLEAR_CANVAS,
 		getColorUnderTail : NODE_GET_COLOR_UNDER_TAIL
 	}

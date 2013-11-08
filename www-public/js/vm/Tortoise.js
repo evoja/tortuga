@@ -29,9 +29,9 @@ Tortuga.Vm.initTortoise;
 	var prependArgumentsByObject = Om.prependArgumentsByObject;
 	var TR = Tortuga.Vm.TortoiseRunner
 
-	var createJsTortoise = function(jsConverter, x, y, color, width)
+	var createJsTortoise = function(jsConverter, x, y, color, width, style_caps)
 	{
-		return jsConverter.parseNode(jsConverter.nodes.create, x, y, color, width)
+		return jsConverter.parseNode(jsConverter.nodes.create, x, y, color, width, style_caps)
 	}
 
 	var getColorUnderTail = function(jsConverter, jsTortoise, forward)
@@ -78,20 +78,23 @@ Tortuga.Vm.initTortoise;
 			tailDown: jsConverter.nodes.tailDown,
 			setColor: jsConverter.nodes.setColor,
 			setWidth: jsConverter.nodes.setWidth,
+			capsRound: jsConverter.nodes.capsRound,
+			capsSquare: jsConverter.nodes.capsSquare,
 		}
 	}
 
 
 	Tortuga.Vm.initTortoise = function(tortoiseContainer, jsConverter)
 	{
-		var Tortoise = function(xx, yy, color, width)
+		var Tortoise = function(xx, yy, color, width, style_caps)
 		{
 			xx = xx === undefined ? tortoiseContainer.offsetWidth / 2 : xx;
 			yy = yy === undefined ? tortoiseContainer.offsetHeight / 2 : yy;
 			color = color || "#0a0";
 			width = width || 1;
+			style_caps = style_caps || "round";
 
-			this.jsTortoise = createJsTortoise(jsConverter, xx, yy, color, width)			
+			this.jsTortoise = createJsTortoise(jsConverter, xx, yy, color, width, style_caps)			
 		}
 
 		applyMethodsToProto(constructProto(jsConverter), Tortoise.prototype,
@@ -116,9 +119,9 @@ Tortuga.Vm.initTortoise;
 		repeat = wrapNode(jsConverter.nodes.repeat, jsConverter)
 		end = wrapNode(jsConverter.nodes.end, jsConverter)
 
-		createTortoise = function(xx, yy, color, width)
+		createTortoise = function(xx, yy, color, width, style_caps)
 		{
-			return new Tortoise(xx, yy, color, width, tortoiseContainer, jsConverter);
+			return new Tortoise(xx, yy, color, width, style_caps, tortoiseContainer, jsConverter);
 		}
 	}
 })()

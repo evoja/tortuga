@@ -44,6 +44,11 @@ Tortuga.Vm.DrawingSystem;
 		ctx.lineWidth = width;
 	}
 
+	var setCapsStyle = function(ctx, style_caps)
+	{
+		ctx.lineCap = style_caps
+	}
+
 	var getColorAt = function(ctx, x, y, withAlpha)
 	{
 			y = ctx.canvas.height - y
@@ -161,6 +166,7 @@ Tortuga.Vm.DrawingSystem;
 		beginPath:    function(){                 this.ctx.beginPath() },
 		stroke:       function(){                 this.ctx.stroke() },
 		clearCanvas:  function(){                 clearCtx(this.ctx) },
+		setCapsStyle: function(style_caps){       setCapsStyle(this.ctx, style_caps) },
 
 		createTortoise: function(){ return createTortoise(this) },
 		placeTortoise: function(dsTortoiseId, x, y, deg, isDrawing, color)
