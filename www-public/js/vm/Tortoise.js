@@ -80,6 +80,10 @@ Tortuga.Vm.initTortoise;
 			setWidth: jsConverter.nodes.setWidth,
 			capsRound: jsConverter.nodes.capsRound,
 			capsSquare: jsConverter.nodes.capsSquare,
+			setX: jsConverter.nodes.setX,
+			getX: jsConverter.nodes.getX,
+			setY: jsConverter.nodes.setY,
+			getY: jsConverter.nodes.getY,
 		}
 	}
 

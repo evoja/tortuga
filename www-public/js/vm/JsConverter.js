@@ -191,6 +191,10 @@ var fun = function(n)
 	var NODE_TAIL_DOWN  = new SimpleVariableNode(TR.commands.tailDown)
 	var NODE_SET_WIDTH  = new SimpleVariableNode(TR.commands.setWidth)
 	var NODE_SET_COLOR  = new SimpleVariableNode(TR.commands.setColor)
+	var NODE_SET_X      = new SimpleVariableNode(TR.commands.setX)
+	var NODE_GET_X      = new SimpleVariableNode(TR.commands.getX)
+	var NODE_SET_Y      = new SimpleVariableNode(TR.commands.setY)
+	var NODE_GET_Y      = new SimpleVariableNode(TR.commands.getY)
 	var NODE_CAPS_ROUND = new SimpleVariableNode(TR.commands.capsRound)
 	var NODE_CAPS_SQUARE = new SimpleVariableNode(TR.commands.capsSquare)
 	var NODE_CLEAR_CANVAS = new SimpleNode(TR.commands.clearCanvas)
@@ -227,6 +231,10 @@ var fun = function(n)
 		end      : NODE_END,
 		create   : NODE_CREATE,
 		go       : NODE_GO,
+		setX     : NODE_SET_X,
+		getX     : NODE_GET_X,
+		setY     : NODE_SET_Y,
+		getY     : NODE_GET_Y,
 		rotate   : NODE_ROTATE,
 		tailUp   : NODE_TAIL_UP,
 		tailDown : NODE_TAIL_DOWN,

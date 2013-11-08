@@ -284,7 +284,26 @@ fun2(10000)
 		getTrTortoise().color = color
 	}
 
+	var runSetX = function runSetX(runner, getTrTortoise, x)
+	{
+		getTrTortoise().x = x
+	}
 
+	var runGetX = function runSetX(runner, getTrTortoise)
+	{
+		console.log("x =", getTrTortoise().x)
+	}
+
+	var runSetY = function runSetX(runner, getTrTortoise, y)
+	{
+		getTrTortoise().y = y
+	}
+
+	var runGetY = function runSetX(runner, getTrTortoise)
+	{
+		console.log("y =", getTrTortoise().y)
+	}
+	
 	var runCapsSquare = function runCapsSquare(runner, getTrTortoise)
 	{
 		getTrTortoise().style_caps = "butt"
@@ -404,6 +423,10 @@ fun2(10000)
 		rotate   : runRotate,
 		setColor : runSetColor,
 		setWidth : runSetWidth,
+		setX     : runSetX,
+		getX     : runGetX,
+		setY     : runSetY,
+		getY     : runGetY,
 		capsRound : runCapsRound,
 		capsSquare : runCapsSquare,
 		setCapsStyle : runSetCapsStyle,
