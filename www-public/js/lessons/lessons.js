@@ -166,8 +166,8 @@ var replacementDOMListOfTabs = function(bg, list, descrDiv, env, lesson)
 {
 	for(var i=1; i<=list.children.length; i++) 
 	{
-    	var child = list.children[i];
-   		list.removeChild(child);
+		var child = list.children[i];
+		list.removeChild(child);
 	}
 
 	buildListOfTabs(bg, list, descrDiv, env, lesson);
@@ -200,24 +200,24 @@ Tortuga.initLessons = function(bg, list, descrDiv, env, allContainers)
 
 
 
-	
+
 	if ("onhashchange" in window)
 	{
 		window.onhashchange = function () 
 		{
 			replacementDOMListOfTabs(bg, list, descrDiv, env, lesson);
-	    }
-	} 
-		else 
-	{ 
-	    var storedHash = window.location.hash;
-	    window.setInterval(function () 
-	    {
-	        if (window.location.hash != storedHash) 
-	        {
-	            replacementDOMListOfTabs(bg, list, descrDiv, env, lesson);
-	        }
-	    }, 100);
+		}
+	}
+	else
+	{
+		var storedHash = window.location.hash;
+		window.setInterval(function () 
+			{
+				if (window.location.hash != storedHash) 
+				{
+					replacementDOMListOfTabs(bg, list, descrDiv, env, lesson);
+				}
+			}, 100);
 	}
 
 	var header = document.createElement("DIV");
