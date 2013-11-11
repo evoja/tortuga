@@ -103,6 +103,9 @@ var fun = function(n)
 		appendCommandToSeq(jsConverter.currentCommand, nextCommand)
 	}
 
+	//Это нода, аргументом с индексом 1 которой является JsVariable,
+	//обычно это переменная целевой черепахи,
+	//но может использоваться и для других нужд.
 	var FirstParamIsVariableNode = function(command)
 	{
 		this.command = command
@@ -120,6 +123,7 @@ var fun = function(n)
 		appendCommandToSeq(jsConverter.currentCommand, nextCommand)
 	}
 
+	//Это нода, которая возвращает результат в виде JsVariable
 	var ResultNode = function(command)
 	{
 		this.command = command
@@ -142,6 +146,11 @@ var fun = function(n)
 		jsConverter.result = jsVar
 	}
 
+	//Это нода, аргументом с индексом 1 которой является JsVariable,
+	//обычно это переменная целевой черепахи,
+	//но может использоваться и для других нужд.
+	//И одновременно с этим
+	//это нода, которая возвращает результат в виде JsVariable
 	var FirstParamIsVariableResultNode = function(command)
 	{
 		this.command = command
@@ -212,7 +221,7 @@ var fun = function(n)
 
 	var NODE_CREATE     = new ResultNode(TR.commands.create)
 	var NODE_GET_COLOR_UNDER_TAIL = new FirstParamIsVariableResultNode(
-												TR.commands.getColorUnderTail)
+	                                            TR.commands.getColorUnderTail)
 	var NODE_GET_X      = new FirstParamIsVariableResultNode(TR.commands.getX)
 	var NODE_GET_Y      = new FirstParamIsVariableResultNode(TR.commands.getY)
 
