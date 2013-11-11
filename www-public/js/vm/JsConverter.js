@@ -113,7 +113,7 @@ var fun = function(n)
 		var zeroParam = params[0]
 		var firstParam = params[1]
 		params[0] = this.command
-		params[1] = function(){return firstParam.value}
+		params[1] = firstParam;
 		var nextCommand = constructCommand(params)
 		params[0] = zeroParam
 		params[1] = firstParam
@@ -139,7 +139,7 @@ var fun = function(n)
 		var nextCommand = constructCommand(args)
 
 		appendCommandToSeq(jsConverter.currentCommand, nextCommand)
-		jsConverter.result = jsVar
+		jsConverter.result = function(){return jsVar.value}
 	}
 	var NODE_BEGIN  = {
 		process: function(jsConverter, jcNode)
@@ -184,6 +184,8 @@ var fun = function(n)
 
 	var NODE_CREATE     = new ResultNode(TR.commands.create)
 	var NODE_GET_COLOR_UNDER_TAIL = new ResultNode(TR.commands.getColorUnderTail)
+	var NODE_GET_X      = new ResultNode(TR.commands.getX)
+	var NODE_GET_Y      = new ResultNode(TR.commands.getY)
 
 	var NODE_GO         = new SimpleVariableNode(TR.commands.go)
 	var NODE_ROTATE     = new SimpleVariableNode(TR.commands.rotate)
@@ -192,9 +194,7 @@ var fun = function(n)
 	var NODE_SET_WIDTH  = new SimpleVariableNode(TR.commands.setWidth)
 	var NODE_SET_COLOR  = new SimpleVariableNode(TR.commands.setColor)
 	var NODE_SET_X      = new SimpleVariableNode(TR.commands.setX)
-	var NODE_GET_X      = new SimpleVariableNode(TR.commands.getX)
 	var NODE_SET_Y      = new SimpleVariableNode(TR.commands.setY)
-	var NODE_GET_Y      = new SimpleVariableNode(TR.commands.getY)
 	var NODE_CAPS_ROUND = new SimpleVariableNode(TR.commands.capsRound)
 	var NODE_CAPS_SQUARE = new SimpleVariableNode(TR.commands.capsSquare)
 	var NODE_CLEAR_CANVAS = new SimpleNode(TR.commands.clearCanvas)

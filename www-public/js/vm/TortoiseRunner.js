@@ -288,9 +288,9 @@ fun2(10000)
 		getTrTortoise().x = x
 	}
 
-	var runGetX = function runSetX(runner, getTrTortoise)
+	var runGetX = function runSetX(runner, getTrTortoise, handler)
 	{
-		console.log("x =", getTrTortoise().x)
+		handler(getTrTortoise().x)
 	}
 
 	var runSetY = function runSetX(runner, getTrTortoise, y)
@@ -298,9 +298,9 @@ fun2(10000)
 		getTrTortoise().y = y
 	}
 
-	var runGetY = function runSetX(runner, getTrTortoise)
+	var runGetY = function runSetX(runner, getTrTortoise, handler)
 	{
-		console.log("y =", getTrTortoise().y)
+		handler(getTrTortoise().y)
 	}
 	
 	var runCapsSquare = function runCapsSquare(runner, getTrTortoise)
@@ -315,11 +315,13 @@ fun2(10000)
 
 	var runSetWidth = function runSetWidth(runner, getTrTortoise, width)
 	{
+		window.params = arguments
 		getTrTortoise().width = width
 	}
 
 	var runGetColorUnderTail = function runGetColorUnderTail(runner, getTrTortoise, forward, handler)
 	{
+		console.log(arguments)
 		var trTortoise = getTrTortoise()
 		forward = forward || 0
 		var rad = degToRad(trTortoise.deg)
