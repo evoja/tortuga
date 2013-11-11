@@ -103,17 +103,17 @@ var fun = function(n)
 		appendCommandToSeq(jsConverter.currentCommand, nextCommand)
 	}
 
-	var SimpleVariableNode = function(command)
+	var FirstParamIsVariableNode = function(command)
 	{
 		this.command = command
 	}
-	SimpleVariableNode.prototype.process = function(jsConverter, jcNode)
+	FirstParamIsVariableNode.prototype.process = function(jsConverter, jcNode)
 	{
 		var params = jcNode.params
 		var zeroParam = params[0]
 		var firstParam = params[1]
 		params[0] = this.command
-		params[1] = firstParam;
+		params[1] = function(){return firstParam.value}
 		var nextCommand = constructCommand(params)
 		params[0] = zeroParam
 		params[1] = firstParam
@@ -139,8 +139,36 @@ var fun = function(n)
 		var nextCommand = constructCommand(args)
 
 		appendCommandToSeq(jsConverter.currentCommand, nextCommand)
-		jsConverter.result = function(){return jsVar.value}
+		jsConverter.result = jsVar
 	}
+
+	var FirstParamIsVariableResultNode = function(command)
+	{
+		this.command = command
+	}
+	FirstParamIsVariableResultNode.prototype.process = function(jsConverter, jcNode)
+	{
+		var jsVar = new JsVariable()
+		var args = [this.command]
+		var params = jcNode.params
+
+		var firstParam = params[1]
+		args.push(function(){return firstParam.value})
+
+		var paramsLen = params.length
+		for(var i = 2; i < paramsLen; ++i)
+		{
+			args.push(params[i])
+		}
+		args.push(function(result){jsVar.value = result})
+
+		var nextCommand = constructCommand(args)
+
+		appendCommandToSeq(jsConverter.currentCommand, nextCommand)
+		jsConverter.result = jsVar
+	}
+
+
 	var NODE_BEGIN  = {
 		process: function(jsConverter, jcNode)
 		{
@@ -183,20 +211,21 @@ var fun = function(n)
 	}
 
 	var NODE_CREATE     = new ResultNode(TR.commands.create)
-	var NODE_GET_COLOR_UNDER_TAIL = new ResultNode(TR.commands.getColorUnderTail)
-	var NODE_GET_X      = new ResultNode(TR.commands.getX)
-	var NODE_GET_Y      = new ResultNode(TR.commands.getY)
+	var NODE_GET_COLOR_UNDER_TAIL = new FirstParamIsVariableResultNode(
+												TR.commands.getColorUnderTail)
+	var NODE_GET_X      = new FirstParamIsVariableResultNode(TR.commands.getX)
+	var NODE_GET_Y      = new FirstParamIsVariableResultNode(TR.commands.getY)
 
-	var NODE_GO         = new SimpleVariableNode(TR.commands.go)
-	var NODE_ROTATE     = new SimpleVariableNode(TR.commands.rotate)
-	var NODE_TAIL_UP    = new SimpleVariableNode(TR.commands.tailUp)
-	var NODE_TAIL_DOWN  = new SimpleVariableNode(TR.commands.tailDown)
-	var NODE_SET_WIDTH  = new SimpleVariableNode(TR.commands.setWidth)
-	var NODE_SET_COLOR  = new SimpleVariableNode(TR.commands.setColor)
-	var NODE_SET_X      = new SimpleVariableNode(TR.commands.setX)
-	var NODE_SET_Y      = new SimpleVariableNode(TR.commands.setY)
-	var NODE_CAPS_ROUND = new SimpleVariableNode(TR.commands.capsRound)
-	var NODE_CAPS_SQUARE = new SimpleVariableNode(TR.commands.capsSquare)
+	var NODE_GO         = new FirstParamIsVariableNode(TR.commands.go)
+	var NODE_ROTATE     = new FirstParamIsVariableNode(TR.commands.rotate)
+	var NODE_TAIL_UP    = new FirstParamIsVariableNode(TR.commands.tailUp)
+	var NODE_TAIL_DOWN  = new FirstParamIsVariableNode(TR.commands.tailDown)
+	var NODE_SET_WIDTH  = new FirstParamIsVariableNode(TR.commands.setWidth)
+	var NODE_SET_COLOR  = new FirstParamIsVariableNode(TR.commands.setColor)
+	var NODE_SET_X      = new FirstParamIsVariableNode(TR.commands.setX)
+	var NODE_SET_Y      = new FirstParamIsVariableNode(TR.commands.setY)
+	var NODE_CAPS_ROUND = new FirstParamIsVariableNode(TR.commands.capsRound)
+	var NODE_CAPS_SQUARE = new FirstParamIsVariableNode(TR.commands.capsSquare)
 	var NODE_CLEAR_CANVAS = new SimpleNode(TR.commands.clearCanvas)
 
 	//==== JsConverter =======================================================

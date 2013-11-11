@@ -315,13 +315,11 @@ fun2(10000)
 
 	var runSetWidth = function runSetWidth(runner, getTrTortoise, width)
 	{
-		window.params = arguments
 		getTrTortoise().width = width
 	}
 
 	var runGetColorUnderTail = function runGetColorUnderTail(runner, getTrTortoise, forward, handler)
 	{
-		console.log(arguments)
 		var trTortoise = getTrTortoise()
 		forward = forward || 0
 		var rad = degToRad(trTortoise.deg)
