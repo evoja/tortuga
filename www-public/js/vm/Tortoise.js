@@ -102,8 +102,8 @@ Tortuga.Vm.initTortoise;
 	{
 		var Tortoise = function(xx, yy, color, width, style_caps)
 		{
-			xx = xx === undefined ? tortoiseContainer.offsetWidth / 2 : xx;
-			yy = yy === undefined ? tortoiseContainer.offsetHeight / 2 : yy;
+			xx = xx === undefined ? Math.floor(tortoiseContainer.offsetWidth / 2) : xx;
+			yy = yy === undefined ? Math.floor(tortoiseContainer.offsetHeight / 2) : yy;
 			color = color || "#0a0";
 			width = width || 1;
 			style_caps = style_caps || "round";
