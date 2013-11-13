@@ -124,9 +124,6 @@ var applyItem = function(list, inputItem, bg, selectedItemContext,
 	list.appendChild(itemDiv);
 
 	return {
-		// item: item,
-		// itemText: itemText,
-		// itemDiv: itemDiv,
 		selectCurrent: selectCurrentItem
 	}
 }
@@ -163,9 +160,27 @@ var LessonEnv = function(tortugaEnv, title)
 	this.tortugaEnv = tortugaEnv;
 	this.title = title;
 }
+
 LessonEnv.prototype.setLessonsTitle = function(itemTitle)
 {
 	this.tortugaEnv.setLessonsTitle(itemTitle + " \\ " + this.title);
+}
+
+var buildListOfTabs = function(bg, list, descrDiv, env, lesson)
+{
+	list.appendChild(createList(lesson.items, bg, descrDiv,
+	new LessonEnv(env, lesson.title))); 
+}
+
+var replacementDOMListOfTabs = function(bg, list, descrDiv, env, lesson)
+{
+	for(var i=1; i<=list.children.length; i++) 
+	{
+		var child = list.children[i];
+		list.removeChild(child);
+	}
+
+	buildListOfTabs(bg, list, descrDiv, env, lesson);
 }
 
 Tortuga.initLessons = function(bg, list, descrDiv, env, allContainers)
@@ -197,12 +212,31 @@ Tortuga.initLessons = function(bg, list, descrDiv, env, allContainers)
 	var CURRENT_VERSION = Tortuga.ParamsUtil.givCurrentVersion();
 	if (getVersionLesson() != CURRENT_VERSION ) { alert('Некорректная версия урока.');}
 
+
+	if ("onhashchange" in window)
+	{
+		window.onhashchange = function () 
+		{
+			replacementDOMListOfTabs(bg, list, descrDiv, env, lesson);
+		}
+	}
+	else
+	{
+		var storedHash = window.location.hash;
+		window.setInterval(function () 
+			{
+				if (window.location.hash != storedHash) 
+				{
+					replacementDOMListOfTabs(bg, list, descrDiv, env, lesson);
+				}
+			}, 100);
+	}
+
 	var header = document.createElement("DIV");
 	appendClass(header, CL_HEADER);
 	list.appendChild(header);
 
-	list.appendChild(createList(lesson.items, bg, descrDiv,
-		new LessonEnv(env, lesson.title)));
+	buildListOfTabs(bg, list, descrDiv, env, lesson);
 }
 
 })()

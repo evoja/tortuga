@@ -39,6 +39,16 @@ Tortuga.Vm.initTortoise;
 		return jsConverter.parseNode(jsConverter.nodes.getColorUnderTail, jsTortoise, forward).value
 	}
 
+	var getX = function(jsConverter, jsTortoise)
+	{
+		return jsConverter.parseNode(jsConverter.nodes.getX, jsTortoise).value
+	}
+
+	var getY = function(jsConverter, jsTortoise)
+	{
+		return jsConverter.parseNode(jsConverter.nodes.getY, jsTortoise).value
+	}
+
 
 	//==== Construction helpers ====
 	var applyMethodsToProto = function (methods, proto, wrapMethod)
@@ -92,8 +102,8 @@ Tortuga.Vm.initTortoise;
 	{
 		var Tortoise = function(xx, yy, color, width, style_caps)
 		{
-			xx = xx === undefined ? tortoiseContainer.offsetWidth / 2 : xx;
-			yy = yy === undefined ? tortoiseContainer.offsetHeight / 2 : yy;
+			xx = xx === undefined ? Math.floor(tortoiseContainer.offsetWidth / 2) : xx;
+			yy = yy === undefined ? Math.floor(tortoiseContainer.offsetHeight / 2) : yy;
 			color = color || "#0a0";
 			width = width || 1;
 			style_caps = style_caps || "round";
@@ -107,6 +117,14 @@ Tortuga.Vm.initTortoise;
 		Tortoise.prototype.getColorUnderTail = function(forward)
 		{
 			return getColorUnderTail(jsConverter, this.jsTortoise, forward)
+		}
+		Tortoise.prototype.getX = function()
+		{
+			return getX(jsConverter, this.jsTortoise)
+		}
+		Tortoise.prototype.getY = function()
+		{
+			return getY(jsConverter, this.jsTortoise)
 		}
 
 		var proto = Tortoise.prototype
