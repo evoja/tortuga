@@ -117,6 +117,8 @@ fun2(10000)
 {
 	var TR_POINT_MOVE = {__move:1};
 	var TR_POINT_LINE = {__line:1};
+	var CAPS_ROUND = "round"
+	var CAPS_SQUARE = "butt"
 
 	//=== Math ===
 	var degToRad = function(deg)
@@ -134,7 +136,7 @@ fun2(10000)
 		this.isDrawing = false
 		this.color = color
 		this.width = width || 1
-		this.style_caps = style_caps || "round"
+		this.style_caps = style_caps || CAPS_ROUND
 	}
 
 
@@ -152,7 +154,7 @@ fun2(10000)
 	{
 		return this.x == that.x && this.y == that.y && 
 			this.color == that.color && this.width == that.width &&
-			this.style_caps == that.style_caps
+			this.style_caps == that.style_caps &&
 			this.trTortoise == that.trTortoise
 	}
 
@@ -213,11 +215,8 @@ fun2(10000)
 				ds.beginPath()
 				ds.setColor(trPoint.color)
 				ds.setWidth(trPoint.width)
-				//ds.capsSquare()
 				ds.setCapsStyle(trPoint.style_caps)
 				ds.moveTo(trPoint.x, trPoint.y)
-				//ds.capsRound(trPoint.capsRound)
-				//ds.capsSquare(trPoint.capsSquare)
 			}
 			else
 			{
@@ -306,17 +305,12 @@ fun2(10000)
 	
 	var runCapsSquare = function runCapsSquare(runner, getTrTortoise)
 	{
-		getTrTortoise().style_caps = "butt"
+		getTrTortoise().style_caps = CAPS_SQUARE
 	}
 
 	var runCapsRound = function runCapsRound(runner, getTrTortoise)
 	{
-		getTrTortoise().style_caps = "round"
-	}
-
-	var runSetCapsStyle = function runSetCapsStyle(runner, getTrTortoise, style_caps)
-	{
-		getTrTortoise().style_caps = style_caps
+		getTrTortoise().style_caps = CAPS_ROUND
 	}
 
 	var runSetWidth = function runSetWidth(runner, getTrTortoise, width)
@@ -429,7 +423,6 @@ fun2(10000)
 		getY     : runGetY,
 		capsRound : runCapsRound,
 		capsSquare : runCapsSquare,
-		setCapsStyle : runSetCapsStyle,
 		kill     : runKill,
 		nil      : runNil,
 		pair     : runPair,
@@ -443,42 +436,5 @@ fun2(10000)
 
 	Tortuga.Vm.TortoiseRunner = TortoiseRunner
 
-
-	fun = function(n)
-{
-	var m1 = new Date().getTime()
-	var tr = Tortuga.Vm.TortoiseRunner
-	var t;
-	var command = tr.constructCommand(tr.commands.create, 0, 0, "green", 1,
-		function(trTortoise)
-		{
-			t = trTortoise
-		})
-	MyTr.run(command)
-	var pair = function(f, s){return tr.constructCommand(tr.commands.pair, f, s)}
-
-
-	var td = tr.constructCommand(tr.commands.tailDown, t)
-	var tu = tr.constructCommand(tr.commands.tailUp, t)
-	var tcr = tr.constructCommand(tr.commands.capsRound,t)
-	var tcs = tr.constructCommand(tr.commands.capsSquare, t)
-	var scs = tr.constructCommand(tr.commands.setCapsStyle, t)
-	var right = tr.constructCommand(tr.commands.rotate, t, -90)
-	var left = tr.constructCommand(tr.commands.rotate, t, 90)
-
-	var go = tr.constructCommand(tr.commands.go, t, 3)
-	var kill = tr.constructCommand(tr.commands.kill, t)
-	var nil = tr.constructCommand(tr.commands.nil)
-
-	var seq = pair(nil, td)
-	for(var i = 0; i < n;++i)
-	{
-	   seq = pair(pair(pair(pair(seq, left), go), right), go)
-	}
-	seq = pair(seq, kill)
-	MyTr.run(seq)
-	var m2 = new Date().getTime()
-	return m2 - m1
-}
 
 })()

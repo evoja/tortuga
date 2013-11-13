@@ -34,10 +34,14 @@ var getLessonLink = function(lesson)
 			"?" + CURRENT_VERSION + value;
 }
 
+var givCurrentVersion = function()
+{
+	return CURRENT_VERSION;
+}
+
 //location.search.substring(1)
 var getUriValue = function(url)
 {
-	//file:///C:/pathToMyProject/tortuga/www-public/index.html?q1YqySzJSVWyUrqw6cKGC5sudgPJ/UASxNuvpKOUWZKaW6xkFV0NVwiThCmG0UDFxUXJMJOwSaekFicXZRaUZOb
 	var vhozhd = url.indexOf('?');
 	var result = url.substr(vhozhd + 1 + VERSION_LENGTH);
 	return result;
@@ -71,6 +75,7 @@ var getLesson = function()
 Tortuga.ParamsUtil = {
 	getLesson:getLesson,
 	getLessonLink:getLessonLink,
+	givCurrentVersion:givCurrentVersion,
 	getLessonTextFromUriValue:getLessonTextFromUriValue,
 	getLessonTextFromGetUriValue:getLessonTextFromGetUriValue
 }
