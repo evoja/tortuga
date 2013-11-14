@@ -1,1 +1,5 @@
 config.js
+*.aux
+*.log
+*.toc
+*.dvi
