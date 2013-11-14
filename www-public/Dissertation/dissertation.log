@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.6.17)  26 JUN 2013 17:08
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.6.17)  14 NOV 2013 13:52
 entering extended mode
 **dissertation.tex
 
-("C:\Users\РИТМ\Desktop\курсач в Техе\Dissertation\dissertation.
-tex"
+("C:\MyPlanet\Univer\КУРСАЧЧЧ!!\4 курс - копия\курсач в
+ Техе\Dissertation\dissertation.tex"
 LaTeX2e <2011/06/27>
 Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
 abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
@@ -33,7 +33,8 @@ File: size12.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
-("C:\Users\РИТМ\Desktop\курсач в Техе\Dissertation\packages.tex"
+("C:\MyPlanet\Univer\КУРСАЧЧЧ!!\4 курс - копия\курсач в
+ Техе\Dissertation\packages.tex"
 ("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\lscape.sty"
 Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
 
@@ -885,11 +886,12 @@ Package tocloft Info: The document has chapter divisions on input line 44.
 \cfttabindent=\skip90
 \cfttabnumwidth=\skip91
 )
-("C:\Users\РИТМ\Desktop\курсач в Техе\Dissertation\styles.tex"
+("C:\MyPlanet\Univer\КУРСАЧЧЧ!!\4 курс - копия\курсач в
+ Техе\Dissertation\styles.tex"
 Package hyperref Info: Option `colorlinks' set `true' on input line 28.
 )
-("C:\Users\РИТМ\Desktop\курсач в Техе\Dissertation\dissertation.
-aux"
+("C:\MyPlanet\Univer\КУРСАЧЧЧ!!\4 курс - копия\курсач в
+ Техе\Dissertation\dissertation.aux"
 
 LaTeX Warning: Label `chapt1' multiply defined.
 
@@ -990,27 +992,29 @@ LaTeX Info: Redefining \ref on input line 5.
 LaTeX Info: Redefining \pageref on input line 5.
 LaTeX Info: Redefining \nameref on input line 5.
 
-("C:\Users\РИТМ\Desktop\курсач в Техе\Dissertation\dissertation.
-out")
-("C:\Users\РИТМ\Desktop\курсач в Техе\Dissertation\dissertation.
-out")
+("C:\MyPlanet\Univer\КУРСАЧЧЧ!!\4 курс - копия\курсач в
+ Техе\Dissertation\dissertation.out")
+("C:\MyPlanet\Univer\КУРСАЧЧЧ!!\4 курс - копия\курсач в
+ Техе\Dissertation\dissertation.out")
 \@outlinefile=\write3
 
-("C:\Users\РИТМ\Desktop\курсач в Техе\Dissertation\names.tex")
-("C:\Users\РИТМ\Desktop\курсач в Техе\Dissertation\title.tex"
-[1
+("C:\MyPlanet\Univer\КУРСАЧЧЧ!!\4 курс - копия\курсач в
+ Техе\Dissertation\names.tex")
+("C:\MyPlanet\Univer\КУРСАЧЧЧ!!\4 курс - копия\курсач в
+ Техе\Dissertation\title.tex" [1
 
 {C:/Users/РИТМ/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}])
-("C:\Users\РИТМ\Desktop\курсач в Техе\Dissertation\contents.tex"
-
-("C:\Users\РИТМ\Desktop\курсач в Техе\Dissertation\dissertation.
-toc"
+("C:\MyPlanet\Univer\КУРСАЧЧЧ!!\4 курс - копия\курсач в
+ Техе\Dissertation\contents.tex"
+("C:\MyPlanet\Univer\КУРСАЧЧЧ!!\4 курс - копия\курсач в
+ Техе\Dissertation\dissertation.toc"
 LaTeX Font Info:    Try loading font information for OT1+ftm on input line 1.
  (C:\texmf\tex\latex\pscyr\ot1ftm.fd
 File: ot1ftm.fd 2001/12/09 Fontinst v1.914 font definitions for OT1/ftm.
 )<<ot1.cmap>><<oml.cmap>><<oms.cmap>><<omx.cmap>>
 LaTeX Font Info:    Try loading font information for U+msa on input line 2.
- ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
 LaTeX Font Info:    Try loading font information for U+msb on input line 2.
@@ -1020,11 +1024,12 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ))
 \tf@toc=\write4
  [2])
-("C:\Users\РИТМ\Desktop\курсач в Техе\Dissertation\introduction.
-tex" [3
+("C:\MyPlanet\Univer\КУРСАЧЧЧ!!\4 курс - копия\курсач в
+ Техе\Dissertation\introduction.tex" [3
 
 ] [4])
-("C:\Users\РИТМ\Desktop\курсач в Техе\Dissertation\part1.tex"
+("C:\MyPlanet\Univer\КУРСАЧЧЧ!!\4 курс - копия\курсач в
+ Техе\Dissertation\part1.tex"
 \IeC {\CYRG }\IeC {\cyrl }\IeC {\cyra }\IeC {\cyrv }\IeC {\cyra } 1.
 <images/pic1.jpg, id=88, 621.82312pt x 485.56406pt>
 File: images/pic1.jpg Graphic file (type jpg)
@@ -1039,29 +1044,18 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 ]
 \IeC {\CYRG }\IeC {\cyrl }\IeC {\cyra }\IeC {\cyrv }\IeC {\cyra } 2.
-[6 <C:/Users/РИТМ/Desktop/курсач в Техе/Dissertation/images/pic1
-.jpg>]
+[6 <C:/MyPlanet/Univer/КУРСАЧЧЧ!!/4 курс - копия/курсач 
+в Техе/Dissertation/images/pic1.jpg>]
 \IeC {\CYRG }\IeC {\cyrl }\IeC {\cyra }\IeC {\cyrv }\IeC {\cyra } 3.
 [7]
 \IeC {\CYRG }\IeC {\cyrl }\IeC {\cyra }\IeC {\cyrv }\IeC {\cyra } 4.
 \IeC {\CYRG }\IeC {\cyrl }\IeC {\cyra }\IeC {\cyrv }\IeC {\cyra } 5.
 [8] [9])
-("C:\Users\РИТМ\Desktop\курсач в Техе\Dissertation\conclusion.te
-x"
-! Illegal unit of measure (pt inserted).
-<to be read again> 
-                   \vskip 
-l.5 \vspace{16}
-               
-Dimensions can be in units of em, ex, in, pt, pc,
-cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
-I'll assume that you meant to say pt, for printer's points.
-To recover gracefully from this error, it's best to
-delete the erroneous units; e.g., type `2' to delete
-two letters. (See Chapter 27 of The TeXbook.)
-
+("C:\MyPlanet\Univer\КУРСАЧЧЧ!!\4 курс - копия\курсач в
+ Техе\Dissertation\conclusion.tex"
 LaTeX Font Info:    Try loading font information for OMS+ftm on input line 8.
 LaTeX Font Info:    No file OMSftm.fd. on input line 8.
+
 
 LaTeX Font Warning: Font shape `OMS/ftm/m/n' undefined
 (Font)              using `OMS/cmsy/m/n' instead
@@ -1070,10 +1064,10 @@ LaTeX Font Warning: Font shape `OMS/ftm/m/n' undefined
 [10
 
 ])
-("C:\Users\РИТМ\Desktop\курсач в Техе\Dissertation\references.te
-x"
-("C:\Users\РИТМ\Desktop\курсач в Техе\Dissertation\dissertation.
-bbl"
+("C:\MyPlanet\Univer\КУРСАЧЧЧ!!\4 курс - копия\курсач в
+ Техе\Dissertation\references.tex"
+("C:\MyPlanet\Univer\КУРСАЧЧЧ!!\4 курс - копия\курсач в
+ Техе\Dissertation\dissertation.bbl"
 
 LaTeX Warning: Empty `thebibliography' environment on input line 10.
 
@@ -1138,8 +1132,9 @@ Underfull \hbox (badness 4967) in paragraph at lines 31--32
 ��-��-��-���
  []
 
-) ("C:\Users\РИТМ\Desktop\курсач в Техе\Dissertation\appendix.te
-x"
+)
+("C:\MyPlanet\Univer\КУРСАЧЧЧ!!\4 курс - копия\курсач в
+ Техе\Dissertation\appendix.tex"
 \IeC {\CYRP }\IeC {\cyrr }\IeC {\cyri }\IeC {\cyrl }\IeC {\cyro }\IeC {\cyrzh }
 \IeC {\cyre }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyre } A.
 [12]
@@ -1165,69 +1160,42 @@ iner)
  []
 
 [14]
-
-! Package inputenc Error: Unicode char \u8:  not set up for use with LaTeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.102 \end{verbatim}
-                    
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-Overfull \hbox (17.4231pt too wide) in paragraph at lines 127--127
+Overfull \hbox (17.4231pt too wide) in paragraph at lines 128--128
 []    \T2A/fer/m/n/14.4 Tortuga.givLessonArea(document.getElementById("area"),[
 ] 
  []
 
 [15]
-Overfull \hbox (112.46309pt too wide) in paragraph at lines 134--134
+Overfull \hbox (112.46309pt too wide) in paragraph at lines 135--135
 []    \T2A/fer/m/n/14.4 button.onclick = function(e){updateArea(area.value, inp
 ut.value)}[] 
  []
 
 
-Overfull \hbox (147.02309pt too wide) in paragraph at lines 159--159
+Overfull \hbox (147.02309pt too wide) in paragraph at lines 160--160
 []    \T2A/fer/m/n/14.4 var t =  Tortuga.ParamsUtil.getLessonTextFromGetUriValu
 e(inputValue);[] 
  []
 
 
-Overfull \hbox (138.38309pt too wide) in paragraph at lines 159--159
+Overfull \hbox (138.38309pt too wide) in paragraph at lines 160--160
 []        \T2A/fer/m/n/14.4 paramText = t.substr(paramBegin + 2, paramAnd - par
 amBegin - 2);[] 
  []
 
 
-Overfull \hbox (103.82309pt too wide) in paragraph at lines 172--172
+Overfull \hbox (103.82309pt too wide) in paragraph at lines 174--174
 []    \T2A/fer/m/n/14.4 return prezip_to_utf8(RawDeflate.inflate(atob(getUriVal
 ue(u))));[] 
  []
-
-
-! Package inputenc Error: Unicode char \u8:  not set up for use with LaTeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.172 \end{verbatim}
-                    
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
 
 )
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 20.
  [16]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 20.
 
-("C:\Users\РИТМ\Desktop\курсач в Техе\Dissertation\dissertation.
-aux")
+("C:\MyPlanet\Univer\КУРСАЧЧЧ!!\4 курс - копия\курсач в
+ Техе\Dissertation\dissertation.aux")
 Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 20.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 20.
 Package rerunfilecheck Info: File `dissertation.out' has not changed.
@@ -1242,10 +1210,10 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 20.
  ) 
 Here is how much of TeX's memory you used:
- 12982 strings out of 493921
- 180341 string characters out of 3147330
+ 12981 strings out of 493921
+ 181595 string characters out of 3147330
  262394 words of memory out of 3000000
- 15977 multiletter control sequences out of 15000+200000
+ 15976 multiletter control sequences out of 15000+200000
  18351 words of font info for 43 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
  38i,7n,38p,3029b,457s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1253,7 +1221,7 @@ Here is how much of TeX's memory you used:
 9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/texmf/fonts/type1/public/pscyr/
 ercour.pfb><C:/texmf/fonts/type1/public/pscyr/times.pfb><C:/texmf/fonts/type1/p
 ublic/pscyr/timesbd.pfb><C:/texmf/fonts/type1/public/pscyr/timesi.pfb>
-Output written on dissertation.pdf (16 pages, 226536 bytes).
+Output written on dissertation.pdf (16 pages, 226530 bytes).
 PDF statistics:
  201 PDF objects out of 1000 (max. 8388607)
  54 named destinations out of 1000 (max. 500000)

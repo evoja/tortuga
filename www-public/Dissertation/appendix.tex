@@ -92,13 +92,14 @@ var proto = {
 \end{verbatim}
 
 Добавлена публичная функция setWidth для отражения на Canvas действий черепахи:
+
 \begin{verbatim}
 Tortuga.initDrawing = function(canvas){
     ...
     setWidth = function(width){
         ctx.lineWidth = width;
     }
-} 
+}
 \end{verbatim}
 
 \vspace{16mm}
@@ -159,6 +160,7 @@ var updateArea = function (areaValue, inputValue){
 \end{verbatim}
 
 Извлечение текста урока из ссылки:
+
 \begin{verbatim}
 var getUriValue = function(u){
     var str = u;
@@ -168,7 +170,8 @@ var getUriValue = function(u){
 }
 var getLessonTextFromGetUriValue = function(u){
     return prezip_to_utf8(RawDeflate.inflate(atob(getUriValue(u))));
-} 
+}
 \end{verbatim}
+
 % % % % % % % % % % % % % % % % % % % % %
 
