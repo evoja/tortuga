@@ -1,0 +1,177 @@
+\appendix
+\chapter{} 
+
+\textbf{\Large A1. Сокращение ссылки} \label{AppendixA3}
+\vspace{6mm}
+
+Отправляет запрос с передачей длинной ссылки:
+\begin{verbatim}
+var parseShortenedResponse = function(m, longUrl) {
+    console.log(m, m.content);
+    var url = null;
+    try {                
+        url = JSON.parse(m.content).id;
+        if (typeof url != 'string') url = longUrl;
+    } catch (e) {
+        url = longUrl;
+    }
+	linkarea.innerHTML = "";			
+	var textinput = document.createElement("INPUT");
+	textinput.type = "text";
+	textinput.disabled = true;
+	textinput.value = url;
+
+	var link = document.createElement("A");
+	link.href = url;
+	link.innerHTML = "Try lesson";
+
+	linkarea.appendChild(textinput);
+	linkarea.appendChild(link);
+	textinput.select();
+}
+
+\end{verbatim}
+
+Получает ответ в формате JSON и, распарсив, выводит на страницу  constructor.html в текстовое окно.
+\begin{verbatim}
+var getShortenURL = function(url) {
+    jsonlib.fetch({
+            url: 'https://www.googleapis.com/urlshortener/v1/url',
+            header: 'Content-Type: application/json',
+            method: 'POST',
+            data: JSON.stringify({longUrl: url})
+        }, 
+        function(m){parseShortenedResponse(m, url)});
+    }
+\end{verbatim}
+
+\vspace{16mm}
+\textbf{\Large A2. Очистка экрана}
+\vspace{6mm}
+
+Очищает прямоугольник, размером с Canvas 
+\begin{verbatim}
+...
+var clearCanvas;
+Tortuga.initDrawing = function(canvas){
+	...
+    clearCanvas = function()	{
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+}
+\end{verbatim}
+
+\vspace{16mm}
+\textbf{\Large A3. Изменение толщины рисования}
+\vspace{6mm}
+
+В объект, представляющий черепаху, добавлено свойство width:
+\begin{verbatim}
+var Tortoise = function(xx, yy, color, width, tortoiseContainer)	{		
+    ...
+    this.width = width || 1;
+    ...
+}
+\end{verbatim}
+В прототип (объект, представляющий свойства и методы, общие для всех черепах) была добавлена функция setWidth:
+
+\begin{verbatim}
+var proto = {
+    go : function(t, length){
+        ...
+        if(t.isDrawing){
+        ...
+        oldWidth = setWidth(t.width);
+        ...
+        setWidth(oldWidth);
+        }
+    },
+    ...
+    setWidth : function(t, w){t.width = w || t.width}
+}
+\end{verbatim}
+
+Добавлена публичная функция setWidth для отражения на Canvas действий черепахи:
+
+\begin{verbatim}
+Tortuga.initDrawing = function(canvas){
+    ...
+    setWidth = function(width){
+        ctx.lineWidth = width;
+    }
+}
+\end{verbatim}
+
+\vspace{16mm}
+\textbf{\Large A4. Редактирование уроков}
+\vspace{6mm}
+
+Формирование необходимых элементов для ввода и вывода информации:
+\begin{verbatim}
+<input type="text" id="lessonInput">
+<button id="changebutton">Изменить урок</button><br>
+<textarea id="area"></textarea><br>
+<button id="createbutton">Создать урок</button><br>
+<div id="linkarea"></div>
+\end{verbatim}
+
+Передача данных из  текстового поля lessonInput в объект Черепаха:
+\begin{verbatim}
+<script>
+var init = function(){
+    ...
+    Tortuga.givLessonArea(document.getElementById("area"),
+        document.getElementById("changebutton"),
+        document.getElementById("lessonInput"));
+}
+</script>
+\end{verbatim}
+
+Вызов закрытой функции updateArea:
+\begin{verbatim}
+Tortuga.givLessonArea = function(area, button, input){
+    button.onclick = function(e){updateArea(area.value, input.value)}
+}
+\end{verbatim}
+
+Обрабатывание полученных из lessonInput  данных:
+\begin{verbatim}
+var updateArea = function (areaValue, inputValue){
+    var t =  Tortuga.ParamsUtil.getLessonTextFromGetUriValue(inputValue);
+    var paramBegin = null;
+    var paramAnd = null;
+    var paramText = null;
+    var resultText = "";
+
+    paramBegin = t.indexOf(':"');
+    paramAnd = t.indexOf('"', paramBegin + 2);
+
+	
+    while (paramBegin > 0){
+        paramText = t.substr(paramBegin + 2, paramAnd - paramBegin - 2);
+        resultText = resultText + paramText + '\n\n';
+        t = t.substr(paramAnd + 2);
+        paramBegin = t.indexOf(':"');
+        paramAnd = t.indexOf('"', paramBegin + 2);
+    }
+
+    document.getElementById('area').value = resultText;
+}
+\end{verbatim}
+
+Извлечение текста урока из ссылки:
+
+\begin{verbatim}
+var getUriValue = function(u){
+    var str = u;
+    var vhozhd = str.indexOf('?');
+    var result = str.substr(vhozhd + 1);
+    return result;
+}
+var getLessonTextFromGetUriValue = function(u){
+    return prezip_to_utf8(RawDeflate.inflate(atob(getUriValue(u))));
+}
+\end{verbatim}
+
+% % % % % % % % % % % % % % % % % % % % %
+
