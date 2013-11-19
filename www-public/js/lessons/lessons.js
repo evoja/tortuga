@@ -186,7 +186,7 @@ var replacementDOMListOfTabs = function(bg, list, descrDiv, env, lesson)
 Tortuga.initLessons = function(bg, list, descrDiv, env, allContainers)
 {
 	var lesson = Tortuga.ParamsUtil.getLesson();
-	if(lesson == null)
+	if((lesson == null) || (lesson == "indexpage"))
 	{
 		if(allContainers != null)
 		{
@@ -195,7 +195,8 @@ Tortuga.initLessons = function(bg, list, descrDiv, env, allContainers)
 				appendClass(item, CL_ALL_EMPTY);
 			})
 		}
-		alert('Некорректная ссылка. Ошибка открытия урока.');
+		if(lesson == null) 
+			alert('Некорректная ссылка. Ошибка открытия урока.');
 		return
 	}
 	else

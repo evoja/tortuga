@@ -62,7 +62,10 @@ var getLesson = function()
 	try
 	{
 		var text = getLessonTextFromUriValue();
-		return JSON.parse(text);
+		if (text!="")
+			return JSON.parse(text)
+		else
+			return "indexpage";
 	}
 	catch(e)
 	{
