@@ -183,6 +183,12 @@ var replacementDOMListOfTabs = function(bg, list, descrDiv, env, lesson)
 	buildListOfTabs(bg, list, descrDiv, env, lesson);
 }
 
+var redirectOnIndex = function redirectOnIndex()
+{
+	var indexpage_url = window.location.pathname;
+	location = indexpage_url;
+}
+
 Tortuga.initLessons = function(bg, list, descrDiv, env, allContainers)
 {
 	var lesson = Tortuga.ParamsUtil.getLesson();
@@ -195,8 +201,12 @@ Tortuga.initLessons = function(bg, list, descrDiv, env, allContainers)
 				appendClass(item, CL_ALL_EMPTY);
 			})
 		}
-		if(lesson == null) 
+
+		if(lesson == null)
+		{ 
 			alert('Некорректная ссылка. Ошибка открытия урока.');
+			redirectOnIndex();
+		}
 		return
 	}
 	else
@@ -209,10 +219,14 @@ Tortuga.initLessons = function(bg, list, descrDiv, env, allContainers)
 			})
 		}
 	}
-	
-	var CURRENT_VERSION = Tortuga.ParamsUtil.givCurrentVersion();
-	if (getVersionLesson() != CURRENT_VERSION ) { alert('Некорректная версия урока.');}
 
+
+	var CURRENT_VERSION = Tortuga.ParamsUtil.givCurrentVersion();
+	if (getVersionLesson() != CURRENT_VERSION ) 
+		{ 
+			alert('Некорректная версия урока.');
+			redirectOnIndex();			
+		} 
 
 	if ("onhashchange" in window)
 	{
