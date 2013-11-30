@@ -9,7 +9,7 @@
 <link rel="stylesheet" type="text/css" href="css/page.css">
 
 </head>
-<body onLoad="init()">
+<body>
 <div id="topTextArea"></div>
 <div class="skyGradient"><div class="skyObjects">
 	<div class="workingArea-wrapper"><div class="workingArea">
@@ -159,18 +159,24 @@ var init;
 	{
 		gebid("topTextArea").innerHTML = Tortuga.Agent.topText;
 	}
+
+	init();
 })()
 </script>
+<!-- Yandex.Metrika counter -->
 <script type="text/javascript">
+if(Tortuga && Tortuga.Config && Tortuga.Config.yandexMetrikaId)
+{
 (function (d, w, c) {
     (w[c] = w[c] || []).push(function() {
         try {
-            w["yaCounter" + Tortuga.Config.yandexMetrikaId] = new Ya.Metrika({id:Tortuga.Config.yandexMetrikaId,
-                    webvisor:true,
-                    clickmap:true,
-                    trackLinks:true,
-                    accurateTrackBounce:true,
-                    trackHash:true});
+            w["yaCounter" + Tortuga.Config.yandexMetrikaId] = new Ya.Metrika({
+                id        : Tortuga.Config.yandexMetrikaId,
+                webvisor  : Tortuga.Config.webvisor,
+                clickmap  : true,
+                trackLinks:true,
+                accurateTrackBounce:true,
+                trackHash:true});
         } catch(e) { }
     });
 
@@ -185,6 +191,11 @@ var init;
         d.addEventListener("DOMContentLoaded", f, false);
     } else { f(); }
 })(document, window, "yandex_metrika_callbacks");
+}
+else
+{
+	alert("else");
+}
 </script>
 <!-- /Yandex.Metrika counter -->
 </body>
