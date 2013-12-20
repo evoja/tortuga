@@ -1,0 +1,66 @@
+/*** Tortoise page *******************************************************/
+.skyGradient
+{
+	background-color: #49a;
+	background:	
+		-webkit-linear-gradient(top, #314, #06a 60%, #4ba5fa 75%, #6bb5ba);
+	background:
+		-moz-linear-gradient(top, #314, #06a 60%, #4ba5fa 75%, #6bb5ba);
+	background:
+		-ms-linear-gradient(top, #314, #06a 60%, #4ba5fa 75%, #6bb5ba);
+}
+.skyObjects
+{
+	background:
+		url("../img/red_head_winter.png") no-repeat center top,
+		url("../img/footer_winter.png") repeat-x center bottom,
+		url("../img/clouds_winter.png") center 300px no-repeat;
+	background-size: auto 200px, auto auto, auto auto;
+}
+
+.grass
+{
+	background:
+		url("../img/green_back_grass.png") repeat-x center top,
+		url("../img/pixel_winter.png") repeat center top;	
+	background-color: #97cccd;
+}
+
+.balloon-blue
+{
+	background: #8ab;
+}
+
+.balloon
+{
+	background:#97cccd;
+}
+
+.workingArea
+{
+	background: none;
+}
+
+
+
+.tortoiseMan
+{/*560x900*/
+	width: 280px;
+	height:450px;
+	background: left top no-repeat url("../img/turtle_winter_2.png");
+	background-size: 100% 100%;
+	bottom: -474px;
+}
+
+
+
+
+
+/*** Lessons **********************************/
+.tortuga-lessonsListContainer-itemSelected.tortuga-lessonsListContainer-item
+{
+	background: #822;
+}
+
+
+
