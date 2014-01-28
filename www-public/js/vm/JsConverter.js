@@ -224,6 +224,7 @@ var fun = function(n)
 	                                            TR.commands.getColorUnderTail)
 	var NODE_GET_X      = new FirstParamIsVariableResultNode(TR.commands.getX)
 	var NODE_GET_Y      = new FirstParamIsVariableResultNode(TR.commands.getY)
+	var NODE_GET_ANGLE  = new FirstParamIsVariableResultNode(TR.commands.getAngle)
 
 	var NODE_GO         = new FirstParamIsVariableNode(TR.commands.go)
 	var NODE_ROTATE     = new FirstParamIsVariableNode(TR.commands.rotate)
@@ -233,6 +234,7 @@ var fun = function(n)
 	var NODE_SET_COLOR  = new FirstParamIsVariableNode(TR.commands.setColor)
 	var NODE_SET_X      = new FirstParamIsVariableNode(TR.commands.setX)
 	var NODE_SET_Y      = new FirstParamIsVariableNode(TR.commands.setY)
+	var NODE_SET_ANGLE  = new FirstParamIsVariableNode(TR.commands.setAngle)
 	var NODE_CAPS_ROUND = new FirstParamIsVariableNode(TR.commands.capsRound)
 	var NODE_CAPS_SQUARE = new FirstParamIsVariableNode(TR.commands.capsSquare)
 	var NODE_CLEAR_CANVAS = new SimpleNode(TR.commands.clearCanvas)
@@ -281,6 +283,8 @@ var fun = function(n)
 		capsRound : NODE_CAPS_ROUND,
 		capsSquare : NODE_CAPS_SQUARE,
 		clearCanvas : NODE_CLEAR_CANVAS,
+		getAngle : 	NODE_GET_ANGLE,
+		setAngle :  NODE_SET_ANGLE,
 		getColorUnderTail : NODE_GET_COLOR_UNDER_TAIL
 	}
 	Tortuga.Vm.JsConverter = JsConverter
