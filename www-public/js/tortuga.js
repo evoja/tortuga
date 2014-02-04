@@ -117,7 +117,7 @@ var initApp = function(
 
 	var jsConverter = Tortuga.Vm.initVm(canvasObjects.canvas, canvasObjects.canvasContainer)
 	Tortuga.Vm.initTortoise(canvasObjects.canvasContainer, jsConverter)
-	Tortuga.initFiles(filesObjects.button,begin,end)
+	Tortuga.initFiles(filesObjects.button, canvasContainer, begin,end)
 	Tortuga.initLessons(canvasObjects.bg, lessonsListContainer, lessonItemDescription,
 		new TortugaEnv(), lessonsContainers);
 }
