@@ -50,7 +50,19 @@ Tortuga.initFiles = function(filesSelector, canvasObjekt, preAction,postAction)
 		e.preventDefault ? e.preventDefault() : (e.returnValue = false);
 	}
 
+	var handleDragOver = function(e)
+	{
+		preventDefault(e)
+		canvasObjekt.classList.add("tortuga-canvasContainer-dragging")
+		console.log("rrr");
+	}
+	var handleDragLeave = function()
+	{
+		canvasObjekt.classList.remove("tortuga-canvasContainer-dragging")
+	}
+
     var doDrop = function(e) {
+    	canvasObjekt.classList.remove("tortuga-canvasContainer-dragging")
     	if (e.dataTransfer.files)
     	{
 	        var file = e.dataTransfer.files;
@@ -71,6 +83,7 @@ Tortuga.initFiles = function(filesSelector, canvasObjekt, preAction,postAction)
     }
 	
 	filesSelector.addEventListener('change', handleFileSelection, false);
-	canvasObjekt.addEventListener("dragover", preventDefault, false);
+	canvasObjekt.addEventListener("dragleave", handleDragLeave, false);
+	canvasObjekt.addEventListener("dragover", handleDragOver, false);
     canvasObjekt.addEventListener("drop", doDrop, false);
 }
