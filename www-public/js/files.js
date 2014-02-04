@@ -19,9 +19,10 @@ Tortuga.initFiles = function(filesSelector, canvasObjekt, preAction,postAction)
 
 	var processScript =  function(script)
 	{
+		console.log(script)
 		preAction();
-		var scriptElement = document.createElement("script");
-	    scriptElement.innerHTML = script;
+		var scriptElement = document.createElement("script")
+		scriptElement.innerHTML = script;
 
 		var headElement = document.getElementsByTagName("head")[0];
 		headElement.appendChild(scriptElement);
@@ -38,11 +39,6 @@ Tortuga.initFiles = function(filesSelector, canvasObjekt, preAction,postAction)
 		reader.readAsText(file);
 	}
 
-	var processText = function(script)
-	{
-		processScript(script)
-	}
-
 	var handleFileSelection = function(evt)
 	{
 		mapFileList(evt.target.files, processFile);
@@ -54,7 +50,7 @@ Tortuga.initFiles = function(filesSelector, canvasObjekt, preAction,postAction)
 		e.preventDefault ? e.preventDefault() : (e.returnValue = false);
 	}
 
-    var dodrop = function(e) {
+    var doDrop = function(e) {
     	if (e.dataTransfer.files)
     	{
 	        var file = e.dataTransfer.files;
@@ -68,7 +64,7 @@ Tortuga.initFiles = function(filesSelector, canvasObjekt, preAction,postAction)
 	    if (e.dataTransfer.getData('Text'))
 	    {
 	        var text = e.dataTransfer.getData('Text');
-	        processText(text);
+	        processScript(text);
 	        preventDefault(e)
 	    }
 	    return false;
@@ -76,5 +72,5 @@ Tortuga.initFiles = function(filesSelector, canvasObjekt, preAction,postAction)
 	
 	filesSelector.addEventListener('change', handleFileSelection, false);
 	canvasObjekt.addEventListener("dragover", preventDefault, false);
-    canvasObjekt.addEventListener("drop", dodrop, false);
+    canvasObjekt.addEventListener("drop", doDrop, false);
 }
