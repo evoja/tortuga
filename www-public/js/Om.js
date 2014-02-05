@@ -49,34 +49,6 @@ prependArgumentsByObject : function(obj, oargs)
 	return nargs
 },
 
-appendClass : function (elem, className)
-{
-	elem.classList.add(className)
-},
-
-removeClass : function (elem, className)
-{
-	var old = elem.className;
-	var index = old.indexOf(className);
-	if(index < 0)
-		return;
-
-	var isLast = index + className.length == old.length;
-	var isFirst = index == 0;
-	var cut = old.substring(0, index) + old.substring(index + className.length);
-
-	if(!isLast)
-	{
-		cut = cut.substring(0, index) + cut.substring(index + 1);
-	}
-	if(isLast && !isFirst)
-	{
-		cut = cut.substring(0, index - 1);
-	}
-	elem.className = cut;
-},
-
-
 htmlspecialchars : function (str, withoutAmps)
 {
 	if (typeof(str) == "string")

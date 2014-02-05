@@ -13,8 +13,6 @@ Tortuga.initLessons;
 (function()
 {
 var htmlspecialchars = Om.htmlspecialchars
-var appendClass = Om.appendClass
-var removeClass = Om.removeClass
 
 var CL_ALL_EMPTY = "tortuga-lessonsContainers-empty"
 var CL_UL = "tortuga-lessonsListContainer-list"
@@ -25,6 +23,16 @@ var CL_ITEM_NUMBER = "tortuga-lessonsListContainer-item-number"
 var CL_ITEM_TEXT = "tortuga-lessonsListContainer-item-text"
 var CL_ITEM_TEXT_SELECTED = "tortuga-lessonsListContainer-item-textSelected"
 
+
+var appendClass = function(elem, className)
+{
+	elem.classList.add(className)
+}
+
+var removeClass = function(elem, className)
+{
+	elem.classList.remove(className)
+}
 
 var getNumberLesson = function()
 {
