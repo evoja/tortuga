@@ -245,6 +245,7 @@ fun2(10000)
 
 	var runGo = function runGo(runner, getTrTortoise, length)
 	{
+		length = length || 0
 		var trTortoise = getTrTortoise()
 		var isDrawing = trTortoise.isDrawing
 
@@ -275,6 +276,7 @@ fun2(10000)
 
 	var runRotate = function runRotate(runner, getTrTortoise, deg)
 	{
+		deg = deg || 0
 		getTrTortoise().deg += deg
 	}
 
