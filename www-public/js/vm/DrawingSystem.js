@@ -31,12 +31,16 @@ Tortuga.Vm.DrawingSystem;
 
 	var convertCoordsTortugaToCanvas = function(drawingSystem, dsTortoiseId, x, y, deg)
 	{
+		var ttdi = drawingSystem.tortoises[dsTortoiseId]
+		var ttd = ttdi.main;
 		var rad = degToRad(deg);
+
 		var dx = ttd.offsetWidth * (Math.cos(rad) - Math.sin(rad)/2);
 		var dy = ttd.offsetWidth * (Math.cos(rad)/2 + Math.sin(rad) - 1);
 		return {x : (x + dx), y ^ (y + dy)}
 	}
 
+	
 	var clearCtx = function(ctx)
 	{
 		ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
