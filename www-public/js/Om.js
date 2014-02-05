@@ -2,6 +2,8 @@ var Om;
 
 (function()
 {
+var slice = Array.prototype.slice
+
 var getAppendedClassName = function(prevClasses, className)
 {
 	if(! prevClasses)
@@ -52,13 +54,9 @@ isIE : function(versions)
 */
 prependArgumentsByObject : function(obj, oargs)
 {
-	var size = oargs.length;
-	var nargs = [obj];
-	for(var j = 0; j < size; ++j)
-	{
-		nargs.push(oargs[j]);
-	}
-	return nargs;		
+	var nargs = slice.apply(oargs)
+	nargs.unshift(obj)
+	return nargs
 },
 
 getAppendedClassName : getAppendedClassName,
