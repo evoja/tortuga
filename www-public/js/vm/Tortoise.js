@@ -47,6 +47,12 @@ Tortuga.Vm.initTortoise;
 	var getY = function(jsConverter, jsTortoise)
 	{
 		return jsConverter.parseNode(jsConverter.nodes.getY, jsTortoise).value
+
+	}
+
+	var getAngle = function(jsConverter, jsTortoise)
+	{
+		return jsConverter.parseNode(jsConverter.nodes.getAngle, jsTortoise).value
 	}
 
 
@@ -94,6 +100,8 @@ Tortuga.Vm.initTortoise;
 			getX: jsConverter.nodes.getX,
 			setY: jsConverter.nodes.setY,
 			getY: jsConverter.nodes.getY,
+			getAngle: jsConverter.nodes.getAngle,
+			setAngle: jsConverter.nodes.setAngle,
 		}
 	}
 
@@ -125,6 +133,10 @@ Tortuga.Vm.initTortoise;
 		Tortoise.prototype.getY = function()
 		{
 			return getY(jsConverter, this.jsTortoise)
+		}
+		Tortoise.prototype.getAngle = function()
+		{
+			return getAngle(jsConverter, this.jsTortoise)
 		}
 
 		var proto = Tortoise.prototype
