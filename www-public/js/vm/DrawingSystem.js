@@ -39,6 +39,7 @@ Tortuga.Vm.DrawingSystem;
 		return {x : x, y : (y - ctx.canvas.height)}
 	}
 
+
 	var clearCtx = function(ctx)
 	{
 		ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
@@ -178,6 +179,7 @@ Tortuga.Vm.DrawingSystem;
 		stroke:       function(){                 this.ctx.stroke() },
 		clearCanvas:  function(){                 clearCtx(this.ctx) },
 		setCapsStyle: function(style_caps){       setCapsStyle(this.ctx, style_caps) },
+		getCanvas: function(){					  return this.ctx},
 		convertCoordsTortugaToCanvas: function(x, y)
 		{ 	
 			convertCoordsTortugaToCanvas(this.ctx, x, y)
