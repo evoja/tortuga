@@ -20,11 +20,10 @@ var SQ2 = Math.sqrt(2);
 Tortuga.initApp;
 
 (function(){
-var getAppendedClassName = Om.getAppendedClassName
 
 var appendClass = function (elem, className)
 {
-	elem.className = getAppendedClassName(elem.className, className)
+	elem.classList.add(className)
 }
 
 var TortugaEnv = function(){}

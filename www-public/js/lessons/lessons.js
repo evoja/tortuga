@@ -13,7 +13,6 @@ Tortuga.initLessons;
 (function()
 {
 var htmlspecialchars = Om.htmlspecialchars
-var getAppendedClassName = Om.getAppendedClassName
 var appendClass = Om.appendClass
 var removeClass = Om.removeClass
 
@@ -89,7 +88,6 @@ var selectItem = function(item, itemText, itemDiv, itemIndex,
 	sic.itemDiv = itemDiv;
 	appendClass(itemText, CL_ITEM_TEXT_SELECTED);
 	appendClass(itemDiv, CL_ITEM_SELECTED);
-	appendClass(item)
 }
 
 var applyItem = function(list, inputItem, bg, selectedItemContext, 

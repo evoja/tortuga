@@ -4,16 +4,6 @@ var Om;
 {
 var slice = Array.prototype.slice
 
-var getAppendedClassName = function(prevClasses, className)
-{
-	if(! prevClasses)
-		return className;
-	if(prevClasses.indexOf(className) > -1)
-		return prevClasses;
-
-	return prevClasses + " " + className;
-}
-
 var isInInUserAgent = function(str)
 {
 	return navigator.userAgent.indexOf(str) != -1
@@ -59,11 +49,9 @@ prependArgumentsByObject : function(obj, oargs)
 	return nargs
 },
 
-getAppendedClassName : getAppendedClassName,
-
 appendClass : function (elem, className)
 {
-	elem.className = getAppendedClassName(elem.className, className)
+	elem.classList.add(className)
 },
 
 removeClass : function (elem, className)
