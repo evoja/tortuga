@@ -108,7 +108,8 @@ var initApp = function(
 	                      //и будут переключаться стили выделенной/невыделенной задачи.
 	lessonItemDescription, //контейнер для текста урока, куда будет помещаться текст выделенной задачи
 	lessonsContainers, //все элементы, которые нужно будет стирать.
-	filesArea //блок, куда будет добавлен элемент выбора файла.
+	filesArea, //блок, куда будет добавлен элемент выбора файла.
+	dropFilesArea //блок, куда пользователь сможет перетаскивать файлы при помощи драг-н-дропа.
 	)
 {
 	var canvasObjects = configureCanvasContainer(canvasContainer)
@@ -117,7 +118,7 @@ var initApp = function(
 
 	var jsConverter = Tortuga.Vm.initVm(canvasObjects.canvas, canvasObjects.canvasContainer)
 	Tortuga.Vm.initTortoise(canvasObjects.canvasContainer, jsConverter)
-	Tortuga.initFiles(filesObjects.button, canvasContainer, begin,end)
+	Tortuga.initFiles(filesObjects.button, dropFilesArea, begin,end)
 	Tortuga.initLessons(canvasObjects.bg, lessonsListContainer, lessonItemDescription,
 		new TortugaEnv(), lessonsContainers);
 }

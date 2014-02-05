@@ -6,7 +6,7 @@ http://www.html5rocks.com/en/tutorials/file/dndfiles/
 который пользователь выбирает на своём компьютере.
 */
 ns("Tortuga");
-Tortuga.initFiles = function(filesSelector, canvasObjekt, preAction,postAction)
+Tortuga.initFiles = function(filesSelector, canvasObject, preAction,postAction)
 {
 	var mapFileList = function(list, fun)
 	{
@@ -53,37 +53,38 @@ Tortuga.initFiles = function(filesSelector, canvasObjekt, preAction,postAction)
 	var handleDragOver = function(e)
 	{
 		preventDefault(e)
-		canvasObjekt.classList.add("tortuga-canvasContainer-dragging")
+		canvasObject.classList.add("tortuga-canvasContainer-dragging")
 		console.log("rrr");
 	}
 	var handleDragLeave = function()
 	{
-		canvasObjekt.classList.remove("tortuga-canvasContainer-dragging")
+		canvasObject.classList.remove("tortuga-canvasContainer-dragging")
 	}
 
-    var doDrop = function(e) {
-    	canvasObjekt.classList.remove("tortuga-canvasContainer-dragging")
-    	if (e.dataTransfer.files)
-    	{
-	        var file = e.dataTransfer.files;
-	        for (var i=0; i<file.length; i++)
-	        {
-	            processFile(file[i]);
-	        }
-	        preventDefault(e)
-	    }
+	var doDrop = function(e)
+	{
+		canvasObject.classList.remove("tortuga-canvasContainer-dragging")
+		if (e.dataTransfer.files)
+		{
+			var file = e.dataTransfer.files;
+			for (var i=0; i<file.length; i++)
+			{
+				processFile(file[i]);
+			}
+			preventDefault(e)
+		}
 
-	    if (e.dataTransfer.getData('Text'))
-	    {
-	        var text = e.dataTransfer.getData('Text');
-	        processScript(text);
-	        preventDefault(e)
-	    }
-	    return false;
-    }
+		if (e.dataTransfer.getData("Text"))
+		{
+			var text = e.dataTransfer.getData("Text");
+			processScript(text);
+			preventDefault(e)
+		}
+		return false;
+	}
 	
-	filesSelector.addEventListener('change', handleFileSelection, false);
-	canvasObjekt.addEventListener("dragleave", handleDragLeave, false);
-	canvasObjekt.addEventListener("dragover", handleDragOver, false);
-    canvasObjekt.addEventListener("drop", doDrop, false);
+	filesSelector.addEventListener("change", handleFileSelection, false);
+	canvasObject.addEventListener("dragleave", handleDragLeave, false);
+	canvasObject.addEventListener("dragover", handleDragOver, false);
+	canvasObject.addEventListener("drop", doDrop, false);
 }
