@@ -29,6 +29,14 @@ Tortuga.Vm.DrawingSystem;
 		return ctx;		
 	}
 
+	var convertCoordsTortugaToCanvas = function(drawingSystem, dsTortoiseId, x, y, deg)
+	{
+		var rad = degToRad(deg);
+		var dx = ttd.offsetWidth * (Math.cos(rad) - Math.sin(rad)/2);
+		var dy = ttd.offsetWidth * (Math.cos(rad)/2 + Math.sin(rad) - 1);
+		return {x : (x + dx), y ^ (y + dy)}
+	}
+
 	var clearCtx = function(ctx)
 	{
 		ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
@@ -123,6 +131,7 @@ Tortuga.Vm.DrawingSystem;
 		var ttd = ttdi.main;
 		var rad = degToRad(deg);
 		var rotation = degToRotation(deg);
+		console.log("ttdi", ttdi);
 
 		var dx = ttd.offsetWidth * (Math.cos(rad) - Math.sin(rad)/2);
 		var dy = ttd.offsetWidth * (Math.cos(rad)/2 + Math.sin(rad) - 1);
@@ -167,6 +176,10 @@ Tortuga.Vm.DrawingSystem;
 		stroke:       function(){                 this.ctx.stroke() },
 		clearCanvas:  function(){                 clearCtx(this.ctx) },
 		setCapsStyle: function(style_caps){       setCapsStyle(this.ctx, style_caps) },
+		convertCoordsTortugaToCanvas: function(drawingSystem, dsTortoiseId, x, y, deg)
+		{ 	
+			convertCoordsTortugaToCanvas(drawingSystem, dsTortoiseId, x, y, deg)
+		},
 
 		createTortoise: function(){ return createTortoise(this) },
 		placeTortoise: function(dsTortoiseId, x, y, deg, isDrawing, color)
