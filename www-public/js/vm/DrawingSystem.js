@@ -37,10 +37,20 @@ Tortuga.Vm.DrawingSystem;
 
 		var dx = ttd.offsetWidth * (Math.cos(rad) - Math.sin(rad)/2);
 		var dy = ttd.offsetWidth * (Math.cos(rad)/2 + Math.sin(rad) - 1);
-		return {x : (x + dx), y ^ (y + dy)}
+		return {x : (x + dx), y : (y + dy)}
 	}
 
-	
+	var convertCoordsCanvasToTortuga = function(drawingSystem, dsTortoiseId, x, y, deg)
+	{
+		var ttdi = drawingSystem.tortoises[dsTortoiseId]
+		var ttd = ttdi.main;
+		var rad = degToRad(deg);
+
+		var dx = ttd.offsetWidth * (Math.cos(rad) - Math.sin(rad)/2);
+		var dy = ttd.offsetWidth * (Math.cos(rad)/2 + Math.sin(rad) - 1);
+		return {x : (x - dx), y : (y - dy)}
+	}
+
 	var clearCtx = function(ctx)
 	{
 		ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
@@ -184,6 +194,10 @@ Tortuga.Vm.DrawingSystem;
 		{ 	
 			convertCoordsTortugaToCanvas(drawingSystem, dsTortoiseId, x, y, deg)
 		},
+		convertCoordsCanvasToTortuga: function(drawingSystem, dsTortoiseId, x, y, deg)
+		{
+			convertCoordsCanvasToTortuga(drawingSystem, dsTortoiseId, x, y, deg)
+		}
 
 		createTortoise: function(){ return createTortoise(this) },
 		placeTortoise: function(dsTortoiseId, x, y, deg, isDrawing, color)
