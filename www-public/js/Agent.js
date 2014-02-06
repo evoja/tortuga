@@ -49,9 +49,12 @@ Tortuga.Agent;
 
 
 
-	var getHelpTextByHotkey = function(hotkey)
+	var getHelpTextByHotkey = function(hotkey, hotkeySingle)
 	{
-		return hotkey && "Консоль открывается сочетанием клавиш: <b>" + hotkey + ".</b>";
+		var message = hotkeySingle
+			? "Консоль открывается нажатием клавиши"
+			: "Консоль открывается сочетанием клавиш"
+		return hotkey && message + ": <b>" + hotkey + ".</b>";
 	}
 
 	var getSafariHelpText = function(hotkey)
@@ -118,8 +121,9 @@ Tortuga.Agent;
 		topTextFun : getSupportedTopText,
 		showTop : false
 	};
-	var BR_IE910   = {
+	var BR_IE   = {
 		hotkeys : ["F12", "F12"],
+		hotkeySingle : true,
 		helpTextFun : getHelpTextByHotkey,
 		topTextFun : getSupportedTopText,
 		showTop : false
@@ -140,11 +144,12 @@ Tortuga.Agent;
 	var os = isMac() ? OS_MAC : OS_OTHER
 
 	var hotkey = browser.hotkeys[os]
+	var hotkeySingle = browser.hotkeySingle
 
 	Tortuga.Agent = {
 		hotkey   : hotkey,
 		topText  : browser.topTextFun(hotkey),
-		helpText : browser.helpTextFun(hotkey),
+		helpText : browser.helpTextFun(hotkey, hotkeySingle),
 		showTop  : browser.showTop
 	}
 })()
