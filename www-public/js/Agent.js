@@ -41,8 +41,9 @@ Tortuga.Agent;
 	var isOpera = function(){return isInInUserAgent("Opera")}
 	var isIE9OrLater = function()
 	{
-		return any([9, 10], function(version){return isInInUserAgent("MSIE " + version)})
-			|| isInInUserAgent("Trident");
+		return !isInInUserAgent("MSIE 8")
+			&& (any([9, 10], function(version){return isInInUserAgent("MSIE " + version)})
+				|| isInInUserAgent("Trident"));
 	}
 
 
