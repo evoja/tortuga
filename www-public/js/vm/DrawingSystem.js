@@ -31,12 +31,12 @@ Tortuga.Vm.DrawingSystem;
 
 	var convertCoordsTortugaToCanvas = function(ctx, x, y)
 	{
-		return {x : x, y : (y + ctx.canvas.height)}
+		return {x : x, y : (ctx.canvas.height - y)}
 	}
 
 	var convertCoordsCanvasToTortuga = function(ctx, x, y)
 	{
-		return {x : x, y : (y - ctx.canvas.height)}
+		return {x : x, y : (ctx.canvas.height - y)}
 	}
 
 
@@ -179,7 +179,7 @@ Tortuga.Vm.DrawingSystem;
 		stroke:       function(){                 this.ctx.stroke() },
 		clearCanvas:  function(){                 clearCtx(this.ctx) },
 		setCapsStyle: function(style_caps){       setCapsStyle(this.ctx, style_caps) },
-		getCanvas: function(){					  return this.ctx},
+		getCanvas: function(){					  return this.ctx.canvas},
 		convertCoordsTortugaToCanvas: function(x, y)
 		{ 	
 			convertCoordsTortugaToCanvas(this.ctx, x, y)
@@ -187,7 +187,7 @@ Tortuga.Vm.DrawingSystem;
 		convertCoordsCanvasToTortuga: function(x, y)
 		{
 			convertCoordsCanvasToTortuga(this.ctx, x, y)
-		}
+		},
 
 		createTortoise: function(){ return createTortoise(this) },
 		placeTortoise: function(dsTortoiseId, x, y, deg, isDrawing, color)
