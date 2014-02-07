@@ -5,9 +5,19 @@ ns("Tortuga.Events");
 	{
 		drawingSystem.getCanvas().onclick = function(e)
 		{
-			//drawingSystem.convertCoordsCanvasToTortuga
-			console.log(e)
-			console.log("canvas coords: {x: 100, y: 150}, tortuga coords: {x: 100, y: 250}")
+			var point = drawingSystem.convertCoordsCanvasToTortuga(e.layerX, e.layerY)
+			var event_canvas_onclick = 
+				{
+					tortugaX: point.x,
+					tortugaY: point.y,
+					originalEvent: e
+				}
+				console.log("Event", event_canvas_onclick)
+
+			if (typeof Tortuga.Events.onclick == "function")
+			{
+				Tortuga.Events.onclick(event_canvas_onclick);
+			}
 		}
 	}
 })()

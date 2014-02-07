@@ -182,11 +182,11 @@ Tortuga.Vm.DrawingSystem;
 		getCanvas: function(){					  return this.ctx.canvas},
 		convertCoordsTortugaToCanvas: function(x, y)
 		{ 	
-			convertCoordsTortugaToCanvas(this.ctx, x, y)
+			return convertCoordsTortugaToCanvas(this.ctx, x, y)
 		},
 		convertCoordsCanvasToTortuga: function(x, y)
 		{
-			convertCoordsCanvasToTortuga(this.ctx, x, y)
+			return convertCoordsCanvasToTortuga(this.ctx, x, y)
 		},
 
 		createTortoise: function(){ return createTortoise(this) },
