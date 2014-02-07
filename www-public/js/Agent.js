@@ -13,9 +13,49 @@ Tortuga.Agent;
 
 (function()
 {
-	var getHelpTextByHotkey = function(hotkey)
+	var any = function(arr, cond)
 	{
-		return hotkey && "Консоль открывается сочетанием клавиш: <b>" + hotkey + ".</b>";
+		var size = arr.length
+		for(var i = 0; i < size; ++i)
+		{
+			if(cond(arr[i]))
+				return true;
+		}
+		return false;
+	}
+
+	var every = function(arr, cond)
+	{
+		return !any(arr, function(val){return !cond(val)})
+	}
+
+	var isInInUserAgent = function(str)
+	{
+		return navigator.userAgent.indexOf(str) != -1
+	}
+
+	var isMac = function(){return isInInUserAgent("Mac")}
+	var isChrome = function(){return isInInUserAgent("Chrome")}
+	var isFirefox = function(){return isInInUserAgent("Firefox")}
+	var isSafari = function(){return isInInUserAgent("Safari")}
+	var isOpera = function(){return isInInUserAgent("Opera")}
+	var isIE9OrLater = function()
+	{
+		return !isInInUserAgent("MSIE 8")
+			&& (any([9, 10], function(version){return isInInUserAgent("MSIE " + version)})
+				|| isInInUserAgent("Trident"));
+	}
+
+
+
+
+
+	var getHelpTextByHotkey = function(hotkey, hotkeySingle)
+	{
+		var message = hotkeySingle
+			? "Консоль открывается нажатием клавиши"
+			: "Консоль открывается сочетанием клавиш"
+		return hotkey && message + ": <b>" + hotkey + ".</b>";
 	}
 
 	var getSafariHelpText = function(hotkey)
@@ -82,8 +122,9 @@ Tortuga.Agent;
 		topTextFun : getSupportedTopText,
 		showTop : false
 	};
-	var BR_IE910   = {
+	var BR_IE   = {
 		hotkeys : ["F12", "F12"],
+		hotkeySingle : true,
 		helpTextFun : getHelpTextByHotkey,
 		topTextFun : getSupportedTopText,
 		showTop : false
@@ -92,23 +133,24 @@ Tortuga.Agent;
 	var OS_OTHER = 0;
 	var OS_MAC   = 1;
 
-	var browser = Om.isChrome()
+	var browser = isChrome()
 		? BR_CHROME
-		: Om.isFirefox()
+		: isFirefox()
 			? BR_FIREFOX
-			: Om.isSafari()
+			: isSafari()
 				? BR_SAFARI 
-				: Om.isOpera()
+				: isOpera()
 					? BR_OPERA
-					: Om.isIE([9, 10]) ? BR_IE : BR_OTHER
-	var os = Om.isMac() ? OS_MAC : OS_OTHER
+					: isIE9OrLater() ? BR_IE : BR_OTHER
+	var os = isMac() ? OS_MAC : OS_OTHER
 
 	var hotkey = browser.hotkeys[os]
+	var hotkeySingle = browser.hotkeySingle
 
 	Tortuga.Agent = {
 		hotkey   : hotkey,
 		topText  : browser.topTextFun(hotkey),
-		helpText : browser.helpTextFun(hotkey),
+		helpText : browser.helpTextFun(hotkey, hotkeySingle),
 		showTop  : browser.showTop
 	}
 })()

@@ -18,13 +18,20 @@ Tortuga.initHelp;
 
 (function()
 {
-	var appendClass = Om.appendClass
-	var removeClass = Om.removeClass
-
 	var CL_HELP_SHOWN = "sideHelp-shown"
 	var CL_POINTER = "pointer"
 
 	var falseFun = function(){return false}
+
+	var appendClass = function(elem, className)
+	{
+		elem.classList.add(className)
+	}
+
+	var removeClass = function(elem, className)
+	{
+		elem.classList.remove(className)
+	}
 
 	var createForEachHandler = function(fun, o)
 	{
