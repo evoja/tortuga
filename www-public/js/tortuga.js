@@ -115,10 +115,9 @@ var initApp = function(
 	var filesObjects = configureFilesArea(filesArea)
 	var lessonsObjects = configureLessonsAreas(lessonsListContainer, lessonItemDescription);
 
-	var TortugaVm = Tortuga.Vm.initVm(canvasObjects.canvas, canvasObjects.canvasContainer)
-	var jsConverter = TortugaVm.jsConverter
-	Tortuga.initMouse(TortugaVm.drawingSystem)
-	Tortuga.Vm.initTortoise(canvasObjects.canvasContainer, jsConverter)
+	var tortugaVm = Tortuga.Vm.initVm(canvasObjects.canvas, canvasObjects.canvasContainer)
+	Tortuga.initMouse(tortugaVm.drawingSystem)
+	Tortuga.Vm.initTortoise(canvasObjects.canvasContainer, tortugaVm.jsConverter)
 	Tortuga.initFiles(filesObjects.button, dropFilesArea, begin,end)
 	Tortuga.initLessons(canvasObjects.bg, lessonsListContainer, lessonItemDescription,
 		new TortugaEnv(), lessonsContainers);

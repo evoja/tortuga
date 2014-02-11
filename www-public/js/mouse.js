@@ -12,7 +12,7 @@ ns("Tortuga.Events");
 					tortugaY: point.y,
 					originalEvent: e
 				}
-				console.log("Event", event_canvas_onclick)
+			console.log("Event", event_canvas_onclick)
 
 			if (typeof Tortuga.Events.onclick == "function")
 			{

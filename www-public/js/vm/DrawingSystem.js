@@ -29,14 +29,14 @@ Tortuga.Vm.DrawingSystem;
 		return ctx;		
 	}
 
-	var convertCoordsTortugaToCanvas = function(ctx, x, y)
+	var convertCoordsTortugaToCanvas = function(ctx, tortugaX, tortugaY)
 	{
-		return {x : x, y : (ctx.canvas.height - y)}
+		return {x : tortugaX, y : (ctx.canvas.height - tortugaY)}
 	}
 
-	var convertCoordsCanvasToTortuga = function(ctx, x, y)
+	var convertCoordsCanvasToTortuga = function(ctx, canvasX, canvasY)
 	{
-		return {x : x, y : (ctx.canvas.height - y)}
+		return {x : canvasX, y : (ctx.canvas.height - canvasY)}
 	}
 
 
