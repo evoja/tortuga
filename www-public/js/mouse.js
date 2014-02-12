@@ -3,7 +3,7 @@ ns("Tortuga.Events");
 {
 	Tortuga.initMouse = function(drawingSystem) 
 	{
-		drawingSystem.getCanvas().onclick = function(e)
+		var handlerEvent = function(e)
 		{
 			var point = drawingSystem.convertCoordsCanvasToTortuga(e.layerX, e.layerY)
 			var event_canvas_onclick = 
@@ -12,29 +12,32 @@ ns("Tortuga.Events");
 					tortugaY: point.y,
 					originalEvent: e
 				}
-			console.log("Event", event_canvas_onclick)
+				var event_name = e.type
 
-			if (typeof Tortuga.Events.onclick == "function")
+			if (typeof Tortuga.Events.event_name == "function")
 			{
-				Tortuga.Events.onclick(event_canvas_onclick);
+				Tortuga.Events.event_name(event_canvas_onclick);
 			}
+			console.log(e.type)
 		}
 
-		drawingSystem.getCanvas().onmousedown = function(e){console.log("onmousedown")}
+		drawingSystem.getCanvas().onclick = function(e){handlerEvent(e)}
 
-		drawingSystem.getCanvas().onmouseenter = function(e){console.log("onmouseenter")}
+		drawingSystem.getCanvas().onmousedown = function(e){handlerEvent(e)}
 
-		drawingSystem.getCanvas().onmouseleave = function(e){console.log("onmouseleave")}
+		drawingSystem.getCanvas().onmouseenter = function(e){handlerEvent(e)}
 
-		drawingSystem.getCanvas().onmousemove = function(e){console.log("onmousemove")}
+		drawingSystem.getCanvas().onmouseleave = function(e){handlerEvent(e)}
 
-		drawingSystem.getCanvas().onmouseout = function(e){console.log("onmouseout")}
+		drawingSystem.getCanvas().onmousemove = function(e){handlerEvent(e)}
 
-		drawingSystem.getCanvas().onmouseover = function(e){console.log("onmouseover")}
+		drawingSystem.getCanvas().onmouseout = function(e){handlerEvent(e)}
 
-		drawingSystem.getCanvas().onmouseup = function(e){console.log("onmouseup")}
+		drawingSystem.getCanvas().onmouseover = function(e){handlerEvent(e)}
 
-		drawingSystem.getCanvas().onmousewheel = function(e){console.log("onmousewheel")}
+		drawingSystem.getCanvas().onmouseup = function(e){handlerEvent(e)}
+
+		drawingSystem.getCanvas().onmousewheel = function(e){handlerEvent(e)}
 
 	}
 })()
