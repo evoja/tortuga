@@ -12,13 +12,14 @@ ns("Tortuga.Events");
 					tortugaY: point.y,
 					originalEvent: e
 				}
-				var event_name = e.type
+				var event_name = "on" + e.type
 
-			if (typeof Tortuga.Events.event_name == "function")
+			if (typeof Tortuga.Events[event_name] == "function")
 			{
-				Tortuga.Events.event_name(event_canvas_onclick);
+				Tortuga.Events["on" + e.type](event_canvas_onclick)
 			}
-			console.log(e.type)
+			
+
 		}
 
 		drawingSystem.getCanvas().onclick = function(e){handlerEvent(e)}
