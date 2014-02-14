@@ -134,7 +134,6 @@ Tortuga.Vm.DrawingSystem;
 		var ttd = ttdi.main;
 		var rad = degToRad(deg);
 		var rotation = degToRotation(deg);
-		console.log("ttdi", ttdi);
 
 		var dx = ttd.offsetWidth * (Math.cos(rad) - Math.sin(rad)/2);
 		var dy = ttd.offsetWidth * (Math.cos(rad)/2 + Math.sin(rad) - 1);
