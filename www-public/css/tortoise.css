@@ -1,5 +1,6 @@
 .om-tortoise-div
 {
+	pointer-events:none;
 	position:absolute;
 	width:32px;
 	height:32px;
