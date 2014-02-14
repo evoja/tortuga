@@ -1,6 +1,8 @@
 ns("Tortuga.Events");
 (function()
 {
+	var tortugaEventsHolder = Tortuga.Events;
+
 	Tortuga.initMouse = function(drawingSystem) 
 	{
 		var handlerEvent = function(e)
@@ -14,9 +16,9 @@ ns("Tortuga.Events");
 				}
 
 			var event_name = "on" + e.type
-			if (typeof Tortuga.Events[event_name] == "function")
+			if (typeof tortugaEventsHolder[event_name] == "function")
 			{
-				Tortuga.Events[event_name](event_canvas)
+				tortugaEventsHolder[event_name](event_canvas)
 			}
 		}
 
@@ -29,6 +31,7 @@ ns("Tortuga.Events");
 		events.forEach(function(event_name)
 		{
 			canvas[event_name] = handlerEvent
+			tortugaEventsHolder[event_name] = null
 		})
 	}
 })()
