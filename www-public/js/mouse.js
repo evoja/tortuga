@@ -18,19 +18,17 @@ ns("Tortuga.Events");
 			{
 				Tortuga.Events[event_name](event_canvas)
 			}
-			
-
 		}
 
 		var canvas = drawingSystem.getCanvas()
-		canvas.onclick = handlerEvent
-		canvas.onmousedown = handlerEvent
-		canvas.onmouseenter = handlerEvent
-		canvas.onmouseleave = handlerEvent
-		canvas.onmousemove = handlerEvent
-		canvas.onmouseout = handlerEvent
-		canvas.onmouseover = handlerEvent
-		canvas.onmouseup = handlerEvent
-		canvas.onmousewheel = handlerEvent
+		var events = [
+			"onclick", "onmousedown", "onmouseenter", "onmouseleave",
+			"onmousemove", "onmouseout", "onmouseover", "onmouseup",
+			"onmousewheel"
+		]
+		events.forEach(function(event_name)
+		{
+			canvas[event_name] = handlerEvent
+		})
 	}
 })()
