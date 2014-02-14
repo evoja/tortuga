@@ -54,7 +54,6 @@ Tortuga.initFiles = function(filesSelector, canvasObject, preAction,postAction)
 	{
 		preventDefault(e)
 		canvasObject.classList.add("tortuga-canvasContainer-dragging")
-		console.log("rrr");
 	}
 	var handleDragLeave = function()
 	{

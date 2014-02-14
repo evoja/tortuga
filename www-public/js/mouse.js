@@ -6,38 +6,31 @@ ns("Tortuga.Events");
 		var handlerEvent = function(e)
 		{
 			var point = drawingSystem.convertCoordsCanvasToTortuga(e.layerX, e.layerY)
-			var event_canvas_onclick = 
+			var event_canvas = 
 				{
 					tortugaX: point.x,
 					tortugaY: point.y,
 					originalEvent: e
 				}
 
+			var event_name = "on" + e.type
 			if (typeof Tortuga.Events[event_name] == "function")
 			{
-				Tortuga.Events["on" + e.type](event_canvas_onclick)
+				Tortuga.Events[event_name](event_canvas)
 			}
 			
 
 		}
 
-		drawingSystem.getCanvas().onclick = function(e){handlerEvent(e)}
-
-		drawingSystem.getCanvas().onmousedown = function(e){handlerEvent(e)}
-
-		drawingSystem.getCanvas().onmouseenter = function(e){handlerEvent(e)}
-
-		drawingSystem.getCanvas().onmouseleave = function(e){handlerEvent(e)}
-
-		drawingSystem.getCanvas().onmousemove = function(e){handlerEvent(e)}
-
-		drawingSystem.getCanvas().onmouseout = function(e){handlerEvent(e)}
-
-		drawingSystem.getCanvas().onmouseover = function(e){handlerEvent(e)}
-
-		drawingSystem.getCanvas().onmouseup = function(e){handlerEvent(e)}
-
-		drawingSystem.getCanvas().onmousewheel = function(e){handlerEvent(e)}
-
+		var canvas = drawingSystem.getCanvas()
+		canvas.onclick = handlerEvent
+		canvas.onmousedown = handlerEvent
+		canvas.onmouseenter = handlerEvent
+		canvas.onmouseleave = handlerEvent
+		canvas.onmousemove = handlerEvent
+		canvas.onmouseout = handlerEvent
+		canvas.onmouseover = handlerEvent
+		canvas.onmouseup = handlerEvent
+		canvas.onmousewheel = handlerEvent
 	}
 })()
