@@ -12,7 +12,6 @@ ns("Tortuga.Events");
 					tortugaY: point.y,
 					originalEvent: e
 				}
-				var event_name = "on" + e.type
 
 			if (typeof Tortuga.Events[event_name] == "function")
 			{
