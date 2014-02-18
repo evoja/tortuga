@@ -245,6 +245,7 @@ fun2(10000)
 
 	var runGo = function runGo(runner, getTrTortoise, length)
 	{
+		length = length || 0
 		var trTortoise = getTrTortoise()
 		var isDrawing = trTortoise.isDrawing
 
@@ -275,6 +276,7 @@ fun2(10000)
 
 	var runRotate = function runRotate(runner, getTrTortoise, deg)
 	{
+		deg = deg || 0
 		getTrTortoise().deg += deg
 	}
 
@@ -301,6 +303,16 @@ fun2(10000)
 	var runGetY = function runSetX(runner, getTrTortoise, handler)
 	{
 		handler(getTrTortoise().y)
+	}
+
+	var runGetAngle = function runGetAngle(runner, getTrTortoise, handler)
+	{
+		handler(getTrTortoise().deg)
+	}
+
+	var runSetAngle = function runGetAngle(runner, getTrTortoise, deg)
+	{
+		getTrTortoise().deg = deg
 	}
 	
 	var runCapsSquare = function runCapsSquare(runner, getTrTortoise)
@@ -421,6 +433,8 @@ fun2(10000)
 		getX     : runGetX,
 		setY     : runSetY,
 		getY     : runGetY,
+		getAngle : runGetAngle,
+		setAngle : runSetAngle,
 		capsRound : runCapsRound,
 		capsSquare : runCapsSquare,
 		kill     : runKill,

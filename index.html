@@ -7,7 +7,7 @@
 <link rel="stylesheet" type="text/css" href="css/tortuga.css">
 <link rel="stylesheet" type="text/css" href="css/tortoise.css">
 <link rel="stylesheet" type="text/css" href="css/page.css">
-<link rel="stylesheet" type="text/css" href="css/page_winter.css">
+<link rel="stylesheet" type="text/css" href="css/page_birthday.css">
 
 </head>
 <body>
@@ -44,6 +44,7 @@
 					<li><b>t.tailUp()</b>&nbsp;&mdash; поднять хвост, чтобы просто перемещаться.</li>
 					<li><b>t.setColor("red")</b>&nbsp;&mdash; поменять цвет черепахе.</li>
 				</ul>
+				<p class="help-hint">Назад</p>
 			</div></div>
 			<div class="tortoiseMan" id="tortoiseMan"></div>
 		</div>
@@ -56,7 +57,7 @@
 		<div class="bottomContent-block">
 			<h2>Об авторах</h2>
 			<ul>
-				<li>Владелец проекта: <a href="http://www.progschool.ru">Школа&nbsp;программиста</a> (&copy;&nbsp;2013)</li>
+				<li>Владелец проекта: <a href="http://www.progschool.ru">Школа&nbsp;программиста</a> (&copy;&nbsp;2013-2014)</li>
 				<li>Автор и&nbsp;разработчик: Сергей&nbsp;Шмаков</li>
 				<li>Программист: Евгений&nbsp;Притужалов</li>
 				<li>Художник: Настя Дворная</li>
@@ -71,6 +72,9 @@
 			<h2>Рецепты</h2>
 			<ul>
 				<li><a href="http://youtu.be/5RHCoiEefcA" target="_blank">Игральный кубик для игры Марракеш</a></li>
+				<li><a href="http://youtu.be/R3Ix3YYVHD4" target="_blank">Снежинка Коха</a></li>
+				<li><a href="http://youtu.be/lx965tTMOlE" target="_blank">Зомбо-укропо-снежинка</a></li>
+				<li><a href="http://youtu.be/bFXMx6q-DZs" target="_blank">Дерево из ЗГМШ-2014</a></li>
 			</ul>
 		</div>
 		<div class="bottomContent-block">
@@ -83,8 +87,8 @@
 				<li><a href="http://youtu.be/woulWQEDlcU" target="_blank">Циклы в&nbsp;стиле Logo</a></li>
 				<li><a href="http://youtu.be/cFAzc7-CkwY" target="_blank">Создание уроков</a></li>
 				<li><a href="http://youtu.be/uMAejUD1HaA" target="_blank">Черепашка-маляр</a></li>
-				<li><a href="http://youtu.be/JEh_lNemF-0" target="_blank"><b>Coming soon!</b></a></li>
-				<li>Версия <a href="https://github.com/progschool-ru/org.omich.tortoise/releases/tag/www.trtg.org-0.05">0.05</a>+</li>
+				<li>Блог разработки: <a href="http://tortuga-dev.livejournal.com">tortuga-dev</a></li>
+				<li>Версия <a href="https://github.com/progschool-ru/org.omich.tortoise/releases/tag/www.trtg.org-0.06">0.06</a></li>
 			</ul>
 			<h2>Зеркала</h2>
 			<p>
@@ -129,8 +133,8 @@
 <script src="js/Agent.js"></script>
 <script src="js/lessons/lessons.js"></script>
 <script src="js/lessons/ParamsUtil.js"></script>
-<script src="js/lessons/SimpleBgAnalyser.js"></script>
 <script src="js/tortuga.js"></script>
+<script src="js/mouse.js"></script>
 
 <script>
 /**
@@ -152,7 +156,8 @@ var init;
 			gebid("lessonsList"),
 			gebid("lessonItemDescription"),
 			[gebid("lessonsContainer")],
-			gebid("files"))
+			gebid("files"),
+			gebid("canvasBalloon"))
 
 		Tortuga.initHelp([gebid("tortoiseMan"), gebid("help-help"), gebid("help-hint")],
 			[gebid("help-help"), gebid("help-underHelp"), gebid("canvasBalloon"),gebid("help-hint")])
@@ -172,34 +177,34 @@ var init;
 <script type="text/javascript">
 if(Tortuga && Tortuga.Config && Tortuga.Config.yandexMetrikaId)
 {
-(function (d, w, c) {
-    (w[c] = w[c] || []).push(function() {
-        try {
-            w["yaCounter" + Tortuga.Config.yandexMetrikaId] = new Ya.Metrika({
-                id        : Tortuga.Config.yandexMetrikaId,
-                webvisor  : Tortuga.Config.webvisor,
-                clickmap  : true,
-                trackLinks:true,
-                accurateTrackBounce:true,
-                trackHash:true});
-        } catch(e) { }
-    });
+	(function (d, w, c) {
+	    (w[c] = w[c] || []).push(function() {
+	        try {
+	            w["yaCounter" + Tortuga.Config.yandexMetrikaId] = new Ya.Metrika({
+	                id        : Tortuga.Config.yandexMetrikaId,
+	                webvisor  : Tortuga.Config.webvisor,
+	                clickmap  : true,
+	                trackLinks:true,
+	                accurateTrackBounce:true,
+	                trackHash:true});
+	        } catch(e) { }
+	    });
 
-    var n = d.getElementsByTagName("script")[0],
-        s = d.createElement("script"),
-        f = function () { n.parentNode.insertBefore(s, n); };
-    s.type = "text/javascript";
-    s.async = true;
-    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+	    var n = d.getElementsByTagName("script")[0],
+	        s = d.createElement("script"),
+	        f = function () { n.parentNode.insertBefore(s, n); };
+	    s.type = "text/javascript";
+	    s.async = true;
+	    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
 
-    if (w.opera == "[object Opera]") {
-        d.addEventListener("DOMContentLoaded", f, false);
-    } else { f(); }
-})(document, window, "yandex_metrika_callbacks");
+	    if (w.opera == "[object Opera]") {
+	        d.addEventListener("DOMContentLoaded", f, false);
+	    } else { f(); }
+	})(document, window, "yandex_metrika_callbacks");
 }
 else
 {
-	alert("else");
+	console.log("There is no Yandex.Metrika configuration");
 }
 </script>
 <!-- /Yandex.Metrika counter -->

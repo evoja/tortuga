@@ -29,6 +29,17 @@ Tortuga.Vm.DrawingSystem;
 		return ctx;		
 	}
 
+	var convertCoordsTortugaToCanvas = function(ctx, tortugaX, tortugaY)
+	{
+		return {x : tortugaX, y : (ctx.canvas.height - tortugaY)}
+	}
+
+	var convertCoordsCanvasToTortuga = function(ctx, canvasX, canvasY)
+	{
+		return {x : canvasX, y : (ctx.canvas.height - canvasY)}
+	}
+
+
 	var clearCtx = function(ctx)
 	{
 		ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
@@ -167,6 +178,15 @@ Tortuga.Vm.DrawingSystem;
 		stroke:       function(){                 this.ctx.stroke() },
 		clearCanvas:  function(){                 clearCtx(this.ctx) },
 		setCapsStyle: function(style_caps){       setCapsStyle(this.ctx, style_caps) },
+		getCanvas: function(){					  return this.ctx.canvas},
+		convertCoordsTortugaToCanvas: function(x, y)
+		{ 	
+			return convertCoordsTortugaToCanvas(this.ctx, x, y)
+		},
+		convertCoordsCanvasToTortuga: function(x, y)
+		{
+			return convertCoordsCanvasToTortuga(this.ctx, x, y)
+		},
 
 		createTortoise: function(){ return createTortoise(this) },
 		placeTortoise: function(dsTortoiseId, x, y, deg, isDrawing, color)

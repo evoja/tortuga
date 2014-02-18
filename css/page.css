@@ -141,6 +141,11 @@ i {font-style: italic;}
 .balloon-blue a:visited{color:#72B;}
 /*.balloon-blue a:hover{color:#00e;}*/
 
+.balloon.tortuga-canvasContainer-dragging
+{
+	background-color: #6aa;
+}
+
 
 
 

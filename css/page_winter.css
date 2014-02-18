@@ -36,6 +36,11 @@
 	background:#97cccd;
 }
 
+.balloon.tortuga-canvasContainer-dragging
+{
+	background-color: #6aa;
+}
+
 .workingArea
 {
 	background: none;
