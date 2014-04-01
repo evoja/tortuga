@@ -139,6 +139,19 @@ var are_equal_objects = function(first, second)
 	assert(!are_equal_objects(["volk", 0, 0], ["koza", 0, 0]), "[volk, 0, 0] != [koza, 0, 0]")
 })()
 
+var has_object = function(arr, obj)
+{
+	return !arr.every(curry(not(are_equal_types), obj))
+};
+
+(function(){
+	var one = [["volk", 0, 0], ["koza", 1, 1], ["volk", 1, 2], ["kapusta", 0, 3], ["muzhik", 1, 4], ["kapusta", 0, 5]]
+	assert(has_object(one, ["volk"]), "There are volk")
+	assert(has_object(one, ["koza"]), "There are koza")
+	assert(has_object(one, ["kapusta"]), "There are kapusta")
+	assert(has_object(one, ["muzhik"]), "There are muzhik")
+	assert(!has_object(one, ["korova"]), "There are not korova")
+})()
 
 var has_pair_of_checked_families = function(arr, first, second, family_checker)
 {
@@ -365,14 +378,81 @@ var has_object_without_pair = function(arr, first, second)
 })()
 
 
-// var disable_pair = function(first, second)
-// {
-// 	var checker = function(arr)
-// 	{
+var afraids = function(first, second)
+{
+	return function(arr)
+	{
+		return !has_pair(arr, first, second)
+	}
+}
 
-// 	}
-// }
+var disabled = afraids
 
+var needs = function(first, second)
+{
+	return function(arr)
+	{
+		return !has_object_without_pair(arr, first, second)
+	}
+}
+
+var necessary = function(obj)
+{
+	return function(arr)
+	{
+		return has_object(arr, obj)
+	}
+}
+
+var required = function(first, second)
+{
+	return and(needs(first, second), first_need_second(second, first))
+};
+
+(function(){
+	var man = ["man"]
+	var volk = ["volk"]
+	var koza = ["koza"]
+	var kapusta = ["kapusta"]
+
+	var koza_volk = disabled(koza, volk)
+	var koza_kapusta = disabled(kapusta, koza)
+	var man_koza = needs(koza, man)
+	var man_kapusta = needs(kapusta, man)
+
+	var rule1 = and(or(man_koza, koza_volk), or(man_kapusta, koza_kapusta))
+	var rule2 = or(necessary(man), and(koza_volk, koza_kapusta))
+
+	var arrays = [
+		[true, [man, volk, koza, kapusta], "That must be OK! man is there"],
+		[false, [volk, koza, kapusta], "Alarm! they all eat each other"],
+		[true, [man, volk, koza], "That must be OK! man is there"],
+		[false, [volk, koza], "Alarm! volk eats koza"],
+		[true, [koza, kapusta, man], "That must be OK! man is there"],
+		[false, [koza, kapusta], "Alarm! koza eats kapusta"],
+		[true, [volk, kapusta, man], "That must be OK! man is there"],
+		[true, [volk, kapusta], "That must be OK! volk ok with kapusta"],
+		[true, [volk], "That must be OK! any of them ok along"],
+		[true, [man], "That must be OK! any of them ok along"],
+		[true, [koza], "That must be OK! any of them ok along"],
+		[true, [kapusta], "That must be OK! any of them ok along"],
+		[true, [volk, man], "That must be OK! any of them ok with man"],
+		[true, [koza, man], "That must be OK! any of them ok with man"],
+		[true, [kapusta, man], "That must be OK! any of them ok with man"],
+		[true, [], "That must be OK! nobody there, there are no conflicts"]
+	]
+
+	var test = function(rule, message)
+	{
+		arrays.forEach(function(elem){
+			assert(elem[0] == rule(elem[1]), message + ": " + elem[2])
+		})
+	}
+
+	test(rule1, "Rule 1")
+	test(rule2, "Rule 2")
+
+})()
 // var game = {
 // 	right: [["man"], ["volk"], ["koza"], ["kapusta"]],
 // 	left: [],
