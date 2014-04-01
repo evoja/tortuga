@@ -1,5 +1,14 @@
 (function()
 {
+
+
+//==========================================================================
+
+//------- Core logic ---------
+
+//==========================================================================
+
+
 // CI means index
 var CI_TYPE = 0;
 var CI_FAMILY = 1;
@@ -451,6 +460,165 @@ var required = function(first, second)
 
 	test(rule1, "Rule 1")
 	test(rule2, "Rule 2")
+
+})()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//==========================================================================
+
+//--------- Game logic -----------
+
+//==========================================================================
+
+var POS_RIGHT = "right"
+var POS_LEFT = "left"
+
+(function()
+{
+	var select_boat_position = function(left, right)
+	{
+		return left.length > 0 ? POS_LEFT
+				: right.length > 0 ? POS_RIGHT
+				: POS_LEFT
+	}
+
+	var not_empty = function(arr)
+	{
+		return arr.length > 0
+	}
+
+	var find = function(array, is_match, from, to)
+	{
+		var len = array.length
+		from = from || 0;
+		to = to === undefined ? len : to;
+		for(var i = from; i < to; ++i)
+		{
+			if(is_match(array[i], i))
+			{
+				return i
+			}
+		}
+		return -1
+	}
+
+	var find_obj_in_arr = function(arr, obj)
+	{
+		return find(array, obj, and(are_equal_types, are_equal_families))
+	}
+
+	var get_weight = function(types_weights, arr)
+	{
+		var sum = 0;
+		var len = arr.length;
+		for(var i = 0; i < len; ++i)
+		{
+			var weight = types_weights[arr[i][0]]
+			sum += weight === undefined ? 1 : weight
+		}
+		return sum
+	}
+
+	var move = function(transaction_rules, from, to, what)
+	{
+		var rest = from.slice()
+		var target = to.slice()
+		var real_what = []
+		var all = from.concat(to)
+
+		var what_len = what.length
+		for(var i = 0; i < what_len; ++i)
+		{
+			var j = find_obj_in_arr(rest, what[i])
+
+			if(j != -1 && transaction_rules[what[i][CI_TYPE]](all))
+			{
+				var moved_obj = rest.splice(j, 1)[0]
+				real_what.push(moved_obj)
+				target.push(moved_obj)
+			}
+		}
+
+		return {from: rest, to: target, what: real_what}
+	}
+
+	var do_transaction = function(game, from, to, what,
+		from_boat_position, to_boat_position,
+		from_rules, to_rules)
+	{
+		var config = game.config
+		
+		var result = move(config.transaction_rules, from, game.boat, what)
+		if(game.boat_position != from_boat_position
+			|| !from_rules(result.from)
+			|| !config.boat_rules(result.to)
+			|| !config.boat_moving_rules(result.to)
+			|| get_weight(config.types_weights, result.to) > config.boat_capacity)
+		{
+			return false;
+		}
+
+		var to_result = move(config.transaction_rules, result.to, to, result.to)
+		var to_all = to_result.from.concat(to_result.to)
+		
+		if(!to_rules(to_all))
+		{
+			return false;
+		}
+
+		game[from_boat_position] = result.from
+		game.boat = right_result.from
+		game[to_boat_position] = to_result.to
+		game.boat_position = to_boat_position
+
+		return true
+	}
+
+	var Game = function(cfg)
+	{
+		this.left = cfg.left || []
+		this.right = cfg.right || []
+		this.boat = cfg.boat || []
+		this.boat_position = cfg.boat || select_boat_position(cfg.left, cfg.right)
+		this.config = {
+			left_rules: cfg.left_rules || cfg.rules || true_fun,
+			right_rules: cfg.right_rules || cfg.rules || true_fun,
+			boat_rules: cfg.boat_rules || cfg.rules || true_fun,
+			boat_moving_rules: cfg.boat_moving_rules || not_empty,
+			boat_capacity: cfg.boat_capacity || 0,
+			types_weights: cfg.types_weights || [],
+			transaction_rules: cfg.transaction_rules || true_fun
+		}
+	}
+
+	Game.prototype.to_right = function(what)
+	{
+		var game = this
+		return do_transaction(game, game.left, game.right, what,
+			POS_LEFT, POS_RIGHT,
+			game.config.left_rules, game.config.right_rules)
+	}
+
+	Game.prototype.to_left = function(what)
+	{
+		var game = this
+		return do_transaction(game, game.right, game.left, what,
+			POS_RIGHT, POS_LEFT,
+			game.config.right_rules, game.config.left_rules)
+	}
+
 
 })()
 // var game = {
