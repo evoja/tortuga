@@ -162,6 +162,37 @@ var has_object = function(arr, obj)
 	assert(!has_object(one, ["korova"]), "There are not korova")
 })()
 
+var has_at_least_numbers_of_objects = function(arr, obj, num)
+{
+	var len = arr.length
+	for(var i = 0; i < len; ++i)
+	{
+		if(are_equal_types(arr[i], obj))
+		{
+			--num
+		}
+		if(num == 0)
+		{
+			return true;
+		}
+	}
+	
+	// if there are no elements and num == 0 at start we must return true.
+	return num == 0;
+};
+
+(function(){
+	var one = [["volk", 0, 0], ["koza", 1, 1], ["volk", 1, 2], ["kapusta", 0, 3], ["muzhik", 1, 4], ["kapusta", 0, 5]]
+	assert(has_at_least_numbers_of_objects([], ["volk"], 0), "There are 0 volks")
+	assert(has_at_least_numbers_of_objects(one, ["volk"], 2), "There are 2 volks")
+	assert(has_at_least_numbers_of_objects(one, ["koza"], 1), "There are 1 koza")
+	assert(has_at_least_numbers_of_objects(one, ["kapusta"], 1), "There are 2 kapustas")
+	assert(!has_at_least_numbers_of_objects(one, ["muzhik"], 2), "There are 1 muzhik")
+	assert(!has_at_least_numbers_of_objects(one, ["korova"], 1), "There are not korova")
+	assert(has_at_least_numbers_of_objects(one, ["korova"], 0), "There are not korova")
+	assert(!has_at_least_numbers_of_objects(one, ["volk"], 3), "There are 2 volks")
+})()
+
 var has_pair_of_checked_families = function(arr, first, second, family_checker)
 {
 	var first_compat = arr.filter(curry(are_equal_types, first))
@@ -405,6 +436,14 @@ var needs = function(first, second)
 	}
 }
 
+var needs_at_least = function(first, second, number)
+{
+	return function(arr)
+	{
+		return !has_object(arr, first) || has_at_least_numbers_of_objects(arr, second, number)
+	}
+}
+
 var necessary = function(obj)
 {
 	return function(arr)
@@ -461,11 +500,16 @@ var required = function(first, second)
 	test(rule1, "Rule 1")
 	test(rule2, "Rule 2")
 
+})();
+
+(function(){
+	var rule = needs_at_least(["stiralka"], ["muzhik"], 3)
+	assert(!rule([["stiralka"]]), "needs 3 has 0")
+	assert(!rule([["stiralka"], ["muzhik"]]), "needs 3 has 0")
+	assert(!rule([["stiralka"], ["muzhik"], ["muzhik"]]), "needs 3 has 0")
+	assert(rule([["stiralka"], ["muzhik"], ["muzhik"], ["muzhik"]]), "needs 3 has 3")
+	assert(rule([["stiralka"], ["muzhik"], ["muzhik"], ["muzhik"], ["muzhik"]]), "needs 3 has 4")
 })()
-
-
-
-
 
 
 
@@ -482,8 +526,8 @@ var required = function(first, second)
 
 //==========================================================================
 
-var POS_RIGHT = "right"
-var POS_LEFT = "left"
+var POS_RIGHT = "right";
+var POS_LEFT = "left";
 
 (function()
 {
@@ -492,12 +536,41 @@ var POS_LEFT = "left"
 		return left.length > 0 ? POS_LEFT
 				: right.length > 0 ? POS_RIGHT
 				: POS_LEFT
-	}
+	};
+
+	(function(){
+		assert(POS_LEFT == select_boat_position([1, 2], [3, 4]), "left priority")
+		assert(POS_LEFT == select_boat_position([1, 2], []), "left priority")
+		assert(POS_LEFT == select_boat_position([], []), "left priority")
+		assert(POS_RIGHT == select_boat_position([], [1, 2]), "left is empty but right is not")
+	})()
 
 	var not_empty = function(arr)
 	{
 		return arr.length > 0
 	}
+
+	var get_weight = function(types_weights, arr)
+	{
+		var sum = 0;
+		var len = arr.length;
+		for(var i = 0; i < len; ++i)
+		{
+			var weight = types_weights[arr[i][0]]
+			sum += weight === undefined ? 1 : weight
+		}
+		return sum
+	};
+
+	(function(){
+		var types_weights = {
+			volk: 2,
+			muzhik: 1,
+			nothing: 0
+		}
+		var arr = [["muzhik"], ["volk"], ["kapusta"], ["muzhik"], ["kapusta"], ["nothing"], ["nothing"]]
+		assert(6 == get_weight(types_weights, arr), "Sum must be equal 6")
+	})()
 
 	var find = function(array, is_match, from, to)
 	{
@@ -512,23 +585,24 @@ var POS_LEFT = "left"
 			}
 		}
 		return -1
+	};
+
+	(function(){
+		assert(-1 == find([1, 2, 3, 4], function(){return false}), "must not find anyting")
+		assert(0 == find([1, 2, 3, 4], function(){return true}), "must find first (ind=0) element")
+		assert(1 == find([1, 2, 3, 4], function(elem){return elem % 2 == 0}), "arr[1] == 2 is first even element")
+		assert(3 == find([1, 2, 3, 4], function(elem){return elem % 2 == 0}, 2), "arr[3] == 4 is first even element beginning from [2]")
+		assert(-1 == find([1, 2, 3, 4], function(elem){return elem % 4 == 0}, 0, 3), "last elem%%4 is arr[3]==4 but it's over searching interval")
+	})()
+
+	var get_transaction_rule = function(transaction_rules, obj)
+	{
+		return transaction_rules[obj[CI_TYPE]] || true_fun;
 	}
 
 	var find_obj_in_arr = function(arr, obj)
 	{
-		return find(array, obj, and(are_equal_types, are_equal_families))
-	}
-
-	var get_weight = function(types_weights, arr)
-	{
-		var sum = 0;
-		var len = arr.length;
-		for(var i = 0; i < len; ++i)
-		{
-			var weight = types_weights[arr[i][0]]
-			sum += weight === undefined ? 1 : weight
-		}
-		return sum
+		return find(arr, curry(and(are_equal_types, are_equal_families), obj))
 	}
 
 	var move = function(transaction_rules, from, to, what)
@@ -543,7 +617,7 @@ var POS_LEFT = "left"
 		{
 			var j = find_obj_in_arr(rest, what[i])
 
-			if(j != -1 && transaction_rules[what[i][CI_TYPE]](all))
+			if(j != -1 && get_transaction_rule(transaction_rules, what[i])(all))
 			{
 				var moved_obj = rest.splice(j, 1)[0]
 				real_what.push(moved_obj)
@@ -552,7 +626,30 @@ var POS_LEFT = "left"
 		}
 
 		return {from: rest, to: target, what: real_what}
-	}
+	};
+
+	(function(){
+		var muzh1 = ["muzhik"]
+		var transaction_rules = {stiralka: needs_at_least(["stiralka"], ["muzhik"], 3)}
+
+		var from1 = [["muzhik"], ["muzhik"], ["muzhik"], ["stiralka"]]
+		var to1 = []
+		var what1 = [["muzhik"], ["stiralka"]] 
+		var result1 = move(transaction_rules, from1, to1, what1)
+
+		assert(result1.from.length == 2, "muzhik, muzhik in from")
+		assert(result1.what.length == 2, "muzhik, stiralka were moved ")
+		assert(result1.to.length == 2, "muzhik, stiralka in to")
+
+		var from2 = [["muzhik"], ["muzhik"], ["stiralka"]]
+		var to2 = [["korova"]]
+		var what2 = [["muzhik"], ["stiralka"]] 
+		var result2 = move(transaction_rules, from2, to2, what2)
+
+		assert(result2.from.length == 2, "muzhik, stiralka are in from")
+		assert(result2.what.length == 1, "muzhik was moved")
+		assert(result2.to.length == 2, "muzhik, korova are in to")
+	})()
 
 	var do_transaction = function(game, from, to, what,
 		from_boat_position, to_boat_position,
@@ -617,8 +714,11 @@ var POS_LEFT = "left"
 		return do_transaction(game, game.right, game.left, what,
 			POS_RIGHT, POS_LEFT,
 			game.config.right_rules, game.config.left_rules)
-	}
+	};
 
+	(function(){
+		//var game = new Game()
+	})()
 
 })()
 // var game = {
@@ -628,6 +728,8 @@ var POS_LEFT = "left"
 // 	boat_position: "right",
 // 	rules:
 // }
+
+
 
 
 
