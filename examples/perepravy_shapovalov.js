@@ -12,7 +12,6 @@
 // CI means index
 var CI_TYPE = 0;
 var CI_FAMILY = 1;
-var CI_ID = 2;
 
 var slice = Array.prototype.slice
 var bind = Function.prototype.bind
@@ -39,7 +38,7 @@ var and = function(fun1, fun2)
 	}
 };
 
-(function(){
+(function test_and(){
 	var more3 = function(x){return x > 3}
 	var less7 = function(x){return x < 7}
 	var more_less = and(more3, less7)
@@ -58,7 +57,7 @@ var or = function(fun1, fun2)
 	}
 };
 
-(function(){
+(function test_or(){
 	var more6 = function(x){return x > 6}
 	var less4 = function(x){return x < 4}
 	var more_less = or(more6, less4)
@@ -77,7 +76,7 @@ var not = function(fun)
 	}
 };
 
-(function(){
+(function test_not_and_true_fun(){
 	var more3 = function(x){return x > 3}
 	var less7 = function(x){return x < 7}
 	var more6 = function(x){return x > 6}
@@ -119,7 +118,7 @@ var are_equal_families = function(first, second)
 	return first[CI_FAMILY] == second[CI_FAMILY]
 };
 
-(function(){
+(function test_are_equal_families(){
 	assert(are_equal_families(["volk", 0], ["koza", 0]), "0 == 0")
 	assert(!are_equal_families(["volk", 0], ["volk", 1]), "0 != 1")
 })()
@@ -129,23 +128,9 @@ var are_equal_types = function(first, second)
 	return first[CI_TYPE] == second[CI_TYPE]
 };
 
-(function(){
+(function test_are_equal_types(){
 	assert(are_equal_types(["volk", 0], ["volk", 1]), "volk == volk")
 	assert(!are_equal_types(["volk", 0], ["koza", 0]), "volk != koza")
-})()
-
-var are_equal_objects = function(first, second)
-{
-	return first[CI_ID] == second[CI_ID]
-		&& are_equal_types(first, second)
-		&& 0 == compare_families(first, second)
-};
-
-(function(){
-	assert(are_equal_objects(["volk", 0, 0], ["volk", 0, 0]), "[volk, 0, 0] == [volk, 0, 0]")
-	assert(!are_equal_objects(["volk", 0, 1], ["volk", 0, 0]), "[volk, 0, 1] != [volk, 0, 0]")
-	assert(!are_equal_objects(["volk", 1, 0], ["volk", 0, 0]), "[volk, 1, 0] != [volk, 0, 0]")
-	assert(!are_equal_objects(["volk", 0, 0], ["koza", 0, 0]), "[volk, 0, 0] != [koza, 0, 0]")
 })()
 
 var has_object = function(arr, obj)
@@ -153,8 +138,8 @@ var has_object = function(arr, obj)
 	return !arr.every(curry(not(are_equal_types), obj))
 };
 
-(function(){
-	var one = [["volk", 0, 0], ["koza", 1, 1], ["volk", 1, 2], ["kapusta", 0, 3], ["muzhik", 1, 4], ["kapusta", 0, 5]]
+(function test_has_object(){
+	var one = [["volk", 0], ["koza", 1], ["volk", 1], ["kapusta", 0], ["muzhik", 1], ["kapusta", 0]]
 	assert(has_object(one, ["volk"]), "There are volk")
 	assert(has_object(one, ["koza"]), "There are koza")
 	assert(has_object(one, ["kapusta"]), "There are kapusta")
@@ -181,8 +166,8 @@ var has_at_least_numbers_of_objects = function(arr, obj, num)
 	return num == 0;
 };
 
-(function(){
-	var one = [["volk", 0, 0], ["koza", 1, 1], ["volk", 1, 2], ["kapusta", 0, 3], ["muzhik", 1, 4], ["kapusta", 0, 5]]
+(function test_has_at_least_numbers_of_objects(){
+	var one = [["volk", 0], ["koza", 1], ["volk", 1], ["kapusta", 0], ["muzhik", 1], ["kapusta", 0]]
 	assert(has_at_least_numbers_of_objects([], ["volk"], 0), "There are 0 volks")
 	assert(has_at_least_numbers_of_objects(one, ["volk"], 2), "There are 2 volks")
 	assert(has_at_least_numbers_of_objects(one, ["koza"], 1), "There are 1 koza")
@@ -207,7 +192,7 @@ var has_pair_of_checked_families = function(arr, first, second, family_checker)
 		for(var j = 0; j < second_length; ++j)
 		{
 			var s = second_compat[j]
-			if(family_checker(f, s) && !are_equal_objects(f, s))
+			if(family_checker(f, s) && f != s)
 			{
 				return true;
 			}
@@ -237,8 +222,8 @@ var has_pair = function(arr, first, second)
 		: has_pair_different_families(arr, first, second)
 };
 
-(function(){
-	var one = [["volk", 0, 0], ["koza", 1, 1], ["volk", 1, 2], ["kapusta", 0, 3], ["muzhik", 1, 4], ["kapusta", 0, 5]]
+(function test_has_pair_functions(){
+	var one = [["volk", 0], ["koza", 1], ["volk", 1], ["kapusta", 0], ["muzhik", 1], ["kapusta", 0]]
 	assert(has_pair_one_family(one, ["volk"], ["koza"]), one + " has volk & koza of family 1")
 	assert(has_pair_one_family(one, ["volk"], ["kapusta"]), one + " has volk & kapusta of family 0")
 	assert(has_pair_one_family(one, ["kapusta"], ["kapusta"]), one + " has two kapustas of family 0")
@@ -302,7 +287,7 @@ var has_object_without_pair_of_checked_families = function(arr, first, second, f
 		for(var j = 0; j < second_length; ++j)
 		{
 			var s = second_compat[j]
-			if(family_checker(f, s) && !are_equal_objects(f, s))
+			if(family_checker(f, s) && f != s)
 			{
 				contains = true;
 				break;
@@ -345,8 +330,8 @@ var has_object_without_pair = function(arr, first, second)
 			: has_object_without_pair_of_different_families(arr, first, second)
 };
 
-(function(){
-	var one = [["volk", 0, 0], ["koza", 1, 1], ["volk", 1, 2], ["kapusta", 0, 3], ["muzhik", 1, 4], ["kapusta", 0, 5]]
+(function test_has_object_without_pair_punctions(){
+	var one = [["volk", 0], ["koza", 1], ["volk", 1], ["kapusta", 0], ["muzhik", 1], ["kapusta", 0]]
 	assert(has_object_without_pair_of_one_family(one, ["volk"], ["koza"]), one + " has volk-0 without koza-0")
 	assert(!has_object_without_pair_of_one_family(one, ["koza"], ["volk"]), one + " has volk-1 for koza-1")
 	assert(has_object_without_pair_of_one_family(one, ["volk"], ["kapusta"]), one + " has volk-1 without kapusta-1")
@@ -457,7 +442,7 @@ var required = function(first, second)
 	return and(needs(first, second), first_need_second(second, first))
 };
 
-(function(){
+(function test_rules_functions(){
 	var man = ["man"]
 	var volk = ["volk"]
 	var koza = ["koza"]
@@ -502,7 +487,7 @@ var required = function(first, second)
 
 })();
 
-(function(){
+(function test_needs_at_least(){
 	var rule = needs_at_least(["stiralka"], ["muzhik"], 3)
 	assert(!rule([["stiralka"]]), "needs 3 has 0")
 	assert(!rule([["stiralka"], ["muzhik"]]), "needs 3 has 0")
@@ -538,7 +523,7 @@ var POS_LEFT = "left";
 				: POS_LEFT
 	};
 
-	(function(){
+	(function test_select_boat_position(){
 		assert(POS_LEFT == select_boat_position([1, 2], [3, 4]), "left priority")
 		assert(POS_LEFT == select_boat_position([1, 2], []), "left priority")
 		assert(POS_LEFT == select_boat_position([], []), "left priority")
@@ -562,7 +547,7 @@ var POS_LEFT = "left";
 		return sum
 	};
 
-	(function(){
+	(function test_get_weight(){
 		var types_weights = {
 			volk: 2,
 			muzhik: 1,
@@ -587,7 +572,7 @@ var POS_LEFT = "left";
 		return -1
 	};
 
-	(function(){
+	(function test_find(){
 		assert(-1 == find([1, 2, 3, 4], function(){return false}), "must not find anyting")
 		assert(0 == find([1, 2, 3, 4], function(){return true}), "must find first (ind=0) element")
 		assert(1 == find([1, 2, 3, 4], function(elem){return elem % 2 == 0}), "arr[1] == 2 is first even element")
@@ -628,7 +613,7 @@ var POS_LEFT = "left";
 		return {from: rest, to: target, what: real_what}
 	};
 
-	(function(){
+	(function test_move(){
 		var muzh1 = ["muzhik"]
 		var transaction_rules = {stiralka: needs_at_least(["stiralka"], ["muzhik"], 3)}
 
@@ -636,7 +621,6 @@ var POS_LEFT = "left";
 		var to1 = []
 		var what1 = [["muzhik"], ["stiralka"]] 
 		var result1 = move(transaction_rules, from1, to1, what1)
-
 		assert(result1.from.length == 2, "muzhik, muzhik in from")
 		assert(result1.what.length == 2, "muzhik, stiralka were moved ")
 		assert(result1.to.length == 2, "muzhik, stiralka in to")
@@ -645,7 +629,6 @@ var POS_LEFT = "left";
 		var to2 = [["korova"]]
 		var what2 = [["muzhik"], ["stiralka"]] 
 		var result2 = move(transaction_rules, from2, to2, what2)
-
 		assert(result2.from.length == 2, "muzhik, stiralka are in from")
 		assert(result2.what.length == 1, "muzhik was moved")
 		assert(result2.to.length == 2, "muzhik, korova are in to")
@@ -676,7 +659,7 @@ var POS_LEFT = "left";
 		}
 
 		game[from_boat_position] = result.from
-		game.boat = right_result.from
+		game.boat = to_result.from
 		game[to_boat_position] = to_result.to
 		game.boat_position = to_boat_position
 
@@ -688,7 +671,7 @@ var POS_LEFT = "left";
 		this.left = cfg.left || []
 		this.right = cfg.right || []
 		this.boat = cfg.boat || []
-		this.boat_position = cfg.boat || select_boat_position(cfg.left, cfg.right)
+		this.boat_position = cfg.boat || select_boat_position(this.left, this.right)
 		this.config = {
 			left_rules: cfg.left_rules || cfg.rules || true_fun,
 			right_rules: cfg.right_rules || cfg.rules || true_fun,
@@ -716,10 +699,55 @@ var POS_LEFT = "left";
 			game.config.right_rules, game.config.left_rules)
 	};
 
-	(function(){
-		//var game = new Game()
-	})()
+	(function test_game_stiralka(){
+		var game = new Game({
+			left: [["muzhik"], ["muzhik"], ["muzhik"], ["stiralka"]],
+			boat_capacity: 3,
+			boat_rules: necessary(["muzhik"]),
+			transaction_rules: {stiralka: needs_at_least(["stiralka"], ["muzhik"], 3)}
+		});
 
+		assert(game.to_right([["muzhik"], ["muzhik"], ["stiralka"]]), "correct: [muzhik] --- [stiralka]-[muzhik, muzhik]")
+		assert(!game.to_right([["muzhik"]]), "Incorrect boat side")
+		assert(!game.to_left([]), "Can't go without muzhik")
+		assert(game.to_left([["muzhik"]]), "correct: [muzhik, muzhik]-[stiralka] --- [muzhik]")
+		assert(game.to_right([["muzhik"], ["muzhik"]]), "correct: [] --- [] - [muzhik, muzhik, muzhik, stiralka]")
+	})();
+
+	(function test_game_volk_koza_kapusta(){
+		var muzhik = ["muzhik"]
+		var volk = ["volk"]
+		var koza = ["koza"]
+		var kapusta = ["kapusta"]
+
+		var koza_volk = disabled(koza, volk)
+		var koza_kapusta = disabled(kapusta, koza)
+		var muzhik_koza = needs(koza, muzhik)
+		var muzhik_kapusta = needs(kapusta, muzhik)
+
+		var game = new Game({
+			left: [volk, koza, kapusta, muzhik],
+			boat_capacity: 2,
+			rules: or(necessary(muzhik), and(koza_volk, koza_kapusta)),
+			boat_rules: necessary(muzhik)
+		});
+
+		assert(!game.to_right([volk]), "Can't go without muzhik")
+		assert(!game.to_right([muzhik, kapusta]), "Can't go: volk eats koza")
+		assert(!game.to_right([muzhik, volk]), "Can't go: koza eats kapusta")
+		assert(game.to_right([muzhik, koza]), "Correct: [volk, kapusta] --- []-[muzhik, koza]")
+		assert(!game.to_left([koza]), "Can't go without muzhik")
+		assert(game.to_left([muzhik, volk]), "There are no volk but muzhik moves: [volk, kapusta, muzhik]-[] --- [koza]")
+		assert(!game.to_left([muzhik]), "Boat is already on the left")
+		assert(!game.to_right([muzhik, volk, kapusta]), "Overweight!")
+		assert(!game.to_right([volk, kapusta]), "Can't go without muzhik")
+		assert(game.to_right([muzhik, kapusta]), "Correct: [volk] --- []-[muzhik, koza, kapusta]")
+		assert(!game.to_left([muzhik]), "Can't go: koza eats kapusta")
+		assert(game.to_left([muzhik, koza]), "Correct: [volk, muzhik, koza]-[] --- [kapusta]")
+		assert(game.to_right([muzhik, volk]), "Correct: [koza] --- []-[volk, muzhik, kapusta]")
+		assert(game.to_left([muzhik]), "Correct: [koza, muzhik]-[] --- [volk, kapusta]")
+		assert(game.to_right([muzhik, koza]), "Correct: [] --- []-[volk, koza, kapusta, muzhik")
+	})()
 })()
 // var game = {
 // 	right: [["man"], ["volk"], ["koza"], ["kapusta"]],
@@ -730,16 +758,6 @@ var POS_LEFT = "left";
 // }
 
 
-
-
-
-
-
-
-
-
-
-// // Tests 
 
 
 })()
