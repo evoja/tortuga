@@ -1237,6 +1237,23 @@ var infrastructure = (function(){
 						boat_rules: necessary(muzhik)
 					}
 				})()
+			},{
+				title : "Стиральная машина",
+				description : ["Три человека со стиральной машиной хотят переправиться через реку. Катер вмещает либо двух человек и стиральную машину, либо трёх человек. Беда в том, что стиральная машина тяжёлая, поэтому погрузить её в катер или вытащить из него можно только втроём. Смогут ли они переправиться?",
+					"Командой state() вы отображаете текущее состояние.",
+					"Командами to_right(), to_left() возите героев туда-сюда",
+					"Пример:",
+					"\tto_right(\"чел, чел, стиралка\")"],
+				config : (function stiralnaya_mashina(){
+					var muzhik = ["чел"]
+					var stiralka = ["стиралка"]
+					return {
+						left: [muzhik, muzhik, muzhik, stiralka],
+						boat_capacity: 3,
+						boat_rules: necessary(muzhik),
+						transaction_rules: {"стиралка": needs_at_least(stiralka, muzhik, 3)}
+					}
+				})()
 			}
 		]
 	}
