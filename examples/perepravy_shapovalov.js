@@ -13,7 +13,18 @@
 var CI_TYPE = 0
 var CI_FAMILY = 1
 
-var slice = Array.prototype.slice
+var slice = function()
+{
+	var this_is_window = this === window
+
+	var target = this_is_window ? arguments[0] : this
+	
+	var args = this_is_window
+		? Array.prototype.slice.call(arguments, 1)
+		: arguments
+
+	return Array.prototype.slice.apply(target, args)
+}
 var bind = Function.prototype.bind
 
 var test_count = 0
@@ -846,9 +857,7 @@ var game_contructors = (function()
 		this.config = {
 			left_rules: cfg.left_rules || cfg.rules || true_fun,
 			right_rules: cfg.right_rules || cfg.rules || true_fun,
-			boat_rules: cfg.rules && cfg.boat_rules
-				? and(cfg.boat_rules, cfg.rules)
-				: cfg.boat_rules || cfg.rules || true_fun,
+			boat_rules: cfg.boat_rules || cfg.rules || true_fun,
 			boat_moving_rules: cfg.boat_moving_rules || not_empty,
 			boat_capacity: cfg.boat_capacity || 0,
 			types_weights: cfg.types_weights || [],
@@ -896,7 +905,7 @@ var game_contructors = (function()
 		var game = new GameRaw({
 			left: [["muzhik"], ["muzhik"], ["muzhik"], ["stiralka"]],
 			boat_capacity: 3,
-			boat_rules: necessary(["muzhik"]),
+			boat_moving_rules: necessary(["muzhik"]),
 			transaction_rules: {stiralka: necessary_at_least(["muzhik"], 3)}
 		});
 
@@ -925,7 +934,7 @@ var game_contructors = (function()
 			left: [volk, koza, kapusta, muzhik],
 			boat_capacity: 2,
 			rules: or(necessary(muzhik), items_rule(and(koza_volk, koza_kapusta))),
-			boat_rules: necessary(muzhik)
+			boat_moving_rules: necessary(muzhik)
 		});
 
 		assert(!game.is_win(), "Not win")
@@ -1059,7 +1068,7 @@ var game_contructors = (function()
 		var game_raw = new GameRaw({
 			left: [["muzhik", 1], ["muzhik", 2], ["muzhik"], ["stiralka"]],
 			boat_capacity: 3,
-			boat_rules: necessary(["muzhik"]),
+			boat_moving_rules: necessary(["muzhik"]),
 			transaction_rules: {stiralka: necessary_at_least(["muzhik"], 3)}
 		});
 		var game = new Game(game_raw)
@@ -1164,7 +1173,7 @@ var infrastructure = (function(){
 						left: [volk, koza, kapusta, muzhik],
 						boat_capacity: 2,
 						rules: or(necessary(muzhik), and(koza_volk, koza_kapusta)),
-						boat_rules: necessary(muzhik)
+						boat_moving_rules: necessary(muzhik)
 					}
 				})()
 			}
@@ -1177,7 +1186,12 @@ var infrastructure = (function(){
 	var select_problem = function(index)
 	{
 		current_problem_index = index
-		current_game = new Game(new GameRaw(lesson.problems[index].config))
+		var cfg = lesson.problems[index].config
+		if(typeof cfg == "function")
+		{
+			cfg = cfg.apply(null, slice(arguments, 1))
+		}
+		current_game = new Game(new GameRaw(cfg))
 	}
 	select_problem(0)
 
@@ -1213,18 +1227,25 @@ var infrastructure = (function(){
 			print("№ " + index + "." + problem.title + "\n")
 			print(problem.description)
 			print("\n")
-			current_game.display_in_log()
+			if(index == current_problem_index)
+			{
+				current_game.display_in_log()
+			}
 		},
 
 		start : function(index)
 		{
 			index = index === undefined ? current_problem_index : index
-			select_problem(index)
+			var args = slice(arguments)
+			args[0] = index
+			select_problem.apply(null, args)
 		},
 
 		restart : function()
 		{
-			select_problem(current_problem_index)
+			var args = slice(arguments)
+			args.unshift(current_problem_index)
+			select_problem.apply(null, args)
 		},
 
 		state : function()
@@ -1388,7 +1409,7 @@ var infrastructure = (function(){
 						left: [volk, koza, kapusta, muzhik],
 						boat_capacity: 2,
 						rules: or(necessary(muzhik), items_rule(and(koza_volk, koza_kapusta))),
-						boat_rules: necessary(muzhik)
+						boat_moving_rules: necessary(muzhik)
 					}
 				})()
 			},{
@@ -1404,7 +1425,7 @@ var infrastructure = (function(){
 					return {
 						left: [muzhik, muzhik, muzhik, stiralka],
 						boat_capacity: 3,
-						boat_rules: necessary(muzhik),
+						boat_moving_rules: necessary(muzhik),
 						transaction_rules: {"стиралка": necessary_at_least(muzhik, 3)}
 					}
 				})()
@@ -1425,7 +1446,7 @@ var infrastructure = (function(){
 							zhul(3), chem(3), chem(3)],
 						boat_capacity: 3,
 						rules: items_rule(or(needs(["ч", "i"], ["ж", "i"]), afraids(["ч", "i"], ["ж", "j"]))),
-						boat_rules: necessary(["ж"])
+						boat_moving_rules: necessary(["ж"])
 					}
 				})()
 			},{
@@ -1444,7 +1465,7 @@ var infrastructure = (function(){
 							["f", 2], ["m", 2], ["d", 2]],
 						boat_capacity: 2,
 						rules: items_rule(or(needs(["d", "i"], ["f", "i"]), needs(["d", "i"], ["m", "i"]))),
-						boat_rules: necessary(["f"])
+						boat_moving_rules: necessary(["f"])
 					}
 				})()
 			},{
@@ -1471,7 +1492,7 @@ var infrastructure = (function(){
 									needs(["m"], ["f"])
 								)
 							)),
-						boat_rules: necessary(["f"])
+						boat_moving_rules: necessary(["f"])
 					}
 				})()
 			},{
@@ -1497,7 +1518,7 @@ var infrastructure = (function(){
 									needs(["m"], ["s"])
 								)
 							)),
-						boat_rules: necessary(["f", "1"])
+						boat_moving_rules: necessary(["f", "1"])
 					}
 				})()
 			}, {
@@ -1517,7 +1538,7 @@ var infrastructure = (function(){
 					return {
 						left: [s, b1, b2, b3, b4, b5, b6, b7],
 						boat_capacity: 3,
-						boat_rules: and(
+						boat_moving_rules: and(
 							//Правила минимального количества
 							necessary_at_least(2),
 							//Правила дружбы
@@ -1585,9 +1606,102 @@ var infrastructure = (function(){
 									afraids(bbb, vn)
 									)
 							)),
-						boat_rules: necessary(vk)
+						boat_moving_rules: necessary(vk)
 					}
 				})()
+			}, {
+				title : "Дон Кихот и все-все-все",
+				description : ["К переправе подошли Дон Кихот и Санчо Панса с жёнами, а также несколько монахинь. Есть двухместная лодка, грести могут только Санчо и его жена. Никто из женщин не желает оказаться на берегу в одиночистве. Правила этикета запрещают женщинам быть в лодке или на берегу с другими мужчинами, если рядом нет мужа или другой женщины. При каком числе монахинь все они смогут переправиться? (Несколько - это больше одной)",
+					"\n\tКомандой state() вы отображаете текущее состояние.",
+					"\tКомандами to_right(), to_left() возите героев туда-сюда",
+					"\tD - Дон Кихот, d - жена Дона Кихота,",
+					"\tS - Санчо Панса, s - жена Санчо Пансы,",
+					"\tm - монахиня,",
+					"\tПример:",
+					"\t\tto_right(\"bk, K\")",
+					"\n\tТакже вы можете стартовать задачу с разным количеством монахинь:",
+					"\t\trestart(5)"
+					],
+				config : function don_kihot(num_of_nuns)
+				{
+					num_of_nuns = num_of_nuns && num_of_nuns > 1
+						? num_of_nuns
+						: 5
+
+					var b = function(type){return function(){return [type]}}
+					var m = b("m") // генератор монахинь
+					var D = ["D"] // Дон Кихот
+					var d = ["d"] // его жена
+					var S = ["S"] // Санчо Панса
+					var s = ["s"] // Его жена
+					var mm = m() // монахиня (для условий)
+
+					var m_arr = (function(num)
+					{
+						var result = []
+						for(var i = 0; i < num; ++i)
+						{
+							result.push(m())
+						}
+						return result
+					})(num_of_nuns)
+
+					var w_alone = and(
+								//Правила, боязни одиночества женщинами
+								or(
+									needs(mm, mm),
+									needs(mm, d),
+									needs(mm, s)
+									),
+								or(
+									needs(d, mm),
+									needs(d, D),
+									needs(d, s)
+									),
+								or(
+									needs(s, mm),
+									needs(s, S),
+									needs(s, d)
+									))
+
+					var w_chopornost = and(
+								//Правила боязни чужих мужчин.
+								or(
+									needs(mm, mm),
+									needs(mm, d),
+									needs(mm, s),
+									and(
+										afraids(mm, D),
+										afraids(mm, S)
+										)
+									),
+								or(
+									needs(d, mm),
+									needs(d, D),
+									needs(d, s),
+									afraids(d, S)
+									),
+								or(
+									needs(s, mm),
+									needs(s, S),
+									needs(s, d),
+									afraids(s, D)
+									)
+							)
+
+					return {
+						left: [D, d, S, s].concat(m_arr),
+						boat_capacity: 2,
+						rules: items_rule(and(
+								w_alone,
+								w_chopornost
+							)),
+						boat_rules: items_rule(and(
+								w_chopornost
+							)),
+						boat_moving_rules: or(necessary(S), necessary(s))
+					}
+				}
 			}
 		]
 	}
