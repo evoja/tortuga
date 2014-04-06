@@ -568,11 +568,13 @@ var necessary = function(first)
 	}
 }
 
-var necessary_at_least = function(first, number)
+var necessary_at_least = function(first_or_number, number_or_undefined)
 {
 	return function(arr)
 	{
-		return has_at_least_numbers_of_objects(arr, first, number)
+		return (number_or_undefined === undefined)
+			? arr.length >= first_or_number
+			: has_at_least_numbers_of_objects(arr, first_or_number, number_or_undefined)
 	}
 }
 
@@ -1238,6 +1240,19 @@ var infrastructure = (function(){
 		{
 			current_game.to_right.apply(current_game, arguments)
 			current_game.display_in_log()
+		}, 
+
+		move : function()
+		{
+			if(current_game.game_raw.boat_position == POS_LEFT)
+			{
+				current_game.to_right.apply(current_game, arguments)
+			}
+			else
+			{
+				current_game.to_left.apply(current_game, arguments)
+			}
+			current_game.display_in_log()
 		}
 	}
 
@@ -1324,7 +1339,9 @@ var infrastructure = (function(){
 		to_left: "to_left(\"волк, коза, капуста\") - отправить перечисленных участников на левый берег",
 		to_left_full: "to_left(\"волк, коза, капуста\") - отправить перечисленных участников на левый берег",
 		to_right: "to_right(\"чемодан-1, чел-1\") - отправить перечисленных участников на правый берег",
-		to_right_full: "to_right(\"волк, коза, капуста\") - отправить перечисленных участников на правый берег"
+		to_right_full: "to_right(\"волк, коза, капуста\") - отправить перечисленных участников на правый берег",
+		move: "move(\"волк, коза, капуста\") - переправить перечисленных участников с берега, где стоит лодка на противоположный",
+		move_full: "move(\"волк, коза, капуста\") - переправить перечисленных участников с берега, где стоит лодка на противоположный"
 	}
 
 
@@ -1479,6 +1496,47 @@ var infrastructure = (function(){
 								)
 							)),
 						boat_rules: necessary(["f", "1"])
+					}
+				})()
+			}, {
+				title : "Царевна Соня и 7 богатырей",
+				description : ["К переправе подошли царевна Соня и строй из 7 богатырей. Лодка одна, м ней могут плыть двое или трое (в одиночку плыть нельзя). Каждый согласен плыть только вдвоём с другом или втроём с двумя друзьями. Какое наибольшее число из них сможет переправиться, если каждые двое рядом стоящих богатырей - друзья, Соня дружит с ними вместе, кроме среднего из богатырей, а все остальные пары не дружат?",
+					"\n\tКомандой state() вы отображаете текущее состояние.",
+					"\tКомандами to_right(), to_left() возите героев туда-сюда",
+					"\tb - богатырь, s - Соня",
+					"\tПример:",
+					"\t\tto_right(\"b1, s\")"],
+				config : (function dve_semyi_a(){
+					var s = ["s"]
+					var b1 = ["b1"], b2 = ["b2"], b3 = ["b3"],
+						b4 = ["b4"],
+						b5 = ["b5"], b6 = ["b6"], b7 = ["b7"];
+
+					return {
+						left: [s, b1, b2, b3, b4, b5, b6, b7],
+						boat_capacity: 3,
+						boat_rules: and(
+							//Правила минимального количества
+							necessary_at_least(2),
+							//Правила дружбы
+							items_rule(and(
+								afraids(s, b4),
+								afraids(b1, b3),
+								afraids(b1, b4),
+								afraids(b1, b5),
+								afraids(b1, b6),
+								afraids(b1, b7),
+								afraids(b2, b4),
+								afraids(b2, b5),
+								afraids(b2, b6),
+								afraids(b2, b7),
+								afraids(b3, b6),
+								afraids(b3, b7),
+								afraids(b4, b6),
+								afraids(b4, b7),
+								afraids(b5, b7)
+							))
+						)
 					}
 				})()
 			}
