@@ -872,7 +872,7 @@ var game_contructors = (function()
 		var what = []
 		Array.prototype.forEach.call(args, function(elem)
 		{
-			var parts = map(elem.split(","), convert_string_to_object)
+			var parts = map(elem.split(/(?:,|\s)+/), convert_string_to_object)
 			what = what.concat(parts)
 		})
 
@@ -985,7 +985,7 @@ var infrastructure = (function(){
 		{
 			if(obj.hasOwnProperty(i))
 			{
-				print(i + "\t\t" + obj[i].description)
+				print(i + "\t\t" + obj[i].help.description)
 			}
 		}
 	}
@@ -1033,18 +1033,18 @@ var infrastructure = (function(){
 		{
 			if(!command)
 			{
-				print(commands.help.main)
+				print(commands.help.help.main)
 				print_commands(commands)
 			}
 			else
 			{
-				print(commands[command].full_description)
+				print(commands[command].help.full_description)
 			}
 		},
 
 		list : function()
 		{
-			print(lesson.description, "")
+//			print(lesson.description, "")
 			var len = lesson.problems.length
 			for(var i = 0; i < len; ++i)
 			{
@@ -1059,6 +1059,8 @@ var infrastructure = (function(){
 
 			print("№ " + index + "." + problem.title + "\n")
 			print(problem.description)
+			print("\n")
+			current_game.display_in_log()
 		},
 
 		start : function(index)
@@ -1090,32 +1092,13 @@ var infrastructure = (function(){
 		}
 	}
 
-
-	var wrap = function(scope, property)
-	{
-		if(property == "help")
-			return scope[property]
-
-		return function(arg0)
-		{
-			if(arguments.length == 1 && (arg0 == "help" || arg0 == "?"))
-			{
-				scope.help(property)
-			}
-			else
-			{
-				scope[property].apply(scope, arguments)
-			}
-		}
-	}
-
 	var init_global_commands = function()
 	{
 		for(var i in commands)
 		{
 			if(commands.hasOwnProperty(i))
 			{
-				window[i] = wrap(commands, i)
+				window[i] = commands[i]
 			}
 		}
 	}
@@ -1123,16 +1106,18 @@ var infrastructure = (function(){
 
 	var init_messages = function(messages) {
 
-		commands.help.main = messages.help_main
 
 		for(var i in commands)
 		{
 			if(commands.hasOwnProperty(i))
 			{
-				commands[i].description = messages[i]
-				commands[i].full_description = messages[i + "_full"]
+				commands.help[i] = commands[i].help = curry(commands.help, i)
+				commands[i].help.description = messages[i]
+				commands[i].help.full_description = messages[i + "_full"]
 			}
 		}
+
+		commands.help.help.main = messages.help_main
 	}
 
 	var init_lesson = function(lesson1)
@@ -1150,14 +1135,15 @@ var infrastructure = (function(){
 
 (function(){
 	var help_messages = {
-		help : "help() - вывести эту справку; help('command') - вывести справку по конкретной команде",
+		help : "help() - вывести эту справку; help.command() или command.help() - вывести справку по конкретной команде",
 		help_main: "доступны следующие команды:\n",
 		help_full: [
-			"Команда help() с указанным в скобках и в кавычка названием другой команды выводит справку по этой команде",
+			"Команда help() применённая к другой команде выводит справку по ней",
 			"Примеры:",
-			"\thelp(\"list\")",
-			"\thelp(\"to_left\"",
-			"\thelp(\"help\")"],
+			"\thelp.list()",
+			"\tlist.help()",
+			"\thelp.to_left()",
+			"\thelp.help()"],
 
 		list: "вывести список задач (№, название)",
 		list_full: ["Команда list() выводит список имеющихся задач. Вызывается без параметров.",
@@ -1186,10 +1172,10 @@ var infrastructure = (function(){
 			"Примеры:",
 			"\tstate() \t -> \t [волк, капуста] ~~~~~~~~~~~~~~ [] -- [коза, лодочник]"],
 
-		to_left: "to_left('volk, koza, kapusta') - отправить перечисленных участников на левый берег",
-		to_left_full: "to_left('volk, koza, kapusta') - отправить перечисленных участников на левый берег",
-		to_right: "to_right('chemodan-1, man-1') - отправить перечисленных участников на правый берег",
-		to_right_full: "to_right('volk, koza, kapusta') - отправить перечисленных участников на правый берег"
+		to_left: "to_left(\"волк, коза, капуста\") - отправить перечисленных участников на левый берег",
+		to_left_full: "to_left(\"волк, коза, капуста\") - отправить перечисленных участников на левый берег",
+		to_right: "to_right(\"чемодан-1, чел-1\") - отправить перечисленных участников на правый берег",
+		to_right_full: "to_right(\"волк, коза, капуста\") - отправить перечисленных участников на правый берег"
 	}
 
 
@@ -1215,10 +1201,10 @@ var infrastructure = (function(){
 			{
 				title : "Волк, коза и капуста",
 				description : ["Классическая задача. Если лодочник уплыл, то волк ест козу, или коза ест капусту. В лодку помещается не более двух персонажей, а грести умеет только лодочник. Как всем переправиться?",
-					"Командой state() вы отображаете текущее состояние.",
-					"Командами to_right(), to_left() возите героев туда-сюда",
-					"Пример:",
-					"\tto_right(\"лодочник, волк\")"],
+					"\n\tКомандой state() вы отображаете текущее состояние.",
+					"\tКомандами to_right(), to_left() возите героев туда-сюда",
+					"\tПример:",
+					"\t\tto_right(\"лодочник, волк\")"],
 				config : (function volk_koza_kapusta(){
 					var muzhik = ["лодочник"]
 					var volk = ["волк"]
@@ -1240,10 +1226,10 @@ var infrastructure = (function(){
 			},{
 				title : "Стиральная машина",
 				description : ["Три человека со стиральной машиной хотят переправиться через реку. Катер вмещает либо двух человек и стиральную машину, либо трёх человек. Беда в том, что стиральная машина тяжёлая, поэтому погрузить её в катер или вытащить из него можно только втроём. Смогут ли они переправиться?",
-					"Командой state() вы отображаете текущее состояние.",
-					"Командами to_right(), to_left() возите героев туда-сюда",
-					"Пример:",
-					"\tto_right(\"чел, чел, стиралка\")"],
+					"\n\tКомандой state() вы отображаете текущее состояние.",
+					"\tКомандами to_right(), to_left() возите героев туда-сюда",
+					"\tПример:",
+					"\t\tto_right(\"чел, чел, стиралка\")"],
 				config : (function stiralnaya_mashina(){
 					var muzhik = ["чел"]
 					var stiralka = ["стиралка"]
@@ -1252,6 +1238,45 @@ var infrastructure = (function(){
 						boat_capacity: 3,
 						boat_rules: necessary(muzhik),
 						transaction_rules: {"стиралка": needs_at_least(stiralka, muzhik, 3)}
+					}
+				})()
+			},{
+				title : "Три жулика и шесть чемоданов",
+				description : ["Три жулика, каждый с двумя чемоданами, находятся на одном берегу реки, через которую они хотят переправиться. Есть трёхместная лодка, каждое место в ней может быть занято либо человеком, либо чемоданом. Никто из жуликов не доверит свой чемодан спутникам в своё отсутствие, но готов оставить чимоданы на безлюдном берегу. Смогут ли они переправиться?",
+					"\n\tКомандой state() вы отображаете текущее состояние.",
+					"\tКомандами to_right(), to_left() возите героев туда-сюда",
+					"\tж - жулик, ч - чемодан.",
+					"\tПример:",
+					"\t\tto_right(\"ж-1, ж-2, ч-1\")"],
+				config : (function tri_zhulika(){
+					var zhul = function(index){return ["ж", index]}
+					var chem = function(index){return ["ч", index]}
+					return {
+						left: [zhul(1), chem(1), chem(1),
+							zhul(2), chem(2), chem(2),
+							zhul(3), chem(3), chem(3)],
+						boat_capacity: 3,
+						rules: or(needs(["ч", "i"], ["ж", "i"]), afraids(["ч", "i"], ["ж", "j"])),
+						boat_rules: necessary(["ж"])
+					}
+				})()
+			},{
+				title : "Две семьи (a)",
+				description : ["Две семьи (в каждой папа, мама и дочь) хотят переправиться через реку. Есть двухместная лодка. Грести могут только мужчины. Дочери могут быть на берегу или в лодке только вместе с кем-нибудь из своих родителей. Как им всем переправиться на другой берег?",
+					"\n\tКомандой state() вы отображаете текущее состояние.",
+					"\tКомандами to_right(), to_left() возите героев туда-сюда",
+					"\tf - папа, m - мама, d - дочь",
+					"\tПример:",
+					"\t\tto_right(\"p-1, d-1\")"],
+				config : (function dve_semyi_a(){
+					//var zhul = function(index){return ["ж", index]}
+					//var chem = function(index){return ["ч", index]}
+					return {
+						left: [["f", 1], ["m", 1], ["d", 1],
+							["f", 2], ["m", 2], ["d", 2]],
+						boat_capacity: 2,
+						rules: or(needs(["d", "i"], ["f", "i"]), needs(["d", "i"], ["m", "i"])),
+						boat_rules: necessary(["f"])
 					}
 				})()
 			}
