@@ -18,12 +18,46 @@ var bind = Function.prototype.bind
 
 var test_count = 0
 
+var log = function (arg) {
+    var toPrint = [];
+    for (var i = 0; i < arguments.length; ++i) {
+        toPrint.push(arguments[i]);
+    }
+
+    function getErrorObject(){
+        try { throw Error('') } catch(err) { return err; }
+    }
+
+    var err = getErrorObject(),
+        caller;
+
+    caller = err.stack.split("\n")[5];
+
+    var index = caller.indexOf('.js');
+
+    var str = caller.substr(0, index + 3);
+    index = str.lastIndexOf('/');
+    str = str.substr(index + 1, str.length);
+
+    var info = "\t\tFile: " + str;
+
+    index = caller.lastIndexOf(':');
+    str = caller.substr(0, index);
+    index = str.lastIndexOf(':');
+    str = str.substr(index + 1, str.length);
+    info += " Line: " + str;
+    toPrint.push(info);
+
+    console.log.apply(console, toPrint);
+}
+
+
 var assert = function(bool, message)
 {
 	if(!bool)
 	{
 		message = typeof message == "function" ? message() : message
-		console.log("Test #" + test_count + " failed: ", message)
+		log("Test #" + test_count + " failed: ", message)
 	}
 	++test_count
 }
@@ -39,6 +73,25 @@ var map = function(arr, fun)
 	return result
 }
 
+var every = function(arr, fun)
+{
+	return arr.every(fun)
+}
+
+var exists = function(arr, fun)
+{
+	return !arr.every(not(fun))
+}
+
+var count = function(arr, fun)
+{
+	var sum = 0
+	arr.forEach(function(elem)
+		{
+			sum += Number(Boolean(fun(elem)))
+		})
+	return sum
+}
 
 var true_fun = function(){return true}
 
@@ -189,6 +242,15 @@ var has_at_least_numbers_of_objects = function(arr, obj, num)
 	assert(has_at_least_numbers_of_objects(one, ["korova"], 0), "There are not korova")
 	assert(!has_at_least_numbers_of_objects(one, ["volk"], 3), "There are 2 volks")
 })()
+
+var pair_corresponds = function(obj1, obj2, mask1, mask2)
+{
+	if(!are_equal_types(obj1, mask1) || !are_equal_types(obj2, mask2))
+		return false
+
+	return !is_family_defined(mask1) || !is_family_defined(mask2)
+		|| !(are_equal_families(obj1, obj2) ^ are_equal_families(mask1, mask2))
+}
 
 var has_pair_of_checked_families = function(arr, first, second, family_checker)
 {
@@ -415,44 +477,77 @@ var has_object_without_pair = function(arr, first, second)
 })()
 
 
-var afraids = function(first, second)
+var wrap_rule = function(first, fun)
 {
-	return function(arr)
-	{
-		return !has_pair(arr, first, second)
+	return function(obj, arr) {
+		return !are_equal_types(obj, first) || fun(obj, arr)
 	}
 }
 
+var afraids = function(first, second)
+{
+	return wrap_rule(first, function(obj, arr)
+	{
+		return every(arr, function(elem)
+			{
+				return !pair_corresponds(obj, elem, first, second)
+			})
+	})
+}
 var disabled = afraids
 
 var needs = function(first, second)
 {
-	return function(arr)
+	return wrap_rule(first, function(obj, arr)
 	{
-		return !has_object_without_pair(arr, first, second)
-	}
+		return exists(arr, function(elem)
+			{
+				return pair_corresponds(obj, elem, first, second)
+			})
+	})
 }
 
 var needs_at_least = function(first, second, number)
 {
-	return function(arr)
+	return wrap_rule(first, function(obj, arr)
 	{
-		return !has_object(arr, first) || has_at_least_numbers_of_objects(arr, second, number)
-	}
+		return number <= count(arr, function(elem)
+			{
+				return pair_corresponds(obj, elem, first, second)
+			})
+	})
 }
 
-var necessary = function(obj)
+var necessary = function(first)
 {
 	return function(arr)
 	{
-		return has_object(arr, obj)
+		return has_object(arr, first)
 	}
 }
 
-var required = function(first, second)
+var necessary_at_least = function(first, number)
 {
-	return and(needs(first, second), first_need_second(second, first))
+	return function(arr)
+	{
+		return has_at_least_numbers_of_objects(arr, first, number)
+	}
+}
+
+var items_rule = function(rules)
+{
+	return function(arr) {
+		return every(arr, function(elem, i){
+			return rules(elem, arr)
+		})
+	}
 };
+
+(function test_or_for_needs(){
+	var arr = [["f", 1], ["d", 1], ["m", 2], ["d", 2]]
+	var rule = items_rule(or(needs(["d", "i"], ["f", "i"]), needs(["d", "i"], ["m", "i"])))
+	assert(rule(arr), "Must be true because d-1 has f-1 and d-2 has m-2")
+})();
 
 (function test_rules_functions(){
 	var man = ["man"]
@@ -465,8 +560,8 @@ var required = function(first, second)
 	var man_koza = needs(koza, man)
 	var man_kapusta = needs(kapusta, man)
 
-	var rule1 = and(or(man_koza, koza_volk), or(man_kapusta, koza_kapusta))
-	var rule2 = or(necessary(man), and(koza_volk, koza_kapusta))
+	var rule1 = items_rule(and(or(man_koza, koza_volk), or(man_kapusta, koza_kapusta)))
+	var rule2 = or(necessary(man), items_rule(and(koza_volk, koza_kapusta)))
 
 	var arrays = [
 		[true, [man, volk, koza, kapusta], "That must be OK! man is there"],
@@ -500,13 +595,25 @@ var required = function(first, second)
 })();
 
 (function test_needs_at_least(){
-	var rule = needs_at_least(["stiralka"], ["muzhik"], 3)
+	var rule = items_rule(needs_at_least(["stiralka"], ["muzhik"], 3))
 	assert(!rule([["stiralka"]]), "needs 3 has 0")
 	assert(!rule([["stiralka"], ["muzhik"]]), "needs 3 has 0")
 	assert(!rule([["stiralka"], ["muzhik"], ["muzhik"]]), "needs 3 has 0")
 	assert(rule([["stiralka"], ["muzhik"], ["muzhik"], ["muzhik"]]), "needs 3 has 3")
 	assert(rule([["stiralka"], ["muzhik"], ["muzhik"], ["muzhik"], ["muzhik"]]), "needs 3 has 4")
-})()
+})();
+
+(function test_needs(){
+	var zhul = function(index){return ["zhul", index]}
+	var chem = function(index){return ["chem", index]}
+	var arr = [chem(1), chem(1),
+			zhul(2), chem(2), chem(2),
+			zhul(3), chem(3), chem(3)]
+
+	var rules = items_rule(or(needs(["chem", "i"], ["zhul", "i"]), afraids(["chem", "i"], ["zhul", "j"])))
+
+	assert(!rules(arr), "There are chem-1 without zhul-1")
+})();
 
 
 
@@ -630,7 +737,7 @@ var game_contructors = (function()
 
 	(function test_move(){
 		var muzh1 = ["muzhik"]
-		var transaction_rules = {stiralka: needs_at_least(["stiralka"], ["muzhik"], 3)}
+		var transaction_rules = {stiralka: necessary_at_least(["muzhik"], 3)}
 
 		var from1 = [["muzhik"], ["muzhik"], ["muzhik"], ["stiralka"]]
 		var to1 = []
@@ -744,7 +851,7 @@ var game_contructors = (function()
 			left: [["muzhik"], ["muzhik"], ["muzhik"], ["stiralka"]],
 			boat_capacity: 3,
 			boat_rules: necessary(["muzhik"]),
-			transaction_rules: {stiralka: needs_at_least(["stiralka"], ["muzhik"], 3)}
+			transaction_rules: {stiralka: necessary_at_least(["muzhik"], 3)}
 		});
 
 		assert(game.to_right([["muzhik"], ["muzhik"], ["stiralka"]]), "correct: [muzhik] --- [stiralka]-[muzhik, muzhik]")
@@ -771,7 +878,7 @@ var game_contructors = (function()
 		var game = new GameRaw({
 			left: [volk, koza, kapusta, muzhik],
 			boat_capacity: 2,
-			rules: or(necessary(muzhik), and(koza_volk, koza_kapusta)),
+			rules: or(necessary(muzhik), items_rule(and(koza_volk, koza_kapusta))),
 			boat_rules: necessary(muzhik)
 		});
 
@@ -907,7 +1014,7 @@ var game_contructors = (function()
 			left: [["muzhik", 1], ["muzhik", 2], ["muzhik"], ["stiralka"]],
 			boat_capacity: 3,
 			boat_rules: necessary(["muzhik"]),
-			transaction_rules: {stiralka: needs_at_least(["stiralka"], ["muzhik"], 3)}
+			transaction_rules: {stiralka: necessary_at_least(["muzhik"], 3)}
 		});
 		var game = new Game(game_raw)
 		var present =  curry(present_game_as_string, game_raw);
@@ -1219,7 +1326,7 @@ var infrastructure = (function(){
 					return {
 						left: [volk, koza, kapusta, muzhik],
 						boat_capacity: 2,
-						rules: or(necessary(muzhik), and(koza_volk, koza_kapusta)),
+						rules: or(necessary(muzhik), items_rule(and(koza_volk, koza_kapusta))),
 						boat_rules: necessary(muzhik)
 					}
 				})()
@@ -1237,7 +1344,7 @@ var infrastructure = (function(){
 						left: [muzhik, muzhik, muzhik, stiralka],
 						boat_capacity: 3,
 						boat_rules: necessary(muzhik),
-						transaction_rules: {"стиралка": needs_at_least(stiralka, muzhik, 3)}
+						transaction_rules: {"стиралка": necessary_at_least(muzhik, 3)}
 					}
 				})()
 			},{
@@ -1256,7 +1363,7 @@ var infrastructure = (function(){
 							zhul(2), chem(2), chem(2),
 							zhul(3), chem(3), chem(3)],
 						boat_capacity: 3,
-						rules: or(needs(["ч", "i"], ["ж", "i"]), afraids(["ч", "i"], ["ж", "j"])),
+						rules: items_rule(or(needs(["ч", "i"], ["ж", "i"]), afraids(["ч", "i"], ["ж", "j"]))),
 						boat_rules: necessary(["ж"])
 					}
 				})()
@@ -1275,7 +1382,7 @@ var infrastructure = (function(){
 						left: [["f", 1], ["m", 1], ["d", 1],
 							["f", 2], ["m", 2], ["d", 2]],
 						boat_capacity: 2,
-						rules: or(needs(["d", "i"], ["f", "i"]), needs(["d", "i"], ["m", "i"])),
+						rules: items_rule(or(needs(["d", "i"], ["f", "i"]), needs(["d", "i"], ["m", "i"]))),
 						boat_rules: necessary(["f"])
 					}
 				})()
