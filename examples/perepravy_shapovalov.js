@@ -1416,7 +1416,7 @@ var infrastructure = (function(){
 					"\tКомандами to_right(), to_left() возите героев туда-сюда",
 					"\tf - папа, m - мама, d - дочь",
 					"\tПример:",
-					"\t\tto_right(\"p-1, d-1\")"],
+					"\t\tto_right(\"f-1, d-1\")"],
 				config : (function dve_semyi_a(){
 					//var zhul = function(index){return ["ж", index]}
 					//var chem = function(index){return ["ч", index]}
@@ -1435,7 +1435,7 @@ var infrastructure = (function(){
 					"\tКомандами to_right(), to_left() возите героев туда-сюда",
 					"\tf - папа, m - мама, d - дочь",
 					"\tПример:",
-					"\t\tto_right(\"p-1, d-1\")"],
+					"\t\tto_right(\"f-1, d-1\")"],
 				config : (function dve_semyi_a(){
 					return {
 						left: [["f", 1], ["m", 1], ["d", 1],
@@ -1453,6 +1453,32 @@ var infrastructure = (function(){
 								)
 							)),
 						boat_rules: necessary(["f"])
+					}
+				})()
+			},{
+				title : "Две семьи с сыновьями",
+				description : ["Две семьи (в каждой муж, жена и сын) хотят переправиться через реку. Есть двухместная лодка. Грести может всего один человек - один из мужей. Сыновья могут быть на берегу только с кем-нибудь из взрослых. Женщины боятся быть на берегу, если там нет лиц мужского пола. Как им всем переправиться на другой берег?",
+					"\n\tКомандой state() вы отображаете текущее состояние.",
+					"\tКомандами to_right(), to_left() возите героев туда-сюда",
+					"\tf - папа, m - мама, s - сын",
+					"\tПример:",
+					"\t\tto_right(\"f-1, s-1\")"],
+				config : (function dve_semyi_a(){
+					return {
+						left: [["f", 1], ["m", 1], ["s", 1],
+							["f", 2], ["m", 2], ["s", 2]],
+						boat_capacity: 2,
+						rules: items_rule(and(
+								or(
+									needs(["s"], ["f"]),
+									needs(["s"], ["m"])
+								),
+								or(
+									needs(["m"], ["f"]),
+									needs(["m"], ["s"])
+								)
+							)),
+						boat_rules: necessary(["f", "1"])
 					}
 				})()
 			}
