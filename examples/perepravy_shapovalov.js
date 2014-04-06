@@ -95,11 +95,14 @@ var count = function(arr, fun)
 
 var true_fun = function(){return true}
 
-var and = function(fun1, fun2)
+var and = function and(fun1, fun2)
 {
+	var rest_of_args = slice.call(arguments, 1)
 	return function()
 	{
-		return fun1.apply(null, arguments) && fun2.apply(null, arguments)
+		return fun1.apply(null, arguments)
+			&& (rest_of_args.length <= 0
+				|| and.apply(null, rest_of_args).apply(null, arguments))
 	}
 };
 
@@ -112,13 +115,21 @@ var and = function(fun1, fun2)
 	assert(more_less(6), "3 < 6 < 7")
 	assert(!more_less(3), "3 < 3 < 7!!!")
 	assert(!more_less(7), "3 < 7 < 7!!!")
+
+	var odd = function(x){return x % 2 == 1}
+	var more_less_odd = and(more3, less7, odd)
+	assert(more_less_odd(5), "5 is odd")
+	assert(!more_less_odd(4), "4 is even")
 })()
 
-var or = function(fun1, fun2)
+var or = function or(fun1, fun2) // arguments <- funs 
 {
+	var rest_of_args = slice.call(arguments, 1)
 	return function()
 	{
-		return fun1.apply(null, arguments) || fun2.apply(null, arguments)
+		return fun1.apply(null, arguments)
+			|| (rest_of_args.length > 0
+				&& or.apply(null, rest_of_args).apply(null, arguments))
 	}
 };
 
@@ -131,6 +142,11 @@ var or = function(fun1, fun2)
 	assert(!more_less(6), "3 < 6 < 7")
 	assert(more_less(3), "3 < 3 < 7!!!")
 	assert(more_less(7), "3 < 7 < 7!!!")
+
+	var odd = function(x){return x % 2 == 1}
+	var more_less_odd = or(more6, less4, odd)
+	assert(more_less_odd(5), "5 is odd")
+	assert(!more_less_odd(4), "4 is even")
 })()
 
 var not = function(fun)
@@ -245,12 +261,38 @@ var has_at_least_numbers_of_objects = function(arr, obj, num)
 
 var pair_corresponds = function(obj1, obj2, mask1, mask2)
 {
-	if(!are_equal_types(obj1, mask1) || !are_equal_types(obj2, mask2))
+	if(obj1 === obj2
+		|| !are_equal_types(obj1, mask1)
+		|| !are_equal_types(obj2, mask2))
+	{
 		return false
+	}
 
 	return !is_family_defined(mask1) || !is_family_defined(mask2)
 		|| !(are_equal_families(obj1, obj2) ^ are_equal_families(mask1, mask2))
-}
+};
+
+(function test_pair_corresponds(){
+	var f = function(family){return ["f",family]}
+	var m = function(family){return ["m",family]}
+
+	var f_i = f("i")
+	var f_j = f("j")
+	var m_i = m("i")
+	var m_j = m("j")
+
+	var f_1 = f(1)
+	var f_2 = f(2)
+	var f_11 = f(1)
+	var m_1 = m(1)
+	var m_2 = m(2)
+	assert(pair_corresponds(f_1, f_2, f_i, f_j), "corresponds")
+	assert(pair_corresponds(f_1, f_11, f_i, f_i), "corresponds")
+	assert(!pair_corresponds(f_1, f_1, f_i, f_i), "doesn't correspond. 'f' is the same")
+	assert(!pair_corresponds(m_1, m_2, f_i, f_j), "doesn't correspond")
+	assert(pair_corresponds(f_1, m_2, f_i, m_j), "corresponds")
+	assert(pair_corresponds(f_1, m_1, f_i, m_i), "corresponds")
+})()
 
 var has_pair_of_checked_families = function(arr, first, second, family_checker)
 {
@@ -1383,6 +1425,33 @@ var infrastructure = (function(){
 							["f", 2], ["m", 2], ["d", 2]],
 						boat_capacity: 2,
 						rules: items_rule(or(needs(["d", "i"], ["f", "i"]), needs(["d", "i"], ["m", "i"]))),
+						boat_rules: necessary(["f"])
+					}
+				})()
+			},{
+				title : "Две семьи (б)",
+				description : ["Задача почти как предыдущая с одним дополнением.\nДве семьи (в каждой папа, мама и дочь) хотят переправиться через реку. Есть двухместная лодка. Грести могут только мужчины. Дочери могут быть на берегу или в лодке только вместе с кем-нибудь из своих родителей, а никакую из женщин нельзя оставлять на берегу одну. Как им всем переправиться на другой берег?",
+					"\n\tКомандой state() вы отображаете текущее состояние.",
+					"\tКомандами to_right(), to_left() возите героев туда-сюда",
+					"\tf - папа, m - мама, d - дочь",
+					"\tПример:",
+					"\t\tto_right(\"p-1, d-1\")"],
+				config : (function dve_semyi_a(){
+					return {
+						left: [["f", 1], ["m", 1], ["d", 1],
+							["f", 2], ["m", 2], ["d", 2]],
+						boat_capacity: 2,
+						rules: items_rule(and(
+								or(
+									needs(["d", "i"], ["f", "i"]),
+									needs(["d", "i"], ["m", "i"])
+								),
+								or(
+									needs(["m"], ["m"]), 
+									needs(["m"], ["d"]), 
+									needs(["m"], ["f"])
+								)
+							)),
 						boat_rules: necessary(["f"])
 					}
 				})()
