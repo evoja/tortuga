@@ -846,7 +846,9 @@ var game_contructors = (function()
 		this.config = {
 			left_rules: cfg.left_rules || cfg.rules || true_fun,
 			right_rules: cfg.right_rules || cfg.rules || true_fun,
-			boat_rules: cfg.boat_rules || cfg.rules || true_fun,
+			boat_rules: cfg.rules && cfg.boat_rules
+				? and(cfg.boat_rules, cfg.rules)
+				: cfg.boat_rules || cfg.rules || true_fun,
 			boat_moving_rules: cfg.boat_moving_rules || not_empty,
 			boat_capacity: cfg.boat_capacity || 0,
 			types_weights: cfg.types_weights || [],
@@ -1453,7 +1455,7 @@ var infrastructure = (function(){
 					"\tf - папа, m - мама, d - дочь",
 					"\tПример:",
 					"\t\tto_right(\"f-1, d-1\")"],
-				config : (function dve_semyi_a(){
+				config : (function dve_semyi_b(){
 					return {
 						left: [["f", 1], ["m", 1], ["d", 1],
 							["f", 2], ["m", 2], ["d", 2]],
@@ -1480,7 +1482,7 @@ var infrastructure = (function(){
 					"\tf - папа, m - мама, s - сын",
 					"\tПример:",
 					"\t\tto_right(\"f-1, s-1\")"],
-				config : (function dve_semyi_a(){
+				config : (function dve_semyi_s(){
 					return {
 						left: [["f", 1], ["m", 1], ["s", 1],
 							["f", 2], ["m", 2], ["s", 2]],
@@ -1506,7 +1508,7 @@ var infrastructure = (function(){
 					"\tb - богатырь, s - Соня",
 					"\tПример:",
 					"\t\tto_right(\"b1, s\")"],
-				config : (function dve_semyi_a(){
+				config : (function tsarevna_sonya(){
 					var s = ["s"]
 					var b1 = ["b1"], b2 = ["b2"], b3 = ["b3"],
 						b4 = ["b4"],
@@ -1537,6 +1539,53 @@ var infrastructure = (function(){
 								afraids(b5, b7)
 							))
 						)
+					}
+				})()
+			}, {
+				title : "Три вора",
+				description : ["Три вора - Камнев, Ножницын и Бумагин, каждый с несколькими баулами, - хотят переправиться через реку. Известно, что Камнев обворует любой баул Ножницына, если баул останется без присмотра кого-нибудь из остальных. Так же Ножницын обворует баул Бумагина, а Бумагин - баул Камнева. Есть трёхместная лодка, место занимает человек или баул. Грести может только Камнев. Как им всем переправиться и перевезти баулы, чтобы никто никого не обворовал?\n(На пустынном берегу баулы в безопасности)",
+					"\n\tКомандой state() вы отображаете текущее состояние.",
+					"\tКомандами to_right(), to_left() возите героев туда-сюда",
+					"\tK - Камнев, N - Ножницын, B - Бумагин",
+					"\tbk - баул Камнева, bk - баул Ножницына, bb - баул Бумагина",
+					"\tПример:",
+					"\t\tto_right(\"bk, K\")"],
+				config : (function tri_vora(){
+					
+					var b = function(type){return function(){return [type]}}
+					var bk = b("bk")
+					var bn = b("bn")
+					var bb = b("bb")
+					var vk = b("K")()
+					var vn = b("N")()
+					var vb = b("B")()
+					var bkk = bk()
+					var bnn = bn()
+					var bbb = bb()
+
+					return {
+						left: [vk, bk(), bk(),
+							vn, bn(), bn(), bn(),
+							vb, bb(), bb(), bb(), bb()],
+						boat_capacity: 3,
+						rules: items_rule(and(
+								or(
+									needs(bkk, vk),
+									needs(bkk, vn),
+									afraids(bkk, vb)
+									),
+								or(
+									needs(bnn, vn),
+									needs(bnn, vb),
+									afraids(bnn, vk)
+									),
+								or(
+									needs(bbb, vb),
+									needs(bbb, vk),
+									afraids(bbb, vn)
+									)
+							)),
+						boat_rules: necessary(vk)
 					}
 				})()
 			}
