@@ -773,19 +773,22 @@ var game_contructors = (function()
 		var real_what = []
 		var all = from.concat(to)
 
-		var what_len = what.length
-		for(var i = 0; i < what_len; ++i)
+		if(typeof transaction_rules != "function" || transaction_rules(all))
 		{
-			if(!what[i])
-				continue
-
-			var j = find_obj_in_arr(rest, what[i])
-
-			if(j != -1 && get_transaction_rule(transaction_rules, what[i])(all))
+			var what_len = what.length
+			for(var i = 0; i < what_len; ++i)
 			{
-				var moved_obj = rest.splice(j, 1)[0]
-				real_what.push(moved_obj)
-				target.push(moved_obj)
+				if(!what[i])
+					continue
+
+				var j = find_obj_in_arr(rest, what[i])
+
+				if(j != -1 && get_transaction_rule(transaction_rules, what[i])(all))
+				{
+					var moved_obj = rest.splice(j, 1)[0]
+					real_what.push(moved_obj)
+					target.push(moved_obj)
+				}
 			}
 		}
 
@@ -820,11 +823,12 @@ var game_contructors = (function()
 		var config = game.config
 		
 		var boat_result = move(config.transaction_rules, from, game.boat, what)
+		var boat_weight = get_weight(config.types_weights, boat_result.to)
 		if(game.boat_position != from_boat_position
 			|| !from_rules(boat_result.from)
 			|| !config.boat_rules(boat_result.to)
 			|| !config.boat_moving_rules(boat_result.to)
-			|| get_weight(config.types_weights, boat_result.to) > config.boat_capacity)
+			|| boat_weight > config.boat_capacity)
 		{
 			return false;
 		}
@@ -846,7 +850,9 @@ var game_contructors = (function()
 		return {
 			transaction_what: boat_result.to,
 			transaction_from: boat_result.from,
-			transaction_to : transaction_to
+			transaction_to : transaction_to,
+			from_boat_position : from_boat_position,
+			weight_what : boat_weight
 		}
 	}
 
@@ -905,7 +911,7 @@ var game_contructors = (function()
 			boat_rules: cfg.boat_rules || cfg.rules || true_fun,
 			boat_moving_rules: cfg.boat_moving_rules || not_empty,
 			boat_capacity: cfg.boat_capacity || 0,
-			types_weights: cfg.types_weights || [],
+			types_weights: cfg.types_weights || {},
 			transaction_rules: cfg.transaction_rules || true_fun,
 			win_rules: cfg.win_rules || everybody_on_the_right,
 			loose_rules : cfg.loose_rules || not(true_fun),
@@ -1744,16 +1750,16 @@ var infrastructure = (function(){
 				description : ["Председатель жюри на своей машине хочет за три рейса перевезти 9 членов жюри с вокзала в лагерь, где проходит турнир. В машине 4 места для пассажиров, дорога в один конец занимает полчаса. Если в любом месте в лагере, в машине или на вокзале оказывается группа из двух, трёх или четырёх человек, она за полчаса придумывает, соответственно 3, 4 или 5 задач. Группы другого размера неработоспособны (не придумывают ничего), председатель за рулём входит в группу в машине, но если пассажиров четверо, то он им придумывать не мешает. Какое наибольшее число задач может быть придумано жюри и председателем за эти 2,5 часа?\nБольшие группы находящиеся на одном месте, на части делить нальзя, больше членов жюри нет).",
 					"\n\tКомандой state() вы отображаете текущее состояние.",
 					"\tКомандами move(), to_right(), to_left() возите героев туда-сюда",
-					"\tJ - председатель жюри, j - член жюри.",
+					"\tP - председатель жюри, j - член жюри.",
 					"\tПример:",
-					"\t\tmove(\"J, j, j\")"
+					"\t\tmove(\"P, j, j\")"
 					],
 
-				config : function jury()
+				config : (function jury()
 				{
 					var b = function(type){return function(){return [type]}}
 					var j = b("j") // генератор членов
-					var J = ["J"] // Председатель
+					var J = ["P"] // Председатель
 					var transaction_time = .5
 					var time_limit = 2.5
 
@@ -1794,10 +1800,84 @@ var infrastructure = (function(){
 						},
 						win_rules: function(game)
 						{
-							return (game.jury_spent_time >= 2.5) && "Время вышло!"
+							return (game.jury_spent_time >= time_limit) && "Время вышло!"
 						}
 					}
-				}
+				})()
+			}, {
+				title : "Мебель",
+				description : ["Трём братьям надо перевезти с одной квартиры на другую рояль весом 250 кг, диван весом 100 кг и более 100 коробок по 50 кг. Был нанят небольшой фургон с шофёром на 5 рейсов туда (и 4 обратно), который может за раз перевезти 500 кг груза и одного пассажира. Погрузить или выгрузить диван братья могут вдвоём, рояль - втроём, с коробками любой из братьев справляется в одиночку. Надо перевезти всё мебель и как можно больше коробок. Какое наибольшее число коробок удастся перевезти? (Шофёр не грузит, другого транспорта и помощников нет, пассажиров вместо груза везти нельзя",
+					"\n\tКомандой state() вы отображаете текущее состояние.",
+					"\tКомандами move(), to_right(), to_left() возите героев туда-сюда",
+					"\tS - шофёр, B - брат, r - рояль, d - диван.",
+					"\tКоробки не указаны, они грузятся и учитываются атоматически",
+					"\tПример:",
+					"\t\tmove(\"S, B, r\")"
+					],
+
+				config : (function divan_i_royal()
+				{
+					var g = function(type){return function(){return [type]}}
+					var b = g("B") // генератор братьев
+					var S = ["S"] // Шофёр
+					var d = ["d"] // диван
+					var r = ["r"] // рояль
+					var bb = b() // брат для правил
+					var steps_limit = 9
+					var korob_weight = 50
+					var boat_capacity = 500
+
+					return {
+						left: [S, b(), b(), b(), d, r],
+						boat_capacity: boat_capacity,
+						boat_moving_rules: and(
+								necessary(S),
+								items_rule(afraids(bb, bb))
+							),
+						transaction_rules: {
+							d: necessary_at_least(bb, 2),
+							r: necessary_at_least(bb, 3)
+						},
+						types_weights: {
+							B: 0,
+							S: 0,
+							r: 250,
+							d: 100
+						},
+
+						score_counter: function(result, game)
+						{
+							var steps = game.divan_i_royal_steps || 0
+							if(steps >= steps_limit)
+								return;
+
+							game.divan_i_royal_steps = steps + 1
+							var what = result.transaction_what
+							var to = result.transaction_to
+							var from = result.transaction_from
+							var is_forward = result.from_boat_position == POS_LEFT
+							var weight_what = result.weight_what
+
+							var can_move_korobs = has_object(what, bb)
+								|| has_object(from, bb) && has_object(to, bb)
+
+							if(is_forward && can_move_korobs)
+							{
+								game.score += (boat_capacity - weight_what) / 50
+							}
+						},
+						print_score: function(game)
+						{
+							game.print_fun("Коробок: " + game.score
+								+ ", рейсов: " + game.divan_i_royal_steps
+								+ " из " + steps_limit)
+						},
+						win_rules: function(game)
+						{
+							return (game.divan_i_royal_steps >= steps_limit) && "Время аренды вышло!"
+						}
+					}
+				})()
 			}
 		]
 	}
