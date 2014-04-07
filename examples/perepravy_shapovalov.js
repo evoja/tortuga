@@ -1015,15 +1015,6 @@ var infrastructure = (function(){
 		print()
 	}
 
-	var print_commands = function(obj)
-	{
-		print(map(obj, function(elem, i)
-			{
-				return i + "\t\t" + elem.help.description
-			}
-		))
-	}
-
 	var lesson = {
 		description : "Example lesson",
 		problems : [
@@ -1054,6 +1045,16 @@ var infrastructure = (function(){
 
 	var current_problem_index;
 	var current_game;
+	var messages = {}
+
+	var print_commands = function(obj)
+	{
+		print(map(obj, function(elem, i)
+			{
+				return i + "\t\t" + messages[i]
+			}
+		))
+	}
 
 	var select_problem = function(index)
 	{
@@ -1072,12 +1073,12 @@ var infrastructure = (function(){
 		{
 			if(!command)
 			{
-				print(commands.help.help.main)
+				print(messages.help_main)
 				print_commands(commands)
 			}
 			else
 			{
-				print(commands[command].help.full_description)
+				print(messages[command + "_full"])
 			}
 		},
 
@@ -1162,20 +1163,15 @@ var infrastructure = (function(){
 	}
 
 
-	var init_messages = function(messages) {
-
-
+	var init_messages = function(msgs) {
+		messages = msgs
 		for(var i in commands)
 		{
 			if(commands.hasOwnProperty(i))
 			{
 				commands.help[i] = commands[i].help = curry(commands.help, i)
-				commands[i].help.description = messages[i]
-				commands[i].help.full_description = messages[i + "_full"]
 			}
 		}
-
-		commands.help.help.main = messages.help_main
 	}
 
 	var init_lesson = function(lesson1)
