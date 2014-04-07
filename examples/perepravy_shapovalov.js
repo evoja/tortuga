@@ -813,23 +813,24 @@ var game_contructors = (function()
 		assert(result2.to.length == 2, "muzhik, korova are in to")
 	})()
 
-	var do_transaction = function(game, from, to, what,
+	var move_from_side_to_side = function(game, from, to, what,
 		from_boat_position, to_boat_position,
 		from_rules, to_rules)
 	{
 		var config = game.config
 		
-		var result = move(config.transaction_rules, from, game.boat, what)
+		var boat_result = move(config.transaction_rules, from, game.boat, what)
 		if(game.boat_position != from_boat_position
-			|| !from_rules(result.from)
-			|| !config.boat_rules(result.to)
-			|| !config.boat_moving_rules(result.to)
-			|| get_weight(config.types_weights, result.to) > config.boat_capacity)
+			|| !from_rules(boat_result.from)
+			|| !config.boat_rules(boat_result.to)
+			|| !config.boat_moving_rules(boat_result.to)
+			|| get_weight(config.types_weights, boat_result.to) > config.boat_capacity)
 		{
 			return false;
 		}
 
-		var to_result = move(config.transaction_rules, result.to, to, result.to)
+		var transaction_to = to.slice()
+		var to_result = move(config.transaction_rules, boat_result.to, to, boat_result.to)
 		var to_all = to_result.from.concat(to_result.to)
 		
 		if(!to_rules(to_all))
@@ -837,12 +838,39 @@ var game_contructors = (function()
 			return false;
 		}
 
-		game[from_boat_position] = result.from
+		game[from_boat_position] = boat_result.from
 		game.boat = to_result.from
 		game[to_boat_position] = to_result.to
 		game.boat_position = to_boat_position
 
-		return true
+		return {
+			transaction_what: boat_result.to,
+			transaction_from: boat_result.from,
+			transaction_to : transaction_to
+		}
+	}
+
+	var do_transaction = function(game, from, to, what,
+		from_boat_position, to_boat_position,
+		from_rules, to_rules)
+	{
+		var result = move_from_side_to_side.apply(this, arguments)
+
+		game.config.score_counter(result, game)
+
+		var win_result = game.config.win_rules(game)
+		if(win_result)
+		{
+			game.print_fun(win_result === true ? "Победа!" : win_result)
+		}
+		var loose_result = game.config.loose_rules(game)
+		if(loose_result)
+		{
+			game.print_fun(loose_result === true ? "Поражение!" : loose_result)
+		}
+		game.config.print_score(game)
+
+		return Boolean(result)
 	}
 
 	var everybody_on_the_right = function(game)
@@ -850,12 +878,27 @@ var game_contructors = (function()
 		return game.left.length == 0 && game.boat.length == 0
 	}
 
-	var GameRaw = function(cfg)
+	var simple_score_counter = function(result, game)
+	{
+		if(result)
+		{
+			++game.score 
+		}
+	}
+
+	var simple_print_score = function(game)
+	{
+		game.print_fun(game.score + " рейсов")
+	}
+
+	var GameRaw = function(cfg, print_fun)
 	{
 		this.left = cfg.left || []
 		this.right = cfg.right || []
 		this.boat = cfg.boat || []
 		this.boat_position = cfg.boat || select_boat_position(this.left, this.right)
+		this.score = 0
+		this.print_fun = print_fun || function(){}
 		this.config = {
 			left_rules: cfg.left_rules || cfg.rules || true_fun,
 			right_rules: cfg.right_rules || cfg.rules || true_fun,
@@ -864,7 +907,10 @@ var game_contructors = (function()
 			boat_capacity: cfg.boat_capacity || 0,
 			types_weights: cfg.types_weights || [],
 			transaction_rules: cfg.transaction_rules || true_fun,
-			win_rules: cfg.win_rules || everybody_on_the_right
+			win_rules: cfg.win_rules || everybody_on_the_right,
+			loose_rules : cfg.loose_rules || not(true_fun),
+			score_counter : cfg.score_counter || simple_score_counter,
+			print_score : cfg.print_score || simple_print_score
 		}
 	}
 
@@ -1193,7 +1239,7 @@ var infrastructure = (function(){
 		{
 			cfg = cfg.apply(null, slice(arguments, 1))
 		}
-		current_game = new Game(new GameRaw(cfg))
+		current_game = new Game(new GameRaw(cfg, print))
 	}
 	select_problem(0)
 
@@ -1702,17 +1748,54 @@ var infrastructure = (function(){
 					"\tПример:",
 					"\t\tmove(\"J, j, j\")"
 					],
+
 				config : function jury()
 				{
 					var b = function(type){return function(){return [type]}}
 					var j = b("j") // генератор членов
 					var J = ["J"] // Председатель
+					var transaction_time = .5
+					var time_limit = 2.5
 
 					return {
 						left: [J, j(), j(), j(), j(),
 							j(), j(), j(), j(), j()],
 						boat_capacity: 5,
-						boat_moving_rules: necessary(J)
+						boat_moving_rules: necessary(J),
+						score_counter: function(result, game)
+						{
+							var spent_time = game.jury_spent_time || 0
+							if(spent_time >= time_limit)
+								return;
+
+							game.jury_spent_time = spent_time + transaction_time
+							var what = result.transaction_what
+							var to = result.transaction_to
+							var from = result.transaction_from
+
+							var get_score = function(len, is_car)
+							{
+								return len == 2 ? 3
+									: len == 3 ? 4
+									: len == 4 ? 5
+									: len == 5 && is_car ? 5
+									: 0
+							}
+
+							game.score += get_score(what.length, true)
+								+ get_score(to.length, false)
+								+ get_score(from.length, false)
+						},
+						print_score: function(game)
+						{
+							game.print_fun("Задач: " + game.score
+								+ ", время: " + game.jury_spent_time
+								+ " из " + time_limit)
+						},
+						win_rules: function(game)
+						{
+							return (game.jury_spent_time >= 2.5) && "Время вышло!"
+						}
 					}
 				}
 			}
