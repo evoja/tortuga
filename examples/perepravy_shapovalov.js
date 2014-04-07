@@ -101,13 +101,44 @@ var assert = function(success, message)
 	}
 }
 
-var map = function(arr, fun)
+var is_array = function(obj)
+{
+	return typeof obj == "object" && obj.constructor.toString().match("function Array.*")
+}
+
+var map = function(arr, fun, include_external)
 {
 	var result = []
-	var arr_len = arr.length
-	for(var i = 0; i < arr_len; ++i)
+	if(is_array(arr))
 	{
-		result.push(fun(arr[i], i))
+		var arr_len = arr.length
+		for(var i = 0; i < arr_len; ++i)
+		{
+			result.push(fun(arr[i], i))
+		}
+	}
+	else
+	{
+		for(var i in arr)
+		{
+			if(include_external || arr.hasOwnProperty(i))
+			{
+				result.push(fun(arr[i], i))
+			}
+		}
+	}
+	return result
+}
+
+var map_obj = function(arr, fun, include_external)
+{
+	var result = {}
+	for(var i in arr)
+	{
+		if(include_external || arr.hasOwnProperty(i))
+		{
+			result[i] = fun(arr[i], i)
+		}
 	}
 	return result
 }
@@ -924,29 +955,58 @@ var infrastructure = (function(){
 	var Game = game_contructors.Game
 	var GameRaw = game_contructors.GameRaw
 
+	var append_arr_or_str = function(to, what)
+	{
+		if(is_array(what))
+		{
+			what.forEach(function(elem){to.push(elem)})
+		}
+		else
+		{
+			to.push(what)
+		}
+	}
 
-	var print = function(value) 
+	var prepare_print_string = function(value)
 	{
 		var args = slice.call(arguments, 1)
 		var type = typeof value
 		if(type == "function")
 		{
-			value.apply(this, args)
+			return value.apply(this, args)
 		}
 		else if(type == "object" && value.constructor.toString().match("function Array.*"))
 		{
-			value.forEach(function(elem)
-			{
-				print.apply(this, [elem].concat(args))
-			})
+			var output = []
+			map(value, function(elem)
+				{
+					return prepare_print_string.apply(this, [elem].concat(args))
+				}
+			).forEach(curry(append_arr_or_str, output))
+			return output
+		}
+		else if(args.length > 0)
+		{
+			var output = [value]
+			append_arr_or_str(output, prepare_print_string.apply(this, args))
+			return output
 		}
 		else
 		{
-			console.log(value)
-			if(args.length > 0)
-			{
-				print.apply(this, args)
-			}
+			return value
+		}
+	}
+
+	var print = function(value) 
+	{
+		var result = prepare_print_string(value)
+		if(typeof result == "object" && result.constructor.toString().match("function Array.*"))
+		{
+			console.log(result.join("\n"))
+		}
+		else
+		{
+			console.log(result)
 		}
 	}
 
@@ -957,13 +1017,11 @@ var infrastructure = (function(){
 
 	var print_commands = function(obj)
 	{
-		for(var i in obj)
-		{
-			if(obj.hasOwnProperty(i))
+		print(map(obj, function(elem, i)
 			{
-				print(i + "\t\t" + obj[i].help.description)
+				return i + "\t\t" + elem.help.description
 			}
-		}
+		))
 	}
 
 	var lesson = {
@@ -1025,12 +1083,11 @@ var infrastructure = (function(){
 
 		list : function()
 		{
-//			print(lesson.description, "")
 			var len = lesson.problems.length
-			for(var i = 0; i < len; ++i)
-			{
-				print("№ " + i + ".\t" + lesson.problems[i].title)
-			}
+			print(map(lesson.problems, function(elem, i)
+				{
+					return "№ " + i + ".\t" + elem.title
+				}))
 		},
 
 		show : function(index)
@@ -1177,8 +1234,8 @@ var infrastructure = (function(){
 		to_left_full: "to_left(\"волк, коза, капуста\") - отправить перечисленных участников на левый берег",
 		to_right: "to_right(\"чемодан-1, чел-1\") - отправить перечисленных участников на правый берег",
 		to_right_full: "to_right(\"волк, коза, капуста\") - отправить перечисленных участников на правый берег",
-		move: "move(\"волк, коза, капуста\") - переправить перечисленных участников с берега, где стоит лодка на противоположный",
-		move_full: "move(\"волк, коза, капуста\") - переправить перечисленных участников с берега, где стоит лодка на противоположный"
+		move: "move(\"волк, коза, капуста\") - переправить перечисленных участников с берега, где стоит лодка, на противоположный",
+		move_full: "move(\"волк, коза, капуста\") - переправить перечисленных участников с берега, где стоит лодка, на противоположный"
 	}
 
 
