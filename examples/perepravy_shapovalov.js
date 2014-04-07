@@ -1770,6 +1770,9 @@ var infrastructure = (function(){
 						boat_moving_rules: necessary(J),
 						score_counter: function(result, game)
 						{
+							if(result === false)
+								return
+
 							var spent_time = game.jury_spent_time || 0
 							if(spent_time >= time_limit)
 								return;
@@ -1847,6 +1850,9 @@ var infrastructure = (function(){
 
 						score_counter: function(result, game)
 						{
+							if(result === false)
+								return
+							
 							var steps = game.divan_i_royal_steps || 0
 							if(steps >= steps_limit)
 								return;
