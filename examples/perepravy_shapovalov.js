@@ -564,10 +564,12 @@ var needs_at_least = function(first, second, number)
 {
 	return wrap_rule(first, function(obj, arr)
 	{
-		return number <= count(arr, function(elem)
-			{
-				return pair_corresponds(obj, elem, first, second)
-			})
+		return number === undefined
+			? second <= arr.length
+			: number <= count(arr, function(elem)
+				{
+					return pair_corresponds(obj, elem, first, second)
+				})
 	})
 }
 
@@ -1648,21 +1650,10 @@ var infrastructure = (function(){
 
 					var w_alone = and(
 								//Правила, боязни одиночества женщинами
-								or(
-									needs(mm, mm),
-									needs(mm, d),
-									needs(mm, s)
-									),
-								or(
-									needs(d, mm),
-									needs(d, D),
-									needs(d, s)
-									),
-								or(
-									needs(s, mm),
-									needs(s, S),
-									needs(s, d)
-									))
+								needs_at_least(mm, 2),
+								needs_at_least(d, 2),
+								needs_at_least(s, 2)
+							)
 
 					var w_chopornost = and(
 								//Правила боязни чужих мужчин.
