@@ -13,21 +13,51 @@
 var CI_TYPE = 0
 var CI_FAMILY = 1
 
-var slice = function()
-{
-	var this_is_window = this === window
-
-	var target = this_is_window ? arguments[0] : this
-	
-	var args = this_is_window
-		? Array.prototype.slice.call(arguments, 1)
-		: arguments
-
-	return Array.prototype.slice.apply(target, args)
-}
 var bind = Function.prototype.bind
+var slice = Array.prototype.slice
 
-var test_count = 0
+var curry = function(fun /*, arguments */)
+{
+	var scope = this
+	var args1 = slice.call(arguments, 1)
+	return function(/* arguments */)
+	{
+		return fun.apply(scope, args1.concat(slice.apply(arguments)));
+	}
+}
+
+var curryl = function(fun /* other */)
+{
+	var scope = this
+	var args1 = slice.call(arguments, 1)
+	return function(/* arguments */)
+	{
+		return fun.apply(scope, slice.apply(arguments).concat(args1))
+	}
+}
+
+var curry_gaps = function(fun /* other */)
+{
+	var scope = this
+	var args1 = slice.call(arguments, 1)
+	return function(/* arguments */)
+	{
+		var args2 = slice.call(args1)
+		var len = args2.length
+		var arguments_index = 0
+		for(var i = 0; i < len; ++i)
+		{
+			if(args2[i] === undefined)
+			{
+				args2[i] = arguments[arguments_index]
+				++arguments_index
+			}
+		}
+
+		return fun.apply(scope, args2)
+	}
+}
+
 
 var log = function (arg) {
     var toPrint = [];
@@ -62,15 +92,13 @@ var log = function (arg) {
     console.log.apply(console, toPrint);
 }
 
-
-var assert = function(bool, message)
+var assert = function(success, message)
 {
-	if(!bool)
+	if(!success)
 	{
 		message = typeof message == "function" ? message() : message
-		log("Test #" + test_count + " failed: ", message)
+		log("Failed: ", message)
 	}
-	++test_count
 }
 
 var map = function(arr, fun)
@@ -185,24 +213,9 @@ var not = function(fun)
 	assert(true_fun(4, 6, 3, 5), "true_fun() always returns true")
 })()
 
-var curry = function(fun /*, arguments */)
-{
-	var scope = this
-	var args1 = slice.call(arguments, 1)
-	return function(/* arguments */)
-	{
-		return fun.apply(scope, args1.concat(slice.apply(arguments)));
-	}
-}
-
 var is_family_defined = function(obj)
 {
 	return obj[CI_FAMILY] !== undefined;
-}
-
-var compare_families = function(first, second)
-{
-	return first[CI_FAMILY] - second[CI_FAMILY]
 }
 
 var are_equal_families = function(first, second)
@@ -241,21 +254,7 @@ var has_object = function(arr, obj)
 
 var has_at_least_numbers_of_objects = function(arr, obj, num)
 {
-	var len = arr.length
-	for(var i = 0; i < len; ++i)
-	{
-		if(are_equal_types(arr[i], obj))
-		{
-			--num
-		}
-		if(num == 0)
-		{
-			return true;
-		}
-	}
-	
-	// if there are no elements and num == 0 at start we must return true.
-	return num == 0;
+	return num <= count(arr, curry(are_equal_types, obj))
 };
 
 (function test_has_at_least_numbers_of_objects(){
@@ -305,231 +304,6 @@ var pair_corresponds = function(obj1, obj2, mask1, mask2)
 	assert(pair_corresponds(f_1, m_1, f_i, m_i), "corresponds")
 })()
 
-var has_pair_of_checked_families = function(arr, first, second, family_checker)
-{
-	var first_compat = arr.filter(curry(are_equal_types, first))
-	var second_compat = arr.filter(curry(are_equal_types, second))
-
-	var first_length = first_compat.length
-	var second_length = second_compat.length
-
-	for(var i = 0; i < first_length; ++i)
-	{
-		var f = first_compat[i]
-		for(var j = 0; j < second_length; ++j)
-		{
-			var s = second_compat[j]
-			if(family_checker(f, s) && f != s)
-			{
-				return true;
-			}
-		}
-	}
-};
-
-var has_pair_one_family = function(arr, first, second)
-{
-	return has_pair_of_checked_families(arr, first, second, are_equal_families)
-}
-
-var has_pair_different_families = function(arr, first, second)
-{
-	return has_pair_of_checked_families(arr, first, second, not(are_equal_families))
-}
-
-var has_pair_any_family = function(arr, first, second)
-{
-	return has_pair_of_checked_families(arr, first, second, true_fun)
-}
-
-var has_pair = function(arr, first, second)
-{
-	return !is_family_defined(second) ? has_pair_any_family(arr, first, second)
-		: are_equal_families(first, second) ? has_pair_one_family(arr, first, second)
-		: has_pair_different_families(arr, first, second)
-};
-
-(function test_has_pair_functions(){
-	var one = [["volk", 0], ["koza", 1], ["volk", 1], ["kapusta", 0], ["muzhik", 1], ["kapusta", 0]]
-	assert(has_pair_one_family(one, ["volk"], ["koza"]), one + " has volk & koza of family 1")
-	assert(has_pair_one_family(one, ["volk"], ["kapusta"]), one + " has volk & kapusta of family 0")
-	assert(has_pair_one_family(one, ["kapusta"], ["kapusta"]), one + " has two kapustas of family 0")
-	assert(!has_pair_one_family(one, ["koza"], ["kapusta"]), one + " hasn't koza & kapusta of same family")
-	assert(!has_pair_one_family(one, ["volk"], ["volk"]), one + " hasn't two volks of same family")
-	assert(!has_pair_one_family(one, ["koza"], ["koza"]), one + " hasn't two kozas of same family")
-
-	assert(has_pair_different_families(one, ["volk"], ["koza"]), one + " has volk & koza of different families")
-	assert(has_pair_different_families(one, ["volk"], ["kapusta"]), one + " has volk & kapusta of different families")
-	assert(has_pair_different_families(one, ["koza"], ["kapusta"]), one + " has koza & kapusta of different families")
-	assert(has_pair_different_families(one, ["volk"], ["volk"]), one + " hasn two volks of different families")
-	assert(!has_pair_different_families(one, ["muzhik"], ["koza"]), one + " hasn't muzhik & koza of different families")
-	assert(!has_pair_different_families(one, ["kapusta"], ["kapusta"]), one + " hasn't two kapustas of different families")
-	assert(!has_pair_different_families(one, ["koza"], ["koza"]), one + " hasn't two kozas of different families")
-
-	assert(has_pair_any_family(one, ["volk"], ["koza"]), one + " has volk & koza")
-	assert(has_pair_any_family(one, ["volk"], ["kapusta"]), one + " has volk & kapusta")
-	assert(has_pair_any_family(one, ["kapusta"], ["kapusta"]), one + " has two kapustas")
-	assert(has_pair_any_family(one, ["koza"], ["kapusta"]), one + " has koza & kapusta")
-	assert(has_pair_any_family(one, ["volk"], ["volk"]), one + " has two volks of same family")
-	assert(!has_pair_any_family(one, ["koza"], ["koza"]), one + " hasn't two kozas")
-	assert(!has_pair_any_family(one, ["koza"], ["korova"]), one + " hasn't korova")
-
-	assert(has_pair(one, ["volk", "i"], ["koza", "i"]), one + " has volk & koza of family 1")
-	assert(has_pair(one, ["volk", "i"], ["kapusta", "i"]), one + " has volk & kapusta of family 2")
-	assert(has_pair(one, ["kapusta", "i"], ["kapusta", "i"]), one + " has two kapustas of family 2")
-	assert(!has_pair(one, ["koza", "i"], ["kapusta", "i"]), one + " hasn't koza & kapusta of same family")
-	assert(!has_pair(one, ["volk", "i"], ["volk", "i"]), one + " hasn't two volks of same family")
-	assert(!has_pair(one, ["koza", "i"], ["koza", "i"]), one + " hasn't two kozas of same family")
-
-	assert(has_pair(one, ["volk", "i"], ["koza", "j"]), one + " has volk & koza of different families")
-	assert(has_pair(one, ["volk", "i"], ["kapusta", "j"]), one + " has volk & kapusta of different families")
-	assert(has_pair(one, ["koza", "i"], ["kapusta", "j"]), one + " has koza & kapusta of different families")
-	assert(has_pair(one, ["volk", "i"], ["volk", "j"]), one + " hasn two volks of different families")
-	assert(!has_pair(one, ["muzhik", "i"], ["koza", "j"]), one + " hasn't muzhik & koza of different families")
-	assert(!has_pair(one, ["kapusta", "i"], ["kapusta", "j"]), one + " hasn't two kapustas of different families")
-	assert(!has_pair(one, ["koza", "i"], ["koza", "j"]), one + " hasn't two kozas of different families")
-
-	assert(has_pair(one, ["volk", "i"], ["koza"]), one + " has volk & koza")
-	assert(has_pair(one, ["volk", "i"], ["kapusta"]), one + " has volk & kapusta")
-	assert(has_pair(one, ["kapusta"], ["kapusta"]), one + " has two kapustas")
-	assert(has_pair(one, ["koza"], ["kapusta"]), one + " has koza & kapusta")
-	assert(has_pair(one, ["volk", "i"], ["volk"]), one + " has two volks of same family")
-	assert(!has_pair(one, ["koza", "i"], ["koza"]), one + " hasn't two kozas")
-	assert(!has_pair(one, ["koza"], ["korova"]), one + " hasn't korova")
-
-})()
-
-var has_object_without_pair_of_checked_families = function(arr, first, second, family_checker)
-{
-	var first_compat = arr.filter(curry(are_equal_types, first))
-	var second_compat = arr.filter(curry(are_equal_types, second))
-
-	var first_length = first_compat.length
-	var second_length = second_compat.length
-
-	for(var i = 0; i < first_length; ++i)
-	{
-		var f = first_compat[i]
-		var contains = false;
-		for(var j = 0; j < second_length; ++j)
-		{
-			var s = second_compat[j]
-			if(family_checker(f, s) && f != s)
-			{
-				contains = true;
-				break;
-			}
-		}
-
-		if(!contains)
-		{
-			return true;
-		}
-	}
-
-	return false
-};
-
-var has_object_without_pair_of_one_family = function(arr, first, second)
-{
-	return has_object_without_pair_of_checked_families(
-		arr, first, second, are_equal_families)
-};
-
-var has_object_without_pair_of_any_family = function(arr, first, second)
-{
-	return has_object_without_pair_of_checked_families(
-		arr, first, second, true_fun)
-}
-
-var has_object_without_pair_of_different_families = function(arr, first, second)
-{
-	return has_object_without_pair_of_checked_families(
-		arr, first, second, not(are_equal_families))
-};
-
-var has_object_without_pair = function(arr, first, second)
-{
-	return (! is_family_defined(second))
-		? has_object_without_pair_of_any_family(arr, first, second)
-		: are_equal_families(first, second)
-			? has_object_without_pair_of_one_family(arr, first, second)
-			: has_object_without_pair_of_different_families(arr, first, second)
-};
-
-(function test_has_object_without_pair_punctions(){
-	var one = [["volk", 0], ["koza", 1], ["volk", 1], ["kapusta", 0], ["muzhik", 1], ["kapusta", 0]]
-	assert(has_object_without_pair_of_one_family(one, ["volk"], ["koza"]), one + " has volk-0 without koza-0")
-	assert(!has_object_without_pair_of_one_family(one, ["koza"], ["volk"]), one + " has volk-1 for koza-1")
-	assert(has_object_without_pair_of_one_family(one, ["volk"], ["kapusta"]), one + " has volk-1 without kapusta-1")
-	assert(!has_object_without_pair_of_one_family(one, ["kapusta"], ["kapusta"]), one + " has two kapustas of family 0")
-	assert(!has_object_without_pair_of_one_family(one, ["koza"], ["muzhik"]), one + " has muzhik-1 and koza-1")
-	assert(has_object_without_pair_of_one_family(one, ["koza"], ["kapusta"]), one + " hasn't koza & kapusta of same family")
-	assert(has_object_without_pair_of_one_family(one, ["volk"], ["volk"]), one + " hasn't two volks of same family")
-	assert(has_object_without_pair_of_one_family(one, ["koza"], ["koza"]), one + " hasn't two kozas of same family")
-
-	assert(!has_object_without_pair_of_any_family(one, ["volk"], ["koza"]), one + " has volk & koza")
-	assert(!has_object_without_pair_of_any_family(one, ["koza"], ["volk"]), one + " has volk & koza")
-	assert(!has_object_without_pair_of_any_family(one, ["volk"], ["kapusta"]), one + " has volk & kapusta")
-	assert(!has_object_without_pair_of_any_family(one, ["kapusta"], ["kapusta"]), one + " has two kapustas")
-	assert(!has_object_without_pair_of_any_family(one, ["koza"], ["muzhik"]), one + " has muzhik-1 and koza-1")
-	assert(!has_object_without_pair_of_any_family(one, ["koza"], ["kapusta"]), one + " has koza & kapusta")
-	assert(!has_object_without_pair_of_any_family(one, ["volk"], ["volk"]), one + " hasn't two volks")
-	assert(has_object_without_pair_of_any_family(one, ["koza"], ["koza"]), one + " hasn't two kozas")
-	assert(has_object_without_pair_of_any_family(one, ["koza"], ["korova"]), one + " hasn't korova for koza")
-
-	assert(has_object_without_pair_of_different_families(one,
-		["volk"], ["koza"]), one + " has volk-1 without koza-0")
-	assert(!has_object_without_pair_of_different_families(one,
-		["koza"], ["volk"]), one + " has volk-0 for koza-1")
-	assert(has_object_without_pair_of_different_families(one,
-		["volk"], ["kapusta"]), one + " has volk-0 without kapusta-1")
-	assert(!has_object_without_pair_of_different_families(one,
-		["koza"], ["kapusta"]), one + " has koza & kapusta of different families")
-	assert(!has_object_without_pair_of_different_families(one,
-		["kapusta"], ["koza"]), one + " has koza & kapusta of different families")
-	assert(!has_object_without_pair_of_different_families(one,
-		["volk"], ["volk"]), one + " hasn two volks of different families")
-	assert(has_object_without_pair_of_different_families(one,
-		["muzhik"], ["koza"]), one + " hasn't muzhik & koza of different families")
-	assert(has_object_without_pair_of_different_families(one,
-		["kapusta"], ["kapusta"]), one + " hasn't two kapustas of different families")
-	assert(has_object_without_pair_of_different_families(one,
-		["koza"], ["koza"]), one + " hasn't two kozas of different families")
-
-
-	assert(has_object_without_pair(one, ["volk", "i"], ["koza", "i"]), one + " has volk-0 without koza-0")
-	assert(!has_object_without_pair(one, ["koza", "i"], ["volk", "i"]), one + " has volk-1 for koza-1")
-	assert(has_object_without_pair(one, ["volk", "i"], ["kapusta", "i"]), one + " has volk-1 without kapusta-1")
-	assert(!has_object_without_pair(one, ["kapusta", "i"], ["kapusta", "i"]), one + " has two kapustas of family 0")
-	assert(!has_object_without_pair(one, ["koza", "i"], ["muzhik", "i"]), one + " has muzhik-1 and koza-1")
-	assert(has_object_without_pair(one, ["koza", "i"], ["kapusta", "i"]), one + " hasn't koza & kapusta of same family")
-	assert(has_object_without_pair(one, ["volk", "i"], ["volk", "i"]), one + " hasn't two volks of same family")
-	assert(has_object_without_pair(one, ["koza", "i"], ["koza", "i"]), one + " hasn't two kozas of same family")
-
-	assert(has_object_without_pair(one, ["volk", "i"], ["koza", "j"]), one + " has volk-1 without koza-0")
-	assert(!has_object_without_pair(one, ["koza", "i"], ["volk", "j"]), one + " has volk-0 for koza-1")
-	assert(has_object_without_pair(one, ["volk", "i"], ["kapusta", "j"]), one + " has volk-0 without kapusta-1")
-	assert(!has_object_without_pair(one, ["koza", "i"], ["kapusta", "j"]), one + " has koza & kapusta of different families")
-	assert(!has_object_without_pair(one, ["kapusta", "i"], ["koza", "j"]), one + " has koza & kapusta of different families")
-	assert(!has_object_without_pair(one, ["volk", "i"], ["volk", "j"]), one + " hasn two volks of different families")
-	assert(has_object_without_pair(one, ["muzhik", "i"], ["koza", "j"]), one + " hasn't muzhik & koza of different families")
-	assert(has_object_without_pair(one, ["kapusta", "i"], ["kapusta", "j"]), one + " hasn't two kapustas of different families")
-	assert(has_object_without_pair(one, ["koza", "i"], ["koza", "j"]), one + " hasn't two kozas of different families")
-
-	assert(!has_object_without_pair(one, ["volk", "i"], ["koza"]), one + " has volk & koza")
-	assert(!has_object_without_pair(one, ["koza"], ["volk"]), one + " has volk & koza")
-	assert(!has_object_without_pair(one, ["volk"], ["kapusta"]), one + " has volk & kapusta")
-	assert(!has_object_without_pair(one, ["kapusta"], ["kapusta"]), one + " has two kapustas")
-	assert(!has_object_without_pair(one, ["koza"], ["muzhik"]), one + " has muzhik-1 and koza-1")
-	assert(!has_object_without_pair(one, ["koza"], ["kapusta"]), one + " has koza & kapusta")
-	assert(!has_object_without_pair(one, ["volk"], ["volk"]), one + " hasn't two volks")
-	assert(has_object_without_pair(one, ["koza", "i"], ["koza"]), one + " hasn't two kozas")
-	assert(has_object_without_pair(one, ["koza"], ["korova"]), one + " hasn't korova for koza")
-
-})()
-
-
 var wrap_rule = function(first, fun)
 {
 	return function(obj, arr) {
@@ -541,10 +315,7 @@ var afraids = function(first, second)
 {
 	return wrap_rule(first, function(obj, arr)
 	{
-		return every(arr, function(elem)
-			{
-				return !pair_corresponds(obj, elem, first, second)
-			})
+		return every(arr, curry_gaps(not(pair_corresponds), obj, undefined, first, second))
 	})
 }
 var disabled = afraids
@@ -553,10 +324,7 @@ var needs = function(first, second)
 {
 	return wrap_rule(first, function(obj, arr)
 	{
-		return exists(arr, function(elem)
-			{
-				return pair_corresponds(obj, elem, first, second)
-			})
+		return exists(arr, curry_gaps(pair_corresponds, obj, undefined, first, second))
 	})
 }
 
@@ -566,19 +334,13 @@ var needs_at_least = function(first, second, number)
 	{
 		return number === undefined
 			? second <= arr.length
-			: number <= count(arr, function(elem)
-				{
-					return pair_corresponds(obj, elem, first, second)
-				})
+			: number <= count(arr, curry_gaps(pair_corresponds, obj, undefined, first, second))
 	})
 }
 
 var necessary = function(first)
 {
-	return function(arr)
-	{
-		return has_object(arr, first)
-	}
+	return curryl(has_object, first)
 }
 
 var necessary_at_least = function(first_or_number, number_or_undefined)
@@ -594,9 +356,7 @@ var necessary_at_least = function(first_or_number, number_or_undefined)
 var items_rule = function(rules)
 {
 	return function(arr) {
-		return every(arr, function(elem, i){
-			return rules(elem, arr)
-		})
+		return every(arr, curry_gaps(rules, undefined, arr))
 	}
 };
 
@@ -1243,7 +1003,7 @@ var infrastructure = (function(){
 		var cfg = lesson.problems[index].config
 		if(typeof cfg == "function")
 		{
-			cfg = cfg.apply(null, slice(arguments, 1))
+			cfg = cfg.apply(null, slice.call(arguments, 1))
 		}
 		current_game = new Game(new GameRaw(cfg, print))
 	}
@@ -1290,14 +1050,14 @@ var infrastructure = (function(){
 		start : function(index)
 		{
 			index = index === undefined ? current_problem_index : index
-			var args = slice(arguments)
+			var args = slice.call(arguments)
 			args[0] = index
 			select_problem.apply(null, args)
 		},
 
 		restart : function()
 		{
-			var args = slice(arguments)
+			var args = slice.call(arguments)
 			args.unshift(current_problem_index)
 			select_problem.apply(null, args)
 		},
@@ -1892,9 +1652,7 @@ var infrastructure = (function(){
 })()
 
 
-
-
-	infrastructure.init_global_commands();
+infrastructure.init_global_commands();
 
 
 })()
