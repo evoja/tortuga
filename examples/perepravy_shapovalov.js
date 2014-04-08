@@ -655,6 +655,21 @@ var game_contructors = (function()
 		var result = move_from_side_to_side.apply(this, arguments)
 
 		game.config.score_counter(result, game)
+		if(result && drawing_infrastructure)
+		{
+			if(from_boat_position == POS_LEFT)
+				drawing_infrastructure.animate_movement(
+					result.transaction_from,
+					result.transaction_what,
+					result.transaction_to,
+					from_boat_position)
+			else
+				drawing_infrastructure.animate_movement(
+					result.transaction_to,
+					result.transaction_what,
+					result.transaction_from,
+					from_boat_position)
+		}
 
 		var win_result = game.config.win_rules(game)
 		if(win_result)
@@ -952,6 +967,8 @@ var drawing_infrastructure = (function(){
 	var start_river_position = cells_in_row * (cell_size + gap_size) - gap_size + positions_interval
 	var start_right_position = 450
 	var end_river_position = start_right_position - positions_interval
+	var animation_speed = 1/3
+
 	draw_rectangle = function(w_prop, h_prop, t)
 	{
 		t.tailDown()
@@ -1162,16 +1179,47 @@ var drawing_infrastructure = (function(){
 					draw_game(t, game_raw.left, game_raw.boat, game_raw.right,
 						game_raw.config.boat_capacity,
 						config.colors, config.drawers, position)
+					scope.last_updated_timestamp = game_raw.last_moving_timestamp
 				}
+				else
+				{
+					var ap = scope.animation_params
+					draw_game(t, ap.left, ap.boat, ap.right,
+						game_raw.config.boat_capacity,
+						config.colors, config.drawers, ap.position)
+					ap.position += ap.direction * animation_speed
 
-				scope.last_updated_timestamp = game_raw.last_moving_timestamp
+					if(ap.position < 0 || ap.position > 1)
+					{
+						scope.is_animation = false
+					}
+
+					ap.position = Math.max(0, Math.min(1, ap.position))
+					requestAnimationFrame(redraw)
+					return
+				}
 			}
-			setTimeout(redraw, 200)
+			if(!scope.is_animation)
+			{
+				setTimeout(redraw, 200)
+			}
 		})()
 	}
 	Animator.prototype.stop = function()
 	{
 		this.is_stopped = true;
+	}
+	Animator.prototype.animate_movement = function(left, boat, right, from_position)
+	{
+		var scope = this
+		scope.is_animation = true
+		scope.animation_params = {
+			left: left,
+			boat: boat,
+			right:right,
+			direction: from_position == POS_LEFT ? 1 : -1,
+			position: from_position == POS_LEFT ? 0 : 1
+		}
 	}
 
 	var stop_drawing = function()
@@ -1196,13 +1244,21 @@ var drawing_infrastructure = (function(){
 		}
 	}
 
+	var animate_movement = function(left, boat, right, from_position)
+	{
+		if(animator)
+		{
+			animator.animate_movement(left, boat, right, from_position)
+		}
+	}
+
 	window.dr = drawers
 
 	return {
 		drawers : drawers,
 		start_drawing : start_drawing,
-		stop_drawing : stop_drawing//,
-//		animate_movement : animate_movement
+		stop_drawing : stop_drawing,
+		animate_movement : animate_movement
 	}
 })()
 
