@@ -637,6 +637,7 @@ var game_contructors = (function()
 		game.boat = to_result.from
 		game[to_boat_position] = to_result.to
 		game.boat_position = to_boat_position
+		game.last_moving_timestamp = new Date().getTime()
 
 		return {
 			transaction_what: boat_result.to,
@@ -696,6 +697,7 @@ var game_contructors = (function()
 		this.boat_position = cfg.boat || select_boat_position(this.left, this.right)
 		this.score = 0
 		this.print_fun = print_fun || function(){}
+		this.last_moving_timestamp = new Date().getTime()
 		this.config = {
 			left_rules: cfg.left_rules || cfg.rules || true_fun,
 			right_rules: cfg.right_rules || cfg.rules || true_fun,
@@ -933,13 +935,265 @@ var game_contructors = (function()
 })()
 
 
+//==========================================================================
 
+//------- Drawing ---------
 
+//==========================================================================
+var drawing_infrastructure = (function(){
+	var cell_size = 15
+	var gap_size = cell_size * .3
+	var boat_gap = cell_size * .6
+	var cells_in_row = 5
+	var positions_interval = 2 * cell_size
+	var start_position = 20
+	var start_vertical_position = 50
+	var start_river_position = cells_in_row * (cell_size + gap_size) - gap_size + positions_interval
+	var start_right_position = 450
+	var end_river_position = start_right_position - positions_interval
+	draw_rectangle = function(w_prop, h_prop, t)
+	{
+		t.tailDown()
+		repeat(2)
+		t.go(w_prop * cell_size).rotate(90).go(h_prop * cell_size).rotate(90)
+		end()
+		t.tailUp()
+	}
+	draw_man = function(prop, t)
+	{
+		var leg_size = prop * cell_size
+		var arm_size = leg_size * .7
+		var neck_size = leg_size / 10
+		var head_step = leg_size / 20
 
+		//legs
+		t.tailDown()
+		t.rotate(60).go(leg_size).rotate(-120).go(leg_size)
+		t.tailUp()
+		t.go(-leg_size).rotate(150)
 
+		//body
+		t.tailDown().go(leg_size)
 
+		//arms
+		t.rotate(120).go(arm_size).tailUp()
+		t.go(-arm_size).rotate(120)
+		t.tailDown().go(arm_size).tailUp()
+		t.go(-arm_size).rotate(120)
 
+		//neck
+		t.tailDown().go(neck_size)
 
+		//head
+		t.rotate(-90)
+		repeat(20)
+			t.go(head_step).rotate(360 / 20)
+		end()
+		t.tailUp()
+
+		//back way
+		t.rotate(90).go(-neck_size).go(-leg_size).rotate(-30).go(-leg_size)
+		t.rotate(-60)
+	}
+	draw_woman = function(prop, t)
+	{
+		var leg_size = prop * cell_size
+		var arm_size = leg_size * .8
+		var neck_size = leg_size / 10
+		var head_step = leg_size / 20
+
+		var dress_size = leg_size * Math.cos(15 / 180 * Math.PI) * 2
+
+		//dress
+		t.tailDown()
+		t.rotate(75).go(dress_size).rotate(-150).go(dress_size)
+		t.rotate(75).go(-leg_size)
+		t.tailUp()
+		t.rotate(75).go(dress_size).rotate(15)
+
+		// //body
+		// t.tailDown().go(leg_size)
+
+		//arms
+		t.tailDown().rotate(120).go(arm_size).tailUp()
+		t.go(-arm_size).rotate(120)
+		t.tailDown().go(arm_size).tailUp()
+		t.go(-arm_size).rotate(120)
+
+		//neck
+		t.tailDown().go(neck_size)
+
+		//head
+		t.rotate(-90)
+		repeat(20)
+			t.go(head_step).rotate(360 / 20)
+		end()
+		t.tailUp()
+
+		//back way
+		t.rotate(90).go(-neck_size).go(-leg_size).rotate(-30).go(-leg_size)
+		t.rotate(-60)
+	}
+	draw_triangle= function(prop, t)
+	{
+		var size = prop * cell_size
+		t.tailDown()
+		repeat(3)
+		t.go(size).rotate(120)
+		end()
+		t.tailUp()
+	}
+
+	var draw_arr = function(t, colors, drawers, arr)
+	{
+		arr.forEach(function(elem){
+			t.setColor(colors[elem[CI_FAMILY]] || colors[elem[CI_TYPE]] || "black")
+			drawers[elem[CI_TYPE]](t)
+			t.go(cell_size + gap_size)
+		})
+		t.go(-(cell_size + gap_size) * arr.length)
+	}
+
+	var draw_river = function(t)
+	{
+		t.go(start_position)
+		t.tailDown();
+		t.go(start_river_position / 2 + end_river_position / 2)
+		t.setWidth(end_river_position - start_river_position)
+		t.setColor("#ccf")
+		t.rotate(90).tailDown()
+		t.go(1000).go(-1000)
+		t.tailUp().rotate(-90)
+		t.setWidth(1)
+		t.go(- start_river_position / 2 - end_river_position / 2)
+		t.go(-start_position)
+	}
+
+	var get_boat_width = function(boat_capacity)
+	{
+		return 2 * boat_gap + boat_capacity * (cell_size + gap_size) - gap_size
+	}
+
+	var draw_boat = function(t, boat_capacity)
+	{
+		t.setColor("black")
+		var diag = boat_gap * Math.sqrt(2)
+		var cap_size = get_boat_width(boat_capacity) - 2 * boat_gap
+		t.rotate(90).go(boat_gap).rotate(-90)
+		t.tailDown()
+		t.rotate(-45).go(diag).rotate(45).go(cap_size).rotate(45).go(diag)
+		t.tailUp()
+		t.go(-diag).rotate(-45).go(-cap_size).rotate(-45).go(-diag).rotate(45)
+		t.rotate(90).go(-boat_gap).rotate(-90)
+	}
+
+	var draw_game = function(t, left, boat, right, boat_capacity,
+		colors, drawers, boat_relative_position)
+	{
+		draw_river(t)
+		var all = left.concat(boat).concat(right)
+		var draw = curry(draw_arr, t, colors, drawers)
+
+		boat_capacity = Math.min(boat_capacity, cells_in_row)
+		var boat_width = get_boat_width(boat_capacity)
+		var boat_position = start_river_position + (end_river_position - start_river_position - boat_width) * boat_relative_position
+
+		t.go(start_position).rotate(90).go(start_vertical_position).rotate(-90)
+		draw(left)
+		t.go(boat_position)
+		draw_boat(t, boat_capacity)
+		t.go(boat_gap)
+		draw(boat)
+		t.go(-boat_gap)
+		t.go(start_right_position - boat_position)
+		draw(right)
+		t.go(-start_right_position)
+		t.go(-start_position).rotate(90).go(-start_vertical_position).rotate(-90)
+	}
+
+	var drawers = {
+		man: curry(curry, draw_man),
+		woman: curry(curry, draw_woman),
+		rectangle: curry(curry, draw_rectangle),
+		triangle: curry(curry, draw_triangle)
+	}
+
+	var t;
+	var animator;
+
+	var Animator = function(game, t)
+	{
+		this.game = game
+		this.last_updated_timestamp = 0
+	}
+	Animator.prototype.start = function()
+	{
+		var scope = this
+		scope.is_stopped = false;
+
+		(function redraw(){
+
+			if(scope.is_stopped)
+				return
+
+			var game_raw = scope.game.game_raw
+			var config = scope.game.config
+			var position = game_raw.boat_position == POS_LEFT ? 0 : 1
+
+			if((t || createTortoise) 
+				&& scope.last_updated_timestamp < game_raw.last_moving_timestamp)
+			{
+				t = t || createTortoise(0, 0)
+
+				clearCanvas()
+				if(!scope.is_animation)
+				{
+					draw_game(t, game_raw.left, game_raw.boat, game_raw.right,
+						game_raw.config.boat_capacity,
+						config.colors, config.drawers, position)
+				}
+
+				scope.last_updated_timestamp = game_raw.last_moving_timestamp
+			}
+			setTimeout(redraw, 200)
+		})()
+	}
+	Animator.prototype.stop = function()
+	{
+		this.is_stopped = true;
+	}
+
+	var stop_drawing = function()
+	{
+		if(animator)
+		{
+			animator.stop()
+		}
+		if(clearCanvas)
+		{
+			clearCanvas()
+		}
+	}
+
+	var start_drawing = function(game)
+	{
+		stop_drawing()
+		if(game.config.drawers)
+		{
+			animator = new Animator(game)
+			animator.start()
+		}
+	}
+
+	window.dr = drawers
+
+	return {
+		drawers : drawers,
+		start_drawing : start_drawing,
+		stop_drawing : stop_drawing//,
+//		animate_movement : animate_movement
+	}
+})()
 
 
 
@@ -1065,6 +1319,13 @@ var infrastructure = (function(){
 			cfg = cfg.apply(null, slice.call(arguments, 1))
 		}
 		current_game = new Game(new GameRaw(cfg, print))
+
+		current_game.config = {
+			drawers: cfg.drawers,
+			colors: cfg.colors
+		}
+
+		drawing_infrastructure.start_drawing(current_game)
 	}
 	select_problem(0)
 
@@ -1231,6 +1492,8 @@ var infrastructure = (function(){
 
 //==========================================================================
 (function(){
+	var drawers = drawing_infrastructure.drawers
+
 	var lesson = {
 		title : "Переправы от Шаповаловых",
 		description : ["Все знают задачу про перевозку волка, козы и капусты. В первый раз она производит большое впечатление. Ведь казалось, что невозможно, и вдруг - вот способ! И всё так наглядно: можно взять фигурки и подвигать их, а то и поиграть: тф будешь козой, ты волком, ты крестянином...",
@@ -1260,7 +1523,20 @@ var infrastructure = (function(){
 						left: [volk, koza, kapusta, muzhik],
 						boat_capacity: 2,
 						rules: or(necessary(muzhik), items_rule(and(koza_volk, koza_kapusta))),
-						boat_moving_rules: necessary(muzhik)
+						boat_moving_rules: necessary(muzhik),
+						drawers: {
+							"лодочник": drawers.man(1),
+							"волк": drawers.rectangle(1, 1),
+							"коза": drawers.triangle(1),
+							"капуста": drawers.triangle(.5)
+						},
+						colors: {
+							"лодочник": "blue",
+							"капуста": "green",
+							"коза": "gray",
+							"волк": "black"
+						},
+						colors_of_heroes: ["blue", "black", "green", "gray"]
 					}
 				})()
 			},{
@@ -1277,7 +1553,15 @@ var infrastructure = (function(){
 						left: [muzhik, muzhik, muzhik, stiralka],
 						boat_capacity: 3,
 						boat_moving_rules: necessary(muzhik),
-						transaction_rules: {"стиралка": necessary_at_least(muzhik, 3)}
+						transaction_rules: {"стиралка": necessary_at_least(muzhik, 3)},
+						drawers: {
+							"чел": drawers.man(1),
+							"стиралка": drawers.rectangle(1, 1)
+						},
+						colors: {
+							"чел": "black",
+							"стиралка": "blue",
+						}
 					}
 				})()
 			},{
