@@ -694,7 +694,7 @@ var game_contructors = (function()
 		this.left = cfg.left || []
 		this.right = cfg.right || []
 		this.boat = cfg.boat || []
-		this.boat_position = cfg.boat || select_boat_position(this.left, this.right)
+		this.boat_position = cfg.boat_position || select_boat_position(this.left, this.right)
 		this.score = 0
 		this.print_fun = print_fun || function(){}
 		this.last_moving_timestamp = new Date().getTime()
@@ -945,14 +945,14 @@ var drawing_infrastructure = (function(){
 	var cell_vertical_size = 3 * cell_size
 	var gap_size = cell_size * .3
 	var boat_gap = cell_size * .6
-	var cells_in_row = 5
+	var cells_in_row = 6
 	var positions_interval = 2 * cell_size
 	var start_position = 20
 	var start_vertical_position = 50
 	var start_river_position = cells_in_row * (cell_size + gap_size) - gap_size + positions_interval
 	var start_right_position = 450
 	var end_river_position = start_right_position - positions_interval
-	var animation_speed = 1/4
+	var animation_speed = 1/12
 
 	draw_rectangle = function(w_prop, h_prop, t)
 	{
@@ -1070,7 +1070,6 @@ var drawing_infrastructure = (function(){
 	var draw_river = function(t)
 	{
 		t.go(start_position)
-		t.tailDown();
 		t.go(start_river_position / 2 + end_river_position / 2)
 		t.setWidth(end_river_position - start_river_position)
 		t.setColor("#ccf")
@@ -1103,6 +1102,7 @@ var drawing_infrastructure = (function(){
 	var draw_game = function(t, left, boat, right, boat_capacity,
 		colors, drawers, boat_relative_position)
 	{
+		begin()
 		draw_river(t)
 		var all = left.concat(boat).concat(right)
 		var draw = curry(draw_arr, t, colors, drawers)
@@ -1122,6 +1122,7 @@ var drawing_infrastructure = (function(){
 		draw(right)
 		t.go(-start_right_position)
 		t.go(-start_position).rotate(90).go(-start_vertical_position).rotate(-90)
+		end()
 	}
 
 	var drawers = {
@@ -1657,7 +1658,16 @@ var infrastructure = (function(){
 							zhul(3), chem(3), chem(3)],
 						boat_capacity: 3,
 						rules: items_rule(or(needs(["ч", "i"], ["ж", "i"]), afraids(["ч", "i"], ["ж", "j"]))),
-						boat_moving_rules: necessary(["ж"])
+						boat_moving_rules: necessary(["ж"]),
+						drawers: {
+							"ч": drawers.rectangle(1, 1),
+							"ж": drawers.man(1)
+						},
+						colors: {
+							1: "green",
+							2: "blue",
+							3: "black"
+						}
 					}
 				})()
 			},{
@@ -1676,7 +1686,16 @@ var infrastructure = (function(){
 							["f", 2], ["m", 2], ["d", 2]],
 						boat_capacity: 2,
 						rules: items_rule(or(needs(["d", "i"], ["f", "i"]), needs(["d", "i"], ["m", "i"]))),
-						boat_moving_rules: necessary(["f"])
+						boat_moving_rules: necessary(["f"]),
+						drawers: {
+							"f": drawers.man(1),
+							"m": drawers.woman(1),
+							"d": drawers.woman(.6)
+						},
+						colors: {
+							1: "green",
+							2: "blue"
+						}
 					}
 				})()
 			},{
@@ -1703,7 +1722,16 @@ var infrastructure = (function(){
 									needs(["m"], ["f"])
 								)
 							)),
-						boat_moving_rules: necessary(["f"])
+						boat_moving_rules: necessary(["f"]),
+						drawers: {
+							"f": drawers.man(1),
+							"m": drawers.woman(1),
+							"d": drawers.woman(.6)
+						},
+						colors: {
+							1: "green",
+							2: "blue"
+						}
 					}
 				})()
 			},{
@@ -1729,7 +1757,16 @@ var infrastructure = (function(){
 									needs(["m"], ["s"])
 								)
 							)),
-						boat_moving_rules: necessary(["f", "1"])
+						boat_moving_rules: necessary(["f", "1"]),
+						drawers: {
+							"f": drawers.man(1),
+							"m": drawers.woman(1),
+							"s": drawers.man(.6)
+						},
+						colors: {
+							1: "green",
+							2: "blue"
+						}
 					}
 				})()
 			}, {
@@ -1770,7 +1807,20 @@ var infrastructure = (function(){
 								afraids(b4, b7),
 								afraids(b5, b7)
 							))
-						)
+						),
+						drawers: {
+							"b1": drawers.man(1),
+							"b2": drawers.man(1),
+							"b3": drawers.man(1),
+							"b4": drawers.man(1),
+							"b5": drawers.man(1),
+							"b6": drawers.man(1),
+							"b7": drawers.man(1),
+							"s": drawers.woman(.7)
+						},
+						colors: {
+							"s": "blue",
+						}
 					}
 				})()
 			}, {
@@ -1817,7 +1867,23 @@ var infrastructure = (function(){
 									afraids(bbb, vn)
 									)
 							)),
-						boat_moving_rules: necessary(vk)
+						boat_moving_rules: necessary(vk),
+						drawers: {
+							"bk": drawers.rectangle(1, 1),
+							"bb": drawers.rectangle(1, 1),
+							"bn": drawers.rectangle(1, 1),
+							"K": drawers.man(1),
+							"N": drawers.man(1),
+							"B": drawers.man(1)
+						},
+						colors: {
+							"bk": "black",
+							"bb": "green",
+							"bn": "blue",
+							"K": "black",
+							"N": "green",
+							"B": "blue"
+						}
 					}
 				})()
 			}, {
@@ -1899,7 +1965,21 @@ var infrastructure = (function(){
 						boat_rules: items_rule(and(
 								w_chopornost
 							)),
-						boat_moving_rules: or(necessary(S), necessary(s))
+						boat_moving_rules: or(necessary(S), necessary(s)),
+						drawers: {
+							"D": drawers.man(1),
+							"d": drawers.woman(1),
+							"S": drawers.man(.9),
+							"s": drawers.woman(.9),
+							"m": drawers.woman(.8),
+						},
+						colors: {
+							"D": "blue",
+							"d": "blue",
+							"S": "orange",
+							"s": "orange",
+							"m": "black"
+						}
 					}
 				}
 			}, {
@@ -1921,10 +2001,20 @@ var infrastructure = (function(){
 					var time_limit = 2.5
 
 					return {
-						left: [J, j(), j(), j(), j(),
+						left: [j(), j(), j(), j(),
 							j(), j(), j(), j(), j()],
+						boat: [J],
 						boat_capacity: 5,
 						boat_moving_rules: necessary(J),
+						transaction_rules: {"P":not(true_fun)},
+						drawers: {
+							"P": drawers.man(.9),
+							"j": drawers.man(1)
+						},
+						colors: {
+							"P": "blue",
+							"j": "red"
+						},
 						score_counter: function(result, game)
 						{
 							if(result === false)
@@ -1988,7 +2078,8 @@ var infrastructure = (function(){
 					var boat_capacity = 500
 
 					return {
-						left: [S, b(), b(), b(), d, r],
+						left: [b(), b(), b(), d, r],
+						boat: [S],
 						boat_capacity: boat_capacity,
 						boat_moving_rules: and(
 								necessary(S),
@@ -1996,13 +2087,26 @@ var infrastructure = (function(){
 							),
 						transaction_rules: {
 							d: necessary_at_least(bb, 2),
-							r: necessary_at_least(bb, 3)
+							r: necessary_at_least(bb, 3),
+							S: not(true_fun)
 						},
 						types_weights: {
 							B: 0,
 							S: 0,
 							r: 250,
 							d: 100
+						},
+						drawers: {
+							"B": drawers.man(.8),
+							"S": drawers.man(1),
+							"d": drawers.rectangle(1, 1.4),
+							"r": drawers.rectangle(1, 2)
+						},
+						colors: {
+							"S": "gray",
+							"B": "blue",
+							"r": "black",
+							"d": "orange"
 						},
 
 						score_counter: function(result, game)
