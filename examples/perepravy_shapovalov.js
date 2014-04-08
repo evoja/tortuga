@@ -1486,6 +1486,7 @@ var infrastructure = (function(){
 				window[i] = commands[i]
 			}
 		}
+		setTimeout(curry(print, "Для начала наберите команду help()"), 500)
 	}
 
 
