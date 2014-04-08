@@ -655,21 +655,6 @@ var game_contructors = (function()
 		var result = move_from_side_to_side.apply(this, arguments)
 
 		game.config.score_counter(result, game)
-		if(result && drawing_infrastructure)
-		{
-			if(from_boat_position == POS_LEFT)
-				drawing_infrastructure.animate_movement(
-					result.transaction_from,
-					result.transaction_what,
-					result.transaction_to,
-					from_boat_position)
-			else
-				drawing_infrastructure.animate_movement(
-					result.transaction_to,
-					result.transaction_what,
-					result.transaction_from,
-					from_boat_position)
-		}
 
 		var win_result = game.config.win_rules(game)
 		if(win_result)
@@ -967,7 +952,7 @@ var drawing_infrastructure = (function(){
 	var start_river_position = cells_in_row * (cell_size + gap_size) - gap_size + positions_interval
 	var start_right_position = 450
 	var end_river_position = start_right_position - positions_interval
-	var animation_speed = 1/3
+	var animation_speed = 1/4
 
 	draw_rectangle = function(w_prop, h_prop, t)
 	{
@@ -1385,14 +1370,38 @@ var infrastructure = (function(){
 		{
 			cfg = cfg.apply(null, slice.call(arguments, 1))
 		}
+
 		current_game = new Game(new GameRaw(cfg, print))
 
-		current_game.config = {
-			drawers: cfg.drawers,
-			colors: cfg.colors
-		}
+		if(cfg.drawers)
+		{
+			current_game.config = {
+				drawers: cfg.drawers,
+				colors: cfg.colors
+			}
 
-		drawing_infrastructure.start_drawing(current_game)
+			var old_score_counter = current_game.game_raw.config.score_counter
+			current_game.game_raw.config.score_counter = function(result, game)
+			{
+				if(result)
+				{
+					if(result.from_boat_position == POS_LEFT)
+						drawing_infrastructure.animate_movement(
+							result.transaction_from,
+							result.transaction_what,
+							result.transaction_to,
+							result.from_boat_position)
+					else
+						drawing_infrastructure.animate_movement(
+							result.transaction_to,
+							result.transaction_what,
+							result.transaction_from,
+							result.from_boat_position)
+				}
+				old_score_counter(result, game)
+			}
+			drawing_infrastructure.start_drawing(current_game)
+		}
 	}
 	select_problem(0)
 
