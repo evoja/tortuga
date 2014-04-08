@@ -942,6 +942,7 @@ var game_contructors = (function()
 //==========================================================================
 var drawing_infrastructure = (function(){
 	var cell_size = 15
+	var cell_vertical_size = 3 * cell_size
 	var gap_size = cell_size * .3
 	var boat_gap = cell_size * .6
 	var cells_in_row = 5
@@ -1046,12 +1047,22 @@ var drawing_infrastructure = (function(){
 
 	var draw_arr = function(t, colors, drawers, arr)
 	{
+		var rows = 0
+		var cols = 0
+		var gap = cell_size + gap_size
 		arr.forEach(function(elem){
 			t.setColor(colors[elem[CI_FAMILY]] || colors[elem[CI_TYPE]] || "black")
 			drawers[elem[CI_TYPE]](t)
-			t.go(cell_size + gap_size)
+			t.go(gap)
+			++cols
+			if(cols >= cells_in_row)
+			{
+				t.go(-gap * cols).rotate(90).go(cell_vertical_size).rotate(-90)
+				cols = 0
+				++rows
+			}
 		})
-		t.go(-(cell_size + gap_size) * arr.length)
+		t.go(-(gap) * cols).rotate(90).go(-cell_vertical_size * rows).rotate(-90)
 	}
 
 	var draw_river = function(t)
