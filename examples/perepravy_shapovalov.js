@@ -269,9 +269,15 @@ var are_equal_types = function(first, second)
 	assert(!are_equal_types(["volk", 0], ["koza", 0]), "volk != koza")
 })()
 
-var has_object = function(arr, obj)
+var is_object_corresponds = function(obj, first)
 {
-	return !arr.every(curry(not(are_equal_types), obj))
+	return are_equal_types(obj, first)
+		&& (!first[CI_FAMILY] || are_equal_families(obj, first))
+}
+
+var has_object = function(arr, first)
+{
+	return exists(arr, curry_gaps(is_object_corresponds, undefined, first))
 };
 
 (function test_has_object(){
@@ -1139,6 +1145,7 @@ var drawing_infrastructure = (function(){
 	{
 		this.game = game
 		this.last_updated_timestamp = 0
+		this.animation_stack = []
 	}
 	Animator.prototype.start = function()
 	{
@@ -1160,7 +1167,7 @@ var drawing_infrastructure = (function(){
 				t = t || createTortoise(0, 0)
 
 				clearCanvas()
-				if(!scope.is_animation)
+				if(scope.animation_stack.length == 0)
 				{
 					draw_game(t, game_raw.left, game_raw.boat, game_raw.right,
 						game_raw.config.boat_capacity,
@@ -1169,7 +1176,7 @@ var drawing_infrastructure = (function(){
 				}
 				else
 				{
-					var ap = scope.animation_params
+					var ap = scope.animation_stack[0]
 					draw_game(t, ap.left, ap.boat, ap.right,
 						game_raw.config.boat_capacity,
 						config.colors, config.drawers, ap.position)
@@ -1177,7 +1184,7 @@ var drawing_infrastructure = (function(){
 
 					if(ap.position < 0 || ap.position > 1)
 					{
-						scope.is_animation = false
+						scope.animation_stack.shift()
 					}
 
 					ap.position = Math.max(0, Math.min(1, ap.position))
@@ -1198,14 +1205,13 @@ var drawing_infrastructure = (function(){
 	Animator.prototype.animate_movement = function(left, boat, right, from_position)
 	{
 		var scope = this
-		scope.is_animation = true
-		scope.animation_params = {
+		scope.animation_stack.push({
 			left: left,
 			boat: boat,
 			right:right,
 			direction: from_position == POS_LEFT ? 1 : -1,
 			position: from_position == POS_LEFT ? 0 : 1
-		}
+		})
 	}
 
 	var stop_drawing = function()
@@ -1378,7 +1384,7 @@ var infrastructure = (function(){
 		{
 			current_game.config = {
 				drawers: cfg.drawers,
-				colors: cfg.colors
+				colors: cfg.colors || {}
 			}
 
 			var old_score_counter = current_game.game_raw.config.score_counter
@@ -1486,6 +1492,7 @@ var infrastructure = (function(){
 				window[i] = commands[i]
 			}
 		}
+		alert("Всё самое интересное в консоли")
 		setTimeout(curry(print, "Для начала наберите команду help()"), 500)
 	}
 
@@ -2159,6 +2166,263 @@ var infrastructure = (function(){
 						win_rules: function(game)
 						{
 							return (game.divan_i_royal_steps >= steps_limit) && "Время аренды вышло!"
+						}
+					}
+				})()
+			},{
+				title : "Крестьянин с двумя волками, собакой и козой",
+				description : ["Крестьянин с двумя волками, собакой, козой и мешком капусты подошел к реке. Ему надо переправиться на другой берег, однако лодка трехместная, каждое место занимает человек, животное или мешок капусты. Нельзя оставлять без присмотра волка с козой или собакой, собаку – с козой, а козу – с капустой. Как крестьянину переправиться без потерь?",
+					"\n\tКомандой state() вы отображаете текущее состояние.",
+					"\tКомандой move() возите героев туда-сюда.",
+					"\tK - крестьянин, ko - коза, ka - капуста, V - волк, s - собака",
+					"\tПример:",
+					"\t\tmove(\"V, V, K\")"],
+				config : (function dva_volka(){
+					return {
+						left: [["K"], ["V"], ["V"], ["s"], ["ko"], ["ka"]],
+						boat_capacity: 3,
+						rules: or(
+								necessary(["K"]),
+								items_rule(and(
+									afraids(["ka"], ["ko"]),
+									afraids(["ko"], ["s"]),
+									afraids(["ko"], ["V"]),
+									afraids(["s"], ["V"])
+								)
+							)),
+						boat_moving_rules: necessary(["K"]),
+						drawers: {
+							"K": drawers.man(1),
+							"V": drawers.rectangle(1, 2),
+							"s": drawers.rectangle(1, 1),
+							"ko": drawers.triangle(1),
+							"ka": drawers.triangle(.5)
+						},
+						colors: {
+							"K": "blue",
+							"V": "grey",
+							"s": "brown",
+							"ko": "black",
+							"ka": "green"
+						}
+					}
+				})()
+			},{
+				title : "Полк солдат и два мальчика",
+				description : ["Полк солдат подошел к реке. По реке катались на лодке два мальчика. Лодка выдерживает одного солдата или двух мальчиков. Как всем солдатам переправиться на другой берег и вернуть лодку мальчикам?",
+					"\n\tКомандой state() вы отображаете текущее состояние.",
+					"\tКомандой restart(5) с параметром можете стартовать с разным количеством солдат.",
+					"\tКомандой move() возите героев туда-сюда.",
+					"\tS- солдат, b - мальчик",
+					"\tПример:",
+					"\t\tmove(\"S\")"],
+				config : function polk_soldat(num_sold){
+					num_sold = num_sold || 5
+
+					var b = function(type){return function(){return [type]}}
+					var s = b("S") // генератор солдат
+					var b1 = ["b"] // мальчик
+					var b2 = ["b"] // мальчик
+
+					var m_arr = (function(num)
+					{
+						var result = []
+						for(var i = 0; i < num; ++i)
+						{
+							result.push(s())
+						}
+						return result
+					})(num_sold)
+					return {
+						left: [b1, b2].concat(m_arr),
+						boat_capacity: 2,
+						types_weights: {
+							S: 2,
+							b: 1
+						},
+						drawers: {
+							"S": drawers.man(1),
+							"b": drawers.man(.7)
+						},
+						colors: {
+							"S": "blue",
+							"b": "green"
+						}
+					}
+				}
+			},{
+				title : "Три мушкетёра",
+				description : ["Атос, Портос, Арамис и Д’Артаньян сидели за круглым столом, заспорили, и каждый поссорился со своими двумя соседями. Чтобы ехать дальше, им надо переправиться через реку в двухместной лодке. Каждый из мушкетеров отказывается оставаться вдвоем на берегу или быть в лодке с тем, с кем он в ссоре. Могут ли они все-таки все переправиться?",
+					"\n\tКомандой state() вы отображаете текущее состояние.",
+					"\tКомандой move() возите героев туда-сюда.",
+					"\tA - Атос, P - Портос, a - Арамис, D - Д’Артаньян.",
+					"\tПример:",
+					"\t\tmove(\"V, V, K\")"],
+				config : (function tri_mushketera(){
+					return {
+						left: [["A"], ["P"], ["a"], ["D"]],
+						boat_capacity: 2,
+						rules: or(
+								necessary_at_least(3),
+								items_rule(and(
+									afraids(["A"], ["P"]),
+									afraids(["A"], ["D"]),
+									afraids(["a"], ["P"]),
+									afraids(["a"], ["D"])
+								)
+							)),
+						drawers: {
+							"A": drawers.man(1),
+							"P": drawers.man(1),
+							"a": drawers.man(1),
+							"D": drawers.man(1)
+						},
+						colors: {
+							"A": "black",
+							"P": "blue",
+							"a": "green",
+							"D": "red"
+						}
+					}
+				})()
+			},{
+				title : "Три туриста",
+				description : ["Трое туристов должны перебраться с одного берега реки на другой. В их распоряжении старая лодка, которая может выдержать нагрузку всего в 100 кг. Вес одного из туристов 45 кГ, второго — 50 кГ, третьего — 80 кГ. Как должны они действовать, чтобы перебраться на другой берег?",
+					"\n\tКомандой state() вы отображаете текущее состояние.",
+					"\tКомандой move() возите героев туда-сюда.",
+					"\tA - Атос, P - Портос, a - Арамис, D - Д’Артаньян.",
+					"\tПример:",
+					"\t\tmove(\"V, V, K\")"],
+				config : (function tri_turista(){
+					return {
+						left: [["45"], ["50"], ["80"]],
+						boat_capacity: 100,
+						types_weights: {
+							"45": 45,
+							"50": 50,
+							"80": 80
+						},
+						// colors: {
+						// 	"45": 45,
+						// 	"50": 50,
+						// 	"80": 80
+						// },
+						drawers: {
+							"45": drawers.man(.5),
+							"50": drawers.man(.8),
+							"80": drawers.man(1)
+						}
+					}
+				})()
+			},{
+				title : "Два миссионера и два каннибала",
+				description : ["В лодке, вмещающей только двух человек, через реку должны переправиться два миссионера и два каннибала. Миссионеры боятся каннибалов, и хотят всё время быть вдвоём. Как им всем переправиться?",
+					"\n\tКомандой state() вы отображаете текущее состояние.",
+					"\tКомандой move() возите героев туда-сюда.",
+					"\tm - миссионер, С - каннибал.",
+					"\tПример:",
+					"\t\tmove(\"m, m\")"],
+				config : (function dva_missionera(){
+					return {
+						left: [["m"], ["m"], ["C"], ["C"]],
+						rules: items_rule(or(
+								needs(["m"], ["m"]),
+								afraids(["m"], ["C"])
+							)),
+						boat_capacity: 2,
+						colors: {
+							"m": "blue",
+							"C": "black"
+						},
+						drawers: {
+							"m": drawers.man(.8),
+							"C": drawers.man(1)
+						}
+					}
+				})()
+			},{
+				title : "Три миссионера и три каннибала (a)",
+				description : ["В лодке, вмещающей только двух человек, через реку должны переправиться три миссионера и три каннибала. Миссионеры боятся оставаться на каком-нибудь берегу в меньшинстве. Как им всем переправиться?",
+					"\tm - миссионер, С - каннибал.",
+					"\tПример:",
+					"\t\tmove(\"m, m\")"],
+				config : (function tri_missionera_a(){
+					var m = ["m"]
+					var c = ["C"]
+					return {
+						left: [["m"], ["m"], ["m"], ["C"], ["C"], ["C"]],
+						rules: or(
+								and(
+									necessary_at_least(c, 3),
+									or(
+										necessary_at_least(m, 3),
+										items_rule(afraids(m, c))
+									)
+								),
+								and(
+									not(necessary_at_least(c, 3)),
+									necessary_at_least(c, 2),
+									or(
+										necessary_at_least(m, 2),
+										items_rule(afraids(m, c))
+									)
+								),
+								not(necessary_at_least(c, 2))
+							),
+						boat_capacity: 2,
+						colors: {
+							"m": "blue",
+							"C": "black"
+						},
+						drawers: {
+							"m": drawers.man(.8),
+							"C": drawers.man(1)
+						}
+					}
+				})()
+			},{
+				title : "Три миссионера и три каннибала (б)",
+				description : ["В лодке, вмещающей только двух человек, через реку должны переправиться три миссионера и три каннибала. Миссионеры боятся оставаться на каком-нибудь берегу в меньшинстве. Как им всем переправиться, если грести умеют только один миссионер и один каннибал?",
+					"\tm-1 - гребущий миссионер, С-1 - гребущий каннибал,",
+					"\tm-2 - обычный миссионер, C-2 - обычный каннибал,",
+					"\tПример:",
+					"\t\tmove(\"m, M\")"],
+				config : (function tri_missionera_b(){
+					var m = ["m"]
+					var c = ["C"]
+					return {
+						left: [["m", 1], ["m", 2], ["m", 2],
+								["C", 1], ["C", 2], ["C", 2]],
+						rules: or(
+								and(
+									necessary_at_least(c, 3),
+									or(
+										necessary_at_least(m, 3),
+										items_rule(afraids(m, c))
+									)
+								),
+								and(
+									not(necessary_at_least(c, 3)),
+									necessary_at_least(c, 2),
+									or(
+										necessary_at_least(m, 2),
+										items_rule(afraids(m, c))
+									)
+								),
+								not(necessary_at_least(c, 2))
+							),
+						boat_moving_rules: or(
+								necessary(["m", 1]),
+								necessary(["C", 1])
+							),
+						boat_capacity: 2,
+						colors: {
+							"1": "red",
+							"2": "gray"
+						},
+						drawers: {
+							"m": drawers.man(.8),
+							"C": drawers.man(1)
 						}
 					}
 				})()
