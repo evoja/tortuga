@@ -1831,8 +1831,14 @@ var infrastructure = (function(){
 					"\tK - Камнев, N - Ножницын, B - Бумагин",
 					"\tbk - баул Камнева, bk - баул Ножницына, bb - баул Бумагина",
 					"\tПример:",
-					"\t\tmove(\"bk, K\")"],
-				config : (function tri_vora(){
+					"\t\tmove(\"bk, K\")",
+					"\n\tТакже вы можете стартовать задачу с разным количеством баулов:",
+					"\t\trestart(1, 10, 3)",
+					"\tгде первое число - количество баулов Камнева, второе - Ножницына, третье - Бумагина."],
+				config : function tri_vora(k_num, n_num, b_num){
+					k_num = k_num === undefined ? 2 : k_num
+					n_num = n_num === undefined ? 3 : n_num
+					b_num = b_num === undefined ? 4 : b_num
 					
 					var b = function(type){return function(){return [type]}}
 					var bk = b("bk")
@@ -1845,10 +1851,20 @@ var infrastructure = (function(){
 					var bnn = bn()
 					var bbb = bb()
 
+					var arr_gen = (function(num, gen)
+					{
+						var result = []
+						for(var i = 0; i < num; ++i)
+						{
+							result.push(gen())
+						}
+						return result
+					})
+
 					return {
-						left: [vk, bk(), bk(),
-							vn, bn(), bn(), bn(),
-							vb, bb(), bb(), bb(), bb()],
+						left: [vk].concat(arr_gen(k_num, bk))
+							.concat([vn]).concat(arr_gen(n_num, bn))
+							.concat([vb]).concat(arr_gen(b_num, bb)),
 						boat_capacity: 3,
 						rules: items_rule(and(
 								or(
@@ -1885,7 +1901,7 @@ var infrastructure = (function(){
 							"B": "blue"
 						}
 					}
-				})()
+				}
 			}, {
 				title : "Дон Кихот и все-все-все",
 				description : ["К переправе подошли Дон Кихот и Санчо Панса с жёнами, а также несколько монахинь. Есть двухместная лодка, грести могут только Санчо и его жена. Никто из женщин не желает оказаться на берегу в одиночистве. Правила этикета запрещают женщинам быть в лодке или на берегу с другими мужчинами, если рядом нет мужа или другой женщины. При каком числе монахинь все они смогут переправиться? (Несколько - это больше одной)",
