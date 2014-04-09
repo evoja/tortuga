@@ -1455,6 +1455,7 @@ var infrastructure = (function(){
 			var args = slice.call(arguments)
 			args[0] = index
 			select_problem.apply(null, args)
+			current_game.display_in_log()
 		},
 
 		restart : function()
@@ -1462,6 +1463,7 @@ var infrastructure = (function(){
 			var args = slice.call(arguments)
 			args.unshift(current_problem_index)
 			select_problem.apply(null, args)
+			current_game.display_in_log()
 		},
 
 		state : function()
@@ -2354,20 +2356,15 @@ var infrastructure = (function(){
 						rules: or(
 								and(
 									necessary_at_least(c, 3),
-									or(
-										necessary_at_least(m, 3),
-										items_rule(afraids(m, c))
-									)
+									necessary_at_least(m, 3)
 								),
 								and(
 									not(necessary_at_least(c, 3)),
 									necessary_at_least(c, 2),
-									or(
-										necessary_at_least(m, 2),
-										items_rule(afraids(m, c))
-									)
+									necessary_at_least(m, 2)
 								),
-								not(necessary_at_least(c, 2))
+								not(necessary_at_least(c, 2)),
+								items_rule(afraids(m, c))
 							),
 						boat_capacity: 2,
 						colors: {
@@ -2396,20 +2393,15 @@ var infrastructure = (function(){
 						rules: or(
 								and(
 									necessary_at_least(c, 3),
-									or(
-										necessary_at_least(m, 3),
-										items_rule(afraids(m, c))
-									)
+									necessary_at_least(m, 3)
 								),
 								and(
 									not(necessary_at_least(c, 3)),
 									necessary_at_least(c, 2),
-									or(
-										necessary_at_least(m, 2),
-										items_rule(afraids(m, c))
-									)
+									necessary_at_least(m, 2)
 								),
-								not(necessary_at_least(c, 2))
+								not(necessary_at_least(c, 2)),
+								items_rule(afraids(m, c))
 							),
 						boat_moving_rules: or(
 								necessary(["m", 1]),
@@ -2423,6 +2415,227 @@ var infrastructure = (function(){
 						drawers: {
 							"m": drawers.man(.8),
 							"C": drawers.man(1)
+						}
+					}
+				})()
+			},{
+				title : "Три рыцаря с оруженосцами",
+				description : ["Как 3 рыцаря, каждый со своим оруженосцем, могут переправиться через реку на двухместной лодке, если оруженосцы отказываются оставаться с незнакомыми рыцарями без своих хозяев (но могут оставаться на берегу совсем без рыцарей).",
+					"\tR - рыцарь, o - оруженосец.",
+					"\tПример:",
+					"\t\tmove(\"R-1, o-1\")"],
+				config : (function tri_missionera_b(){
+					var R = ["R"]
+					var o = ["o"]
+					return {
+						left: [["R", 1], ["o", 1],
+								["R", 2], ["o", 2],
+								["R", 3], ["o", 3]],
+						rules: items_rule(or(
+								needs(["o", "i"], ["R", "i"]),
+								afraids(["o", "i"], ["R", "j"])
+							)),
+						boat_capacity: 2,
+						colors: {
+							"1": "red",
+							"2": "green",
+							"3": "blue"
+						},
+						drawers: {
+							"o": drawers.man(.8),
+							"R": drawers.man(1)
+						}
+					}
+				})()
+			},{
+				title : "Четыре рыцаря с оруженосцами",
+				description : ["Как 4 рыцаря, каждый со своим оруженосцем, могут переправиться через реку на двухместной лодке, если оруженосцы отказываются оставаться с незнакомыми рыцарями без своих хозяев (но могут оставаться на берегу совсем без рыцарей).",
+					"\tR - рыцарь, o - оруженосец.",
+					"\tПример:",
+					"\t\tmove(\"R-1, o-1\")"],
+				config : (function tri_missionera_b(){
+					var R = ["R"]
+					var o = ["o"]
+					return {
+						left: [["R", 1], ["o", 1],
+								["R", 2], ["o", 2],
+								["R", 3], ["o", 3],
+								["R", 4], ["o", 4]],
+						rules: items_rule(or(
+								needs(["o", "i"], ["R", "i"]),
+								afraids(["o", "i"], ["R", "j"])
+							)),
+						boat_capacity: 3,
+						colors: {
+							"1": "red",
+							"2": "green",
+							"3": "blue",
+							"4": "black"
+						},
+						drawers: {
+							"o": drawers.man(.8),
+							"R": drawers.man(1)
+						}
+					}
+				})()
+			},{
+				title : "Два генерала и полковник",
+				description : ["К реке подошли два генерала, каждый – с двумя ординарцами, и один полковник с одним ординарцем. В их распоряжении имеется только одна лодка, вмещающая не более двух человек. Плавать никто не умеет, зато грести умеют все. Смогут ли все восемь человек переправиться на противоположный берег реки, если ни генералы, ни полковник не согласны оставлять ни одного из своих ординарцев в присутствии другого генерала или полковника ни в лодке, ни на берегу (приставшая к берегу лодка считается частью берега)?",
+					"\tG - генерал или полковник, o - ординарец.",
+					"\tПример:",
+					"\t\tmove(\"G-1, o-1\")"],
+				config : (function tri_missionera_b(){
+					return {
+						left: [["G", 1], ["o", 1], ["o", 1],
+								["G", 2], ["o", 2], ["o", 2],
+								["G", 3], ["o", 3]],
+						rules: items_rule(or(
+								needs(["o", "i"], ["G", "i"]),
+								afraids(["o", "i"], ["G", "j"])
+							)),
+						boat_capacity: 2,
+						colors: {
+							"1": "red",
+							"2": "green",
+							"3": "blue",
+							"4": "black"
+						},
+						drawers: {
+							"o": drawers.man(.8),
+							"G": drawers.man(1)
+						}
+					}
+				})()
+			},{
+				title : "Три генерала",
+				description : [" К реке подошли три генерала, каждый – с двумя ординарцами. В их распоряжении имеется только одна лодка, вмещающая не более двух человек. Плавать никто не умеет, зато грести умеют все. Смогут ли все девять человек переправиться на противоположный берег реки, если ни один из генералов не согласен оставлять ни одного из своих ординарцев в присутствии другого генерала ни в лодке, ни на берегу (приставшая к берегу лодка считается частью берега)?",
+					"\tG - генерал, o - ординарец.",
+					"\tПример:",
+					"\t\tmove(\"G-1, o-1\")"],
+				config : (function tri_missionera_b(){
+					return {
+						left: [["G", 1], ["o", 1], ["o", 1],
+								["G", 2], ["o", 2], ["o", 2],
+								["G", 3], ["o", 3], ["o", 3]],
+						rules: items_rule(or(
+								needs(["o", "i"], ["G", "i"]),
+								afraids(["o", "i"], ["G", "j"])
+							)),
+						boat_capacity: 2,
+						colors: {
+							"1": "red",
+							"2": "green",
+							"3": "blue",
+							"4": "black"
+						},
+						drawers: {
+							"o": drawers.man(.8),
+							"G": drawers.man(1)
+						}
+					}
+				})()
+			},{
+				title : "Два жулика с баулами и стражник с разбойником",
+				description : ["Два жулика и стражник с арестованным разбойником встретились на берегу реки. У каждого жулика по два баула. Все они хотят перправиться на другой берег реки. Есть лодка, которая выдержит двух человек или человека с баулом. Никто из жуликов не согласен оставаться с разбойником в отсутствии стражника. Никто из жуликов не оставит свой баул с разбойником без стражника или с другим жуликом (даже и в присутстствии стражника). Как им всем переправиться?",
+					"\n\tz - жулик, b - баул, s - стражник, r - разбойник."],
+				config : (function tri_missionera_b(){
+					return {
+						left: [["r"], ["s"],
+							["z", 1], ["b", 1], ["b", 1],
+							["z", 2], ["b", 2], ["b", 2]],
+						rules: items_rule(and(
+							or(
+								needs(["z"], ["s"]),
+								afraids(["z"], ["r"])
+							),
+							or(
+								needs(["b", "i"], ["z", "i"]),
+								needs(["b"], ["s"]),
+								afraids(["b"], ["r"])
+							),
+							or(
+								needs(["b", "i"], ["z", "i"]),
+								afraids(["b", "i"], ["z", "j"])
+							)
+						)),
+						boat_capacity: 2,
+						boat_moving_rules: or(
+							necessary(["r"]),
+							necessary(["s"]),
+							necessary(["z"])
+							),
+						colors: {
+							"1": "green",
+							"2": "blue",
+							"s": "red",
+							"r": "black"
+						},
+						drawers: {
+							"z": drawers.man(.9),
+							"s": drawers.man(1),
+							"r": drawers.man(1),
+							"b": drawers.rectangle(1, 1)
+						}
+					}
+				})()
+			}, {
+				title : "Семья с фонариком",
+				description : ["Семья (папа, мама, сын и бабушка) ночью подошла к мосту, способному выдержать только двух человек одновременно. По мосту можно двигаться только с фонариком. Известно, что папа может перейти мост в одну сторону за минуту, мама – за две, сын – за пять и бабушка – за десять минут. Если по мосту движутся двое, время перехода определяется более медленным из двоих. Как семье переправиться менее чем за 18 минут? (Фонарик у них один, кидать его нельзя, светить издали тоже нельзя.)",
+					"\n\tp - папа, m - мама, s - сын, b - бабушка.",
+					"\tПример:",
+					"\t\tmove(\"p, m\")"
+					],
+
+				config : (function family_with_highlighter()
+				{
+					var b = function(type){return function(){return [type]}}
+					var j = b("j") // генератор членов
+					var J = ["P"] // Председатель
+					var time_limit = 18
+
+					return {
+						left: [["p"], ["m"], ["s"], ["b"]],
+						boat_capacity: 2,
+						drawers: {
+							"p": drawers.man(1),
+							"s": drawers.man(0.7),
+							"m": drawers.woman(1),
+							"b": drawers.woman(0.9)
+						},
+						score_counter: function(result, game)
+						{
+							if(result === false)
+								return
+
+							var spent_time = game.family_spent_time || 0
+							if(spent_time >= time_limit)
+								return;
+
+							var what = result.transaction_what
+							var to = result.transaction_to
+							var from = result.transaction_from
+
+							var get_time = function(what)
+							{
+								return has_object(what, ["b"]) ? 10
+									: has_object(what, ["s"]) ? 5
+									: has_object(what, ["m"]) ? 2
+									: has_object(what, ["f"]) ? 1
+									: 0
+							}
+
+							game.family_spent_time = spent_time + get_time(what)
+							game.score += 1
+						},
+						print_score: function(game)
+						{
+							game.print_fun("Рейсов: " + game.score
+								+ ", время: " + game.family_spent_time
+								+ " из " + time_limit)
+						},
+						win_rules: function(game)
+						{
+							return (game.family_spent_time >= time_limit) && "Время вышло!"
 						}
 					}
 				})()
