@@ -1432,7 +1432,7 @@ var infrastructure = (function(){
 			}
 			else
 			{
-				print(messages[command + "_full"])
+				print(messages[command + "_full"] || messages[command])
 			}
 		},
 
@@ -1476,7 +1476,7 @@ var infrastructure = (function(){
 			args[0] = index
 			select_problem.apply(null, args)
 			current_game.display_in_log()
-			print("Наберите команду show(), чтобы прочитать условие задачи")
+			print(messages["start_post_execute_message"])
 		},
 
 		restart : function()
@@ -1515,8 +1515,10 @@ var infrastructure = (function(){
 				window[i] = commands[i]
 			}
 		}
-		alert("Всё самое интересное в консоли")
-		setTimeout(curry(print, "Для начала наберите команду help()"), 500)
+		setTimeout(function()
+			{
+				print(messages["init_globals_message"])
+			}, 1000)
 	}
 
 
@@ -1553,6 +1555,7 @@ var infrastructure = (function(){
 
 (function(){
 	var help_messages = {
+		init_globals_message: "Для начала наберите команду help()",
 		help : "help() - вывести эту справку; help.command() или command.help() - вывести справку по конкретной команде",
 		help_main: "доступны следующие команды:\n",
 		help_full: [
@@ -1563,9 +1566,12 @@ var infrastructure = (function(){
 			"\thelp.to_left()",
 			"\thelp.help()"],
 
-		list: "вывести список задач (№, название)",
+		list: "вывести список задач",
 		list_full: ["Команда problems() или list() выводит список имеющихся задач, выбранного урока. Вызывается без параметров.",
 			"Пример:", "\tlist()"],
+
+		lessons: "отобразить список уроков",
+		lesson: "выбрать нужный урок",
 
 		problems: "вывести список задач (№, название)",
 		problems_full: ["Команда problems() или list() выводит список имеющихся задач, выбранного урока. Вызывается без параметров.",
@@ -1582,6 +1588,7 @@ var infrastructure = (function(){
 		start_full: ["Команда start() с указанным в скобках номером задачи стартует соответствующую задачу.",
 			"Вы её решаете, перемещая героев с берега на берег при помощи команд to_left() и to_right()",
 			"Пример:", "\tstart(5)\t - стартуем пятую задачу"],
+		start_post_execute_message: "Наберите команду show(), чтобы прочитать условие задачи",
 
 		restart: "начать решать текущую задачу заново",
 		restart_full: ["Команда restart() сбрасывает все ваши действия и вы начинаете решать задачу заново. Команда restart() вызывается без аргументов"],
