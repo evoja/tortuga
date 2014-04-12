@@ -2717,7 +2717,7 @@ var infrastructure = (function(){
 								return has_object(what, ["b"]) ? 10
 									: has_object(what, ["s"]) ? 5
 									: has_object(what, ["m"]) ? 2
-									: has_object(what, ["f"]) ? 1
+									: has_object(what, ["p"]) ? 1
 									: 0
 							}
 
@@ -2739,6 +2739,15 @@ var infrastructure = (function(){
 			}
 		]
 	}
+
+
+
+
+
+
+
+
+
 
 	var lesson3 = {
 		title : "Переправы Шаповаловых - остатки сладки (http://www.ashap.info/Zadachi/Perepravy-m.html)",
