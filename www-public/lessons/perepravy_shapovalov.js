@@ -1078,7 +1078,7 @@ var drawing_infrastructure = (function(){
 		t.go(start_position)
 		t.go(start_river_position / 2 + end_river_position / 2)
 		t.setWidth(end_river_position - start_river_position)
-		t.setColor("#ccf")
+		t.setColor("#5cf")
 		t.rotate(90).tailDown()
 		t.go(1000).go(-1000)
 		t.tailUp().rotate(-90)
@@ -1310,9 +1310,9 @@ var infrastructure = (function(){
 		}
 	}
 
-	var print = function(value) 
+	var print = function() 
 	{
-		var result = prepare_print_string(value)
+		var result = prepare_print_string.apply(this, arguments)
 		if(typeof result == "object" && result.constructor.toString().match("function Array.*"))
 		{
 			console.log(result.join("\n"))
@@ -1323,7 +1323,8 @@ var infrastructure = (function(){
 		}
 	}
 
-	var print_help = function() {
+	var print_help = function()
+	{
 		print(commands.help.main)
 		print()
 	}
@@ -1370,17 +1371,50 @@ var infrastructure = (function(){
 		))
 	}
 
+	var help = function(command)
+	{
+		if(!command)
+		{
+			print(messages.help_main)
+			print_commands(commands)
+			print(messages.help_post_execute_message)
+		}
+		else
+		{
+			print(messages[command + "_full"] || messages[command])
+		}
+	}
+
 	var show_problems_of_lesson = function(index)
 	{
 		var less = index === undefined ? lesson : lessons[index]
+		print(less.title + "\n")
+
 		print(map(less.problems, function(elem, i)
 			{
 				return "№ " + i + ".\t" + elem.title
 			}))
+
+		print("")
+
+		if(less === lesson)
+		{
+			print(messages.problems_post_execute_message, current_problem_index)
+		}
+		else
+		{
+			print(messages.problems_post_execute_message_for_other_lesson,
+				index, lesson.title)
+		}
 	}
 
 	var select_problem = function(index)
 	{
+		if(!lesson.problems[index])
+		{
+			return false
+		}
+
 		current_problem_index = index
 		var cfg = lesson.problems[index].config
 		if(typeof cfg == "function")
@@ -1419,28 +1453,19 @@ var infrastructure = (function(){
 			}
 			drawing_infrastructure.start_drawing(current_game)
 		}
+
+		return true
 	}
 	select_problem(0)
 
 	var commands = {
-		help : function(command)
-		{
-			if(!command)
-			{
-				print(messages.help_main)
-				print_commands(commands)
-			}
-			else
-			{
-				print(messages[command + "_full"] || messages[command])
-			}
-		},
-
+		help : help,
 		list : show_problems_of_lesson,
 		problems : show_problems_of_lesson,
 
 		lessons : function()
 		{
+			print([messages.lessons_pre_execute_message, ""])
 			print(map(lessons, function(elem, i)
 				{
 					return [
@@ -1448,11 +1473,14 @@ var infrastructure = (function(){
 						elem.description + "\n"
 					]
 				}))
+			print("")
+			print(messages.lessons_post_execute_message, lesson.title)
 		},
 
 		lesson : function(index)
 		{
 			init_lesson(lessons[index])
+			print(messages.lesson_post_execute_message)
 		},
 
 		show : function(index)
@@ -1474,9 +1502,18 @@ var infrastructure = (function(){
 			index = index === undefined ? current_problem_index : index
 			var args = slice.call(arguments)
 			args[0] = index
-			select_problem.apply(null, args)
-			current_game.display_in_log()
-			print(messages["start_post_execute_message"])
+			if(select_problem.apply(null, args))
+			{
+				print(messages.start_title, current_problem_index,
+					lesson.problems[current_problem_index].title)
+				current_game.display_in_log()
+				print(["", messages["start_post_execute_message"], ""])
+			}
+			else
+			{
+				print(messages.start_error_message)
+				help.start()
+			}
 		},
 
 		restart : function()
@@ -1518,7 +1555,7 @@ var infrastructure = (function(){
 		setTimeout(function()
 			{
 				print(messages["init_globals_message"])
-			}, 1000)
+			}, 2000)
 	}
 
 
@@ -1555,9 +1592,9 @@ var infrastructure = (function(){
 
 (function(){
 	var help_messages = {
-		init_globals_message: "Для начала наберите команду help()",
+		init_globals_message: ["\n\nMышкой можно растянуть окно консоли, чтобы сделать его повыше, чтобы удобнее было читать текст.\n", "Для начала наберите команду help()"],
 		help : "help() - вывести эту справку; help.command() или command.help() - вывести справку по конкретной команде",
-		help_main: "доступны следующие команды:\n",
+		help_main: ["Для того, чтобы посмотреть список задач текущего урока, наберите list() или problems().\n", "Ну а вообще, доступны следующие команды:\n"],
 		help_full: [
 			"Команда help() применённая к другой команде выводит справку по ней",
 			"Примеры:",
@@ -1565,17 +1602,36 @@ var infrastructure = (function(){
 			"\tlist.help()",
 			"\thelp.to_left()",
 			"\thelp.help()"],
+		help_post_execute_message: "\nВ общем, набирайте команду list().\n",
 
 		list: "вывести список задач",
 		list_full: ["Команда problems() или list() выводит список имеющихся задач, выбранного урока. Вызывается без параметров.",
 			"Пример:", "\tlist()"],
 
 		lessons: "отобразить список уроков",
-		lesson: "выбрать нужный урок",
+		lessons_pre_execute_message: "Список уроков:",
+		lessons_post_execute_message: function(current_lesson_title) {
+			return ["Набирайте команду lesson(N), где N - это номер выбранного урока.",
+				"В данный момент выбран урок \"" + current_lesson_title + ".\""]
+		},
 
-		problems: "вывести список задач (№, название)",
+		lesson: "выбрать нужный урок",
+		lesson_post_execute_message: ["Вы выбрали новый урок.", "Наберите команду problems(), чтобы посмотреть задачи этого урока"],
+
+		problems: "вывести список задач",
 		problems_full: ["Команда problems() или list() выводит список имеющихся задач, выбранного урока. Вызывается без параметров.",
 			"Пример:", "\tproblems()"],
+		problems_post_execute_message: function(current_problem_index){
+			return ["Если нравится какая-то задача, набирайте start(N), где N - это номер вашей задачи.",
+				"В данный момент выбрана задача № " + current_problem_index + ".\n",
+				"Решили все задачи этого урока? Набирайте команду lessons(), чтобы выбрать другой урок.\n"]
+		},
+		problems_post_execute_message_for_other_lesson: function(displaying_lesson_index, current_lesson_title)
+		{
+			return ["Если нравятся задачи этого урока, набирайте lesson("
+				+ displaying_lesson_index + "), а затем start(N).\n",
+				"В данный момент выбран урок \"" + current_lesson_title + "\".\n"]
+		},
 
 		show: "show(), show(number) - показать условие задачи",
 		show_full: ["Команда show() с указанным в скобках номером задачи выводит условие этой задачи",
@@ -1588,7 +1644,12 @@ var infrastructure = (function(){
 		start_full: ["Команда start() с указанным в скобках номером задачи стартует соответствующую задачу.",
 			"Вы её решаете, перемещая героев с берега на берег при помощи команд to_left() и to_right()",
 			"Пример:", "\tstart(5)\t - стартуем пятую задачу"],
+		start_title: function(index, title)
+		{
+			return "Выбрана задача № " + index + ". " + title + "\n"
+		},
 		start_post_execute_message: "Наберите команду show(), чтобы прочитать условие задачи",
+		start_error_message: "Что-то пошло не так!\n",
 
 		restart: "начать решать текущую задачу заново",
 		restart_full: ["Команда restart() сбрасывает все ваши действия и вы начинаете решать задачу заново. Команда restart() вызывается без аргументов"],
@@ -2485,7 +2546,7 @@ var infrastructure = (function(){
 				})()
 			},{
 				title : "Четыре рыцаря с оруженосцами",
-				description : ["Как 4 рыцаря, каждый со своим оруженосцем, могут переправиться через реку на двухместной лодке, если оруженосцы отказываются оставаться с незнакомыми рыцарями без своих хозяев (но могут оставаться на берегу совсем без рыцарей).",
+				description : ["Как 4 рыцаря, каждый со своим оруженосцем, могут переправиться через реку на трёхместной лодке, если оруженосцы отказываются оставаться с незнакомыми рыцарями без своих хозяев (но могут оставаться на берегу совсем без рыцарей).",
 					"\n\tR - рыцарь, o - оруженосец.",
 					"\tПример:",
 					"\t\tmove(\"R-1, o-1\")"],
@@ -2656,7 +2717,7 @@ var infrastructure = (function(){
 								return has_object(what, ["b"]) ? 10
 									: has_object(what, ["s"]) ? 5
 									: has_object(what, ["m"]) ? 2
-									: has_object(what, ["f"]) ? 1
+									: has_object(what, ["p"]) ? 1
 									: 0
 							}
 
@@ -2678,6 +2739,15 @@ var infrastructure = (function(){
 			}
 		]
 	}
+
+
+
+
+
+
+
+
+
 
 	var lesson3 = {
 		title : "Переправы Шаповаловых - остатки сладки (http://www.ashap.info/Zadachi/Perepravy-m.html)",
