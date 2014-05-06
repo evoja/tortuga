@@ -2,8 +2,8 @@
 
 var module = angular.module('t_box_module', []);
 
-module.controller('TrtgDrawingSystemController', ['$scope', function($scope) {
-	$scope.ololo = 'alala';
-}]);
+module.controller('DispatcherController', ['$scope', Trtg.TBox.Ang.DispatcherController]);
+module.directive('consoleOut', Trtg.TBox.Ang.ConsoleOutDirective);
+module.directive('consoleIn', Trtg.TBox.Ang.ConsoleInDirective);
 
-})()
+})();

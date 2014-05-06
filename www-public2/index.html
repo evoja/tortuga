@@ -10,9 +10,11 @@
 
 </head>
 <body>
-	<div ng-app="t_box_module" ng-controller="TrtgDrawingSystemController" >
-		<input type="text" ng-model="ololo"></input>
-		{{ololo}}
+	<div ng-app="t_box_module">
+		<div ng-controller="DispatcherController">
+			<input type="text" console-in></input>
+			<div console-out></div>
+		</div>
 	</div>
 <div id="topTextArea"></div>
 <div class="skyGradient"><div class="skyObjects">
@@ -126,6 +128,8 @@
 <script src="js/om/Om.is_browser.js"></script>
 
 <script src="js/lib/angular.js"></script>
+<script src="js/angularable/t_box/controllers/Trtg.TBox.Ang.DispatcherController.js"></script>
+<script src="js/angularable/t_box/directives/Trtg.TBox.Ang.console.js"></script>
 <script src="js/angularable/t_box/t_box_module.js"></script>
 
 <!--
