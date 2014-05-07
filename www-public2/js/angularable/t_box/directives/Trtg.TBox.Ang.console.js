@@ -4,18 +4,17 @@ Om.ns("Trtg.TBox.Ang");
 {
     function ConsoleOutDirective()
     {
-        var link = function(scope, element, attrs)
+        var link = function(scope, $element, attrs)
         {
-            var text = element.text();
+            var text = $element.text();
             var handler = function(message)
             {
-                console.log('out', message);
                 text += message;
-                element.text(text);
+                $element.text(text);
             }
             scope.add_handler(handler);
 
-            element.on('$destroy', function()
+            $element.on('$destroy', function()
             {
                 scope.remove_handler(handler);
             });
@@ -29,15 +28,14 @@ Om.ns("Trtg.TBox.Ang");
 
     function ConsoleInDirective()
     {
-        var link = function(scope, element, attrs)
+        var link = function(scope, $element, attrs)
         {
-            element.on('keydown', function(event)
+            $element.on('keydown', function(event)
             {
                 if(event.keyCode == 13)
                 {
-	                console.log("in", element.val());
-                    scope.dispatch(element.val());
-                    element.val('');
+                    scope.dispatch($element.val());
+                    $element.val('');
                 }
             });
         };

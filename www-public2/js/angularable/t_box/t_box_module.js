@@ -1,9 +1,11 @@
 (function() {
 
-var module = angular.module('t_box_module', []);
+var module = angular.module('t_box_module', [])
 
-module.controller('DispatcherController', ['$scope', Trtg.TBox.Ang.DispatcherController]);
-module.directive('consoleOut', Trtg.TBox.Ang.ConsoleOutDirective);
-module.directive('consoleIn', Trtg.TBox.Ang.ConsoleInDirective);
+    .service('DispatcherService', Trtg.TBox.Ang.DispatcherService)
+    .controller('DispatcherController', ['$scope', 'DispatcherService', Trtg.TBox.Ang.ServiceProxyController])
+    .directive('consoleOut', Trtg.TBox.Ang.ConsoleOutDirective)
+    .directive('consoleIn', Trtg.TBox.Ang.ConsoleInDirective)
+    ;
 
 })();
