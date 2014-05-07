@@ -2,7 +2,7 @@ Om.ns("Trtg.TBox.Ang");
 
 (function()
 {
-    function ConsoleOutDirective()
+    function ConsoleOutDirective(controllerName)
     {
         var link = function(scope, $element, attrs)
         {
@@ -22,11 +22,12 @@ Om.ns("Trtg.TBox.Ang");
 
         return {
             restrict : 'A',
-            link : link
+            link : link,
+            controller : controllerName
         };
     };
 
-    function ConsoleInDirective()
+    function ConsoleInDirective(controllerName)
     {
         var link = function(scope, $element, attrs)
         {
@@ -36,13 +37,16 @@ Om.ns("Trtg.TBox.Ang");
                 {
                     scope.dispatch($element.val());
                     $element.val('');
+                    event.preventDefault();
+                    window.e = $element
                 }
             });
         };
 
         return {
             restrict : 'A',
-            link : link
+            link : link,
+            controller : controllerName
         };
     };
 
