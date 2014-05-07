@@ -1,1 +1,4 @@
 config.js
+vagrant/.vagrant
+grunt_project/node_modules/
+grunt_project/npm-debug.log
