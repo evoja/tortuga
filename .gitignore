@@ -1,1 +1,3 @@
 config.js
+grunt_project/node_modules
+www-public/build
