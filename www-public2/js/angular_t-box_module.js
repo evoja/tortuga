@@ -10,5 +10,9 @@ var module = angular.module('t_box_module', [])
     .directive('consoleOut', curry(Trtg.TBox.Ang.ConsoleOutDirective, 'DispatcherController'))
     .directive('consoleIn', curry(Trtg.TBox.Ang.ConsoleInDirective, 'DispatcherController'))
     ;
+angular.bootstrap(document.getElementById('t_box_module'), ['t_box_module']);
+
+angular.module('other', []);
+angular.bootstrap(document.getElementById('other_module'), ['other']);
 
 })();

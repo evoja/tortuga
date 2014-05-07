@@ -10,7 +10,8 @@
 
 </head>
 <body>
-	<div ng-app="t_box_module">
+	<div id="t_box_module">
+		<h3>t-box module</h3>
 		<div>
 			<textarea console-in></textarea>
 		</div>
@@ -21,6 +22,12 @@
 			<div console-out></div>
 		</div>
 	</div>
+	<div id="other_module">
+		<h3>other module</h3>
+		<input type="text" ng-model="ololo"></input>
+		{{ololo}}
+	</div>
+	<hr/>
 <div id="topTextArea"></div>
 <div class="skyGradient"><div class="skyObjects">
 	<div class="workingArea-wrapper"><div class="workingArea">
