@@ -1,6 +1,4 @@
-Om.ns("Trtg.TBox.Ang");
-
-(function()
+Om.ns_run("Trtg.TBox.Ang", function(ns)
 {
 
 function ServiceProxyController(scope, service)
@@ -13,5 +11,5 @@ function ServiceProxyController(scope, service)
     }
 };
 
-Trtg.TBox.Ang.ServiceProxyController = ServiceProxyController;
-})();
+ns.ServiceProxyController = ServiceProxyController;
+});

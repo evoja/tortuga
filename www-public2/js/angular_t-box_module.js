@@ -1,6 +1,6 @@
 (function() {
 
-var curry = Om.curry;
+var curry = Om.ns_get("Om.curry");
 
 
 var module = angular.module('t_box_module', [])

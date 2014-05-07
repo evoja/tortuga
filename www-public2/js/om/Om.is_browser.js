@@ -1,16 +1,8 @@
 // Requires Om.func
-Om.ns("Om");
-
-(function()
+Om.ns_run("Om", function(ns)
 {
-if(Om.func === undefined || Om.logic === undefined)
-{
-	console.log("Om.func is required")
-	return
-}
-
-var func = Om.func
-var not = Om.logic.not
+var func = Om.ns_get("Om.func")
+var not = Om.ns_get("Om.logic.not")
 
 
 
@@ -32,15 +24,15 @@ var some = function(arr, cond)
 	return !every(arr, not(cond))
 }
 
-Om.is_mac = function(){return is_in_user_agent("Mac")}
-Om.is_chrome = function(){return is_in_user_agent("Chrome")}
-Om.is_firefox = function(){return is_in_user_agent("Firefox")}
-Om.is_safari = function(){return is_in_user_agent("Safari")}
-Om.is_opera = function(){return is_in_user_agent("Opera")}
-Om.is_ie = function(versions)
+ns.is_mac = function(){return is_in_user_agent("Mac")}
+ns.is_chrome = function(){return is_in_user_agent("Chrome")}
+ns.is_firefox = function(){return is_in_user_agent("Firefox")}
+ns.is_safari = function(){return is_in_user_agent("Safari")}
+ns.is_opera = function(){return is_in_user_agent("Opera")}
+ns.is_ie = function(versions)
 {
 	return !versions && is_in_user_agent("MSIE")
 		|| (!!versions) && some(versions, function(version){return is_in_user_agent("MSIE " + version)});
 }
 
-})()
+})

@@ -61,8 +61,9 @@ org.omich.fun1 и org.omich.fun2
 "org.omich.tortoise"
 и создаёт все необходимые объекты, если они не существовали.
 */
-Om = {
-	ns: function ns(namespace)
+(function()
+{
+	var analyse_namespace = function(namespace, null_analyser)
 	{
 		var prevIndex = 0;
 		var nextIndex = namespace.indexOf(".", 0);
@@ -72,10 +73,41 @@ Om = {
 		{
 			nextIndex = namespace.indexOf(".", prevIndex);
 			var key = nextIndex >= 0 ? namespace.substring(prevIndex, nextIndex) : namespace.substring(prevIndex);
-			parent[key] = parent[key] || {};
+			parent[key] = parent[key] || null_analyser(key, parent[key]);
 			parent = parent[key];
 			prevIndex = nextIndex + 1;
 		}
 		while(nextIndex >= 0);
+
+		return parent;
 	}
-}
+
+	function ns(namespace)
+	{
+		return analyse_namespace(namespace, function()
+			{
+				return {};
+			});
+	};
+
+	function ns_run(namespace, fun)
+	{
+		return fun(Om.ns(namespace));
+	};
+
+	function ns_get(namespace)
+	{
+		return analyse_namespace(namespace, function(key)
+			{
+				throw new Error("Namespace '" + namespace + "' is not found. Problem key is '" + key + "'");
+			});
+	};
+
+
+
+	Om = {
+		ns     : ns,
+		ns_run : ns_run,
+		ns_get : ns_get
+	}
+})()

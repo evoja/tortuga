@@ -1,6 +1,4 @@
-Om.ns("Trtg.TBox.Ang");
-
-(function()
+Om.ns_run("Trtg.TBox.Ang", function(ns)
 {
     function ConsoleOutDirective(controllerName)
     {
@@ -50,6 +48,6 @@ Om.ns("Trtg.TBox.Ang");
         };
     };
 
-    Trtg.TBox.Ang.ConsoleOutDirective = ConsoleOutDirective;
-    Trtg.TBox.Ang.ConsoleInDirective = ConsoleInDirective;
-})();
+    ns.ConsoleOutDirective = ConsoleOutDirective;
+    ns.ConsoleInDirective = ConsoleInDirective;
+});

@@ -1,6 +1,4 @@
-Om.ns("Trtg.TBox.Ang.DispatcherService");
-
-(function()
+Om.ns_run("Trtg.TBox.Ang", function(ns)
 {
     function DispatcherService ()
     {
@@ -35,5 +33,5 @@ Om.ns("Trtg.TBox.Ang.DispatcherService");
         };
     };
 
-    Trtg.TBox.Ang.DispatcherService = DispatcherService;
-})();
+    ns.DispatcherService = DispatcherService;
+});

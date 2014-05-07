@@ -1,5 +1,5 @@
-Om.ns("Om");
-
+Om.ns_run("Om", function(ns)
+{
 
 /**
 	Для этих функций существуют всякие стандартные способы разной степени стандартности.
@@ -14,9 +14,7 @@ Om.ns("Om");
 	не меняя по всему коду.
 */
 
-(function()
-{
-Om.htmlspecialchars = function (str, withoutAmps)
+ns.htmlspecialchars = function (str, withoutAmps)
 {
 	if (typeof(str) == "string")
 	{
@@ -31,7 +29,7 @@ Om.htmlspecialchars = function (str, withoutAmps)
 	}
 	return str;
 }
-Om.rhtmlspecialchars = function(str)
+ns.rhtmlspecialchars = function(str)
 {
 	if (typeof(str) == "string")
 	{
@@ -44,13 +42,13 @@ Om.rhtmlspecialchars = function(str)
 	return str;
 }
 
-Om.utf8_to_b64 = function ( str )
+ns.utf8_to_b64 = function ( str )
 {
 	return window.btoa(unescape(encodeURIComponent( str )));
 }
-Om.b64_to_utf8 = function ( str )
+ns.b64_to_utf8 = function ( str )
 {
 	return decodeURIComponent(escape(window.atob( str )));
 }
 
-})()
+})

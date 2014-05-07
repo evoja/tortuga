@@ -1,9 +1,7 @@
-Om.ns("Om");
-
-(function()
+Om.ns_run("Om", function(ns)
 {
-var slice = Array.prototype.slice
-var bind = Function.prototype.bind
+var slice = Om.ns_get("Array.prototype.slice")
+var bind = Om.ns_get("Function.prototype.bind")
 
 /*
 Оборачивает константу в функцию, которая её возвращает.
@@ -119,14 +117,14 @@ var not = function(fun)
 
 
 
-Om.curry              = curry
-Om.curryL             = curryL
-Om.curry_through_bind = curry_through_bind
-Om.curry_gaps         = curry_gaps
-Om.func               = func
+ns.curry              = curry
+ns.curryL             = curryL
+ns.curry_through_bind = curry_through_bind
+ns.curry_gaps         = curry_gaps
+ns.func               = func
 
-Om.logic = {
+ns.logic = {
 	not : not
 }
 
-})()
+});
