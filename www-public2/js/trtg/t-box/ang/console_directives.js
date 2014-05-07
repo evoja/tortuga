@@ -36,7 +36,6 @@ Om.ns_run("Trtg.TBox.Ang", function(ns)
                     scope.dispatch($element.val());
                     $element.val('');
                     event.preventDefault();
-                    window.e = $element
                 }
             });
         };
