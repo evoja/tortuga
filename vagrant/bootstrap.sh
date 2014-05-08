@@ -28,9 +28,11 @@ echo "========================Install GruntJS=================================="
 npm install -g grunt-cli
 
 echo "==========Install Tortuga Grunt project dependencies====================="
-cd /tortuga/grunt_project
+mv /tortuga/grunt_project /t
+cd /t
 npm install
 cd -
+mv /t /tortuga/grunt_project
 
 
 
