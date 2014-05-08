@@ -72,8 +72,8 @@ module.exports = function(grunt) {
 
 
     watch: {
-	    scripts: {
-  	    files: ['../www-public/js/lib/rawdeflate.js',
+      scripts: {
+        files: ['../www-public/js/lib/rawdeflate.js',
           '../www-public/js/lib/rawinflate.js',
           '../www-public/js/Helper.js',
           '../www-public/js/Om.js',
@@ -91,13 +91,22 @@ module.exports = function(grunt) {
           '../www-public/js/tortuga.js',
           '../www-public/js/mouse.js'
           ],
-  	    tasks: ['uglify'],
-  	    options: {
-  	      spawn: false
-  	    }
-	    }
-	  }
+        tasks: ['uglify'],
+        options: {
+          spawn: false
+        }
+      }
+    },
 
+    nodeunit: {
+        all: ['../www-public2-test/example-test.js'],
+        options: {
+            reporter: 'junit',
+            reporterOptions: {
+                output: 'outputdir'
+            }
+        }
+    }
   });
 
   // Load the plugin that provides the "uglify" task.
@@ -106,6 +115,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-nodeunit');
   // Default task(s).
   grunt.registerTask('default', ['concat', 'uglify', 'cssmin']);
 
