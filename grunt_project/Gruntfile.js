@@ -99,7 +99,7 @@ module.exports = function(grunt) {
     },
 
     nodeunit: {
-        all: ['../www-public2-test/example-test.js'],
+        all: ['www-public-test/**/*-test.js'],
         options: {
             reporter: 'junit',
             reporterOptions: {
@@ -118,5 +118,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
   // Default task(s).
   grunt.registerTask('default', ['concat', 'uglify', 'cssmin']);
+
+  grunt.registerTask('test', 'hi', function() {
+    grunt.file.setBase('../2');
+    grunt.task.run('nodeunit');
+  })
 
 };

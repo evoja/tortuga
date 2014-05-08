@@ -63,11 +63,13 @@ org.omich.fun1 и org.omich.fun2
 */
 (function()
 {
+	var context = this;
+	
 	var analyse_namespace = function(namespace, null_analyser)
 	{
 		var prevIndex = 0;
 		var nextIndex = namespace.indexOf(".", 0);
-		var parent = window;
+		var parent = context;
 
 		do
 		{
