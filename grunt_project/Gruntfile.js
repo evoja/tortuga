@@ -99,7 +99,7 @@ module.exports = function(grunt) {
     },
 
     nodeunit: {
-        all: ['www-public-test/**/*-test.js'],
+        all: ['www-public-test/**/*_test.js'],
         options: {
             reporter: 'junit',
             reporterOptions: {
