@@ -17,7 +17,7 @@ describe('Console directives', function()
 
     it('console-out', function()
     {
-        var scope = {};
+        var scope = $rootScope.$new();
         // Compile a piece of HTML containing the directive
         var element = $compile("<div console-out></div>")(scope);
         scope.dispatch("ololo");

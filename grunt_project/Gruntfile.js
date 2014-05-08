@@ -130,6 +130,7 @@ module.exports = function(grunt) {
                     'lib/angular.js',
                     'trtg/t-box/ang/ServiceProxyController.js',
                     'trtg/t-box/ang/DispatcherService.js',
+                    'trtg/t-box/ang/DispatcherController.js',
                     'trtg/t-box/ang/console_directives.js',
                     'angular_t-box_module.js'
                 ],[
