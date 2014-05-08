@@ -9,6 +9,7 @@ then
 apt-get -y install curl
 apt-get -y install make
 apt-get -y install g++
+apt-get -y install libfontconfig1
 
 
 echo "========================Install NodeJS and NPM==========================="
@@ -25,12 +26,6 @@ cd -
 
 echo "========================Install GruntJS=================================="
 npm install -g grunt-cli
-
-# echo "========================Install NodeUnit================================="
-## Description of plugin is here: https://github.com/caolan/nodeunit
-# npm install nodeunit -g
-## Description https://github.com/gruntjs/grunt-contrib-nodeunit
-# npm install grunt-contrib-nodeunit --save-dev
 
 echo "==========Install Tortuga Grunt project dependencies====================="
 cd /tortuga/grunt_project

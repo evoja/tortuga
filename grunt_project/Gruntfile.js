@@ -1,3 +1,11 @@
+var combine_files = function(prefix, array, post_array) {
+    var result = [];
+    array.forEach(function(elem){result.push(prefix + elem)});
+    result = result.concat(post_array);
+    return result;
+};
+
+
 module.exports = function(grunt) {
 
   // Project configuration.
@@ -98,12 +106,39 @@ module.exports = function(grunt) {
       }
     },
 
+    // Description of plugin is here: https://github.com/caolan/nodeunit
+    // https://github.com/gruntjs/grunt-contrib-nodeunit
     nodeunit: {
         all: ['www-public-test/**/*_test.js'],
         options: {
             reporter: 'junit',
             reporterOptions: {
                 output: 'outputdir'
+            }
+        }
+    },
+
+    // Description of plugin is here: https://github.com/gruntjs/grunt-contrib-jasmine
+    // Description of jasmine is here: http://jasmine.github.io/1.3/introduction.html
+    jasmine: {
+        pivotal: {
+            src: combine_files('www-public-src/js/', [
+                    'om/Om.ns.js',
+                    'om/Om.func.js',
+                    'om/Om.text.js',
+                    'om/Om.is_browser.js',
+                    'lib/angular.js',
+                    'trtg/t-box/ang/ServiceProxyController.js',
+                    'trtg/t-box/ang/DispatcherService.js',
+                    'trtg/t-box/ang/console_directives.js',
+                    'angular_t-box_module.js'
+                ],[
+                    'www-public-test/lib/*.js'
+                    // 'www-public-src/**/*.js'
+                ]),
+            options: {
+                specs: 'www-public-test/**/*_jspec.js',
+                helpers: 'www-public-test/**/*_jhelper.js'
             }
         }
     }
@@ -116,12 +151,14 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
+  grunt.loadNpmTasks('grunt-contrib-jasmine');
   // Default task(s).
   grunt.registerTask('default', ['concat', 'uglify', 'cssmin']);
 
   grunt.registerTask('test', 'hi', function() {
     grunt.file.setBase('../2');
     grunt.task.run('nodeunit');
-  })
+    grunt.task.run('jasmine');
+  });
 
 };
