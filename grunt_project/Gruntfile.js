@@ -109,7 +109,7 @@ module.exports = function(grunt) {
     // Description of plugin is here: https://github.com/caolan/nodeunit
     // https://github.com/gruntjs/grunt-contrib-nodeunit
     nodeunit: {
-        all: ['www-public-test/**/*_test.js'],
+        all: ['www-public-test/**/*_nu-test.js'],
         options: {
             reporter: 'junit',
             reporterOptions: {
