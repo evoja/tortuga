@@ -1,4 +1,4 @@
-var path = require("path");
+var path = require('path');
 var src_dir = path.resolve('www-public-src/js/');
 var fs = require('fs');
 

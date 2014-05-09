@@ -68,12 +68,12 @@ org.omich.fun1 и org.omich.fun2
 	var analyse_namespace = function(namespace, null_analyser)
 	{
 		var prevIndex = 0;
-		var nextIndex = namespace.indexOf(".", 0);
+		var nextIndex = namespace.indexOf('.', 0);
 		var parent = context;
 
 		do
 		{
-			nextIndex = namespace.indexOf(".", prevIndex);
+			nextIndex = namespace.indexOf('.', prevIndex);
 			var key = nextIndex >= 0 ? namespace.substring(prevIndex, nextIndex) : namespace.substring(prevIndex);
 			parent[key] = parent[key] || null_analyser(key, parent[key]);
 			parent = parent[key];
@@ -101,7 +101,7 @@ org.omich.fun1 и org.omich.fun2
 	{
 		return analyse_namespace(namespace, function(key)
 			{
-				throw new Error("Namespace '" + namespace + "' is not found. Problem key is '" + key + "'");
+				throw new Error('Namespace "' + namespace + '" is not found. Problem key is "' + key + '"');
 			});
 	};
 

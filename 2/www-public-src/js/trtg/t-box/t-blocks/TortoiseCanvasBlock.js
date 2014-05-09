@@ -14,14 +14,14 @@
 Методы TortoiseCanvasBlock вызываются из TortoiseRunner.
 */
 
-Om.ns_run("Trtg.TBox.TBlocks", function(ns)
+Om.ns_run('Trtg.TBox.TBlocks', function(ns)
 {
     //==== Context functions ==================================================
     var extractCtxFromCanvasAndConfigure = function(canvas)
     {
-        var ctx = canvas.getContext("2d");
-        ctx.lineJoin = "round";
-        ctx.lineCap = "round";
+        var ctx = canvas.getContext('2d');
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
         return ctx;
     };
 
@@ -82,20 +82,20 @@ Om.ns_run("Trtg.TBox.TBlocks", function(ns)
     //==== Tortoise functions ==================================================
     var createTortoiseDiv = function(container)
     {
-        var ttd = document.createElement("DIV");
-        ttd.className = "om-tortoise-div";
+        var ttd = document.createElement('DIV');
+        ttd.className = 'om-tortoise-div';
         container.appendChild(ttd);
 
-        var pointer = document.createElement("DIV");
-        pointer.className = "om-tortoise-pointer";
+        var pointer = document.createElement('DIV');
+        pointer.className = 'om-tortoise-pointer';
         ttd.appendChild(pointer);
 
-        var color = document.createElement("DIV");
-        color.className = "om-tortoise-color";
+        var color = document.createElement('DIV');
+        color.className = 'om-tortoise-color';
         ttd.appendChild(color);
 
-        var image = document.createElement("DIV");
-        image.className = "om-tortoise-image";
+        var image = document.createElement('DIV');
+        image.className = 'om-tortoise-image';
         ttd.appendChild(image);
 
         return {
@@ -143,22 +143,22 @@ Om.ns_run("Trtg.TBox.TBlocks", function(ns)
         var dx = ttd.offsetWidth * (Math.cos(rad) - Math.sin(rad)/2);
         var dy = ttd.offsetWidth * (Math.cos(rad)/2 + Math.sin(rad) - 1);
 
-        ttd.style.left = (x + dx) + "px";
-        ttd.style.bottom =  (y + dy) + "px";
-        var rotate = "rotate(" + rotation + "deg)";
-        var rotateOrigin = "0% 0%";
-        ttd.style["webkitTransform"] = rotate;
-        ttd.style["webkitTransformOrigin"] = rotateOrigin;
-        ttd.style["MozTransform"] = rotate;
-        ttd.style["MozTransformOrigin"] = rotateOrigin;
-        ttd.style["OTransform"] = rotate;
-        ttd.style["OTransformOrigin"] = rotateOrigin;
-        ttd.style["msTransform"] = rotate;
-        ttd.style["msTransformOrigin"] = rotateOrigin;
+        ttd.style.left = (x + dx) + 'px';
+        ttd.style.bottom =  (y + dy) + 'px';
+        var rotate = 'rotate(' + rotation + 'deg)';
+        var rotateOrigin = '0% 0%';
+        ttd.style['webkitTransform'] = rotate;
+        ttd.style['webkitTransformOrigin'] = rotateOrigin;
+        ttd.style['MozTransform'] = rotate;
+        ttd.style['MozTransformOrigin'] = rotateOrigin;
+        ttd.style['OTransform'] = rotate;
+        ttd.style['OTransformOrigin'] = rotateOrigin;
+        ttd.style['msTransform'] = rotate;
+        ttd.style['msTransformOrigin'] = rotateOrigin;
 
-        ttdi.pointer.style.background = isDrawing ? color : "none";
-        ttdi.color.style["border-color"] = color;
-        ttdi.color.style["borderColor"] = color;
+        ttdi.pointer.style.background = isDrawing ? color : 'none';
+        ttdi.color.style['border-color'] = color;
+        ttdi.color.style['borderColor'] = color;
     };
 
     //==== DrawingSystem =======================================================

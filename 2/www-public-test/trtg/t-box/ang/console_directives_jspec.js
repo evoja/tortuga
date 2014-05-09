@@ -19,10 +19,10 @@ describe('Console directives', function()
     {
         var scope = $rootScope.$new();
         // Compile a piece of HTML containing the directive
-        var element = $compile("<div console-out></div>")(scope);
-        scope.dispatch("ololo");
-        expect(element.html()).toEqual("ololo");
-        scope.dispatch("alala");
-        expect(element.html()).toEqual("ololoalala");
+        var element = $compile('<div console-out></div>')(scope);
+        scope.dispatch('ololo');
+        expect(element.html()).toEqual('ololo');
+        scope.dispatch('alala');
+        expect(element.html()).toEqual('ololoalala');
     });
 });

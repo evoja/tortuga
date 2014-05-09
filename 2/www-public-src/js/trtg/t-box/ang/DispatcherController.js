@@ -1,4 +1,4 @@
-Om.ns_run("Trtg.TBox.Ang", function(ns)
+Om.ns_run('Trtg.TBox.Ang', function(ns)
 {
 
 function DispatcherController(scope, service)

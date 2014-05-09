@@ -1,7 +1,7 @@
-Om.ns_run("Om", function(ns)
+Om.ns_run('Om', function(ns)
 {
-var slice = Om.ns_get("Array.prototype.slice")
-var bind = Om.ns_get("Function.prototype.bind")
+var slice = Om.ns_get('Array.prototype.slice')
+var bind = Om.ns_get('Function.prototype.bind')
 
 /*
 Оборачивает константу в функцию, которая её возвращает.

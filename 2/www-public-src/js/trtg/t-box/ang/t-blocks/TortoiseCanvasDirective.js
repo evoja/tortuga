@@ -1,47 +1,47 @@
-Om.ns_run("Trtg.TBox.Ang.TBlocks", function(ns)
+Om.ns_run('Trtg.TBox.Ang.TBlocks', function(ns)
 {
     ns.TortoiseCanvasDirective = function TortoiseCanvasDirective(dispatcherControllerName)
     {
         var link = function(scope, $element, attrs)
         {
-            var slice = Om.ns_get("Array.prototype.slice");
+            var slice = Om.ns_get('Array.prototype.slice');
             var canvas;
             var div;
 
             (function init(){
-                var $canvas = $element.find("canvas");
-                $canvas.attr("width", attrs.width).attr("height", attrs.height);
-                $canvas.css("background", "#0ff");
-                var $div = $element.find("div");
-                $div.css("position", "relative");
+                var $canvas = $element.find('canvas');
+                $canvas.attr('width', attrs.width).attr('height', attrs.height);
+                $canvas.css('background', '#0ff');
+                var $div = $element.find('div');
+                $div.css('position', 'relative');
                 canvas = $canvas[0];
                 div = $div[0];
             })();
 
             var block = scope.register_block(canvas, div);
 
-            $element.on("$destroy", function()
+            $element.on('$destroy', function()
             {
                 scope.unregister_block(block);
             });
 
             // // Example 1: 
             // var t = block.createTortoise();
-            // block.placeTortoise(t, 0, 0, 45, false, "#f00");
+            // block.placeTortoise(t, 0, 0, 45, false, '#f00');
             // var text = $element.text();
 
             // // Example 2:
             // var service = angular.element(document.getElementById('t_box_module')).injector().get('TBoxTortoiseCanvasService');
             // var result = service.createTortoise();
-            // service.placeTortoise(result, 0, 0, 45, false, "#f00");
+            // service.placeTortoise(result, 0, 0, 45, false, '#f00');
         };
 
         return {
-            restrict : "E",
+            restrict : 'E',
             link : link,
             scope : {},
             controller : dispatcherControllerName,
-            template: "<div><canvas></canvas></div>"
+            template: '<div><canvas></canvas></div>'
         };
     };
 });

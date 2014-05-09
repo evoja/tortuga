@@ -13,7 +13,7 @@ describe('DispatcherService', function()
         var res_this;
         var service = {
             a: 1, 
-            b: "hello", 
+            b: 'hello', 
             x: 4, 
             fun: function(y)
             {
@@ -27,7 +27,7 @@ describe('DispatcherService', function()
 
         expect(scope.a).toBeUndefined();
         expect(scope.b).toBeUndefined();
-        expect(typeof scope.fun).toEqual("function");
+        expect(typeof scope.fun).toEqual('function');
         expect(scope.x).toBe(3);
 
         scope.fun(5);
