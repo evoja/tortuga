@@ -1,7 +1,7 @@
-Om.ns_run("Trtg.TBox.Ang.TBlocks", function(ns)
+Om.ns_run("Trtg.TBox.Ang", function(ns)
 {
 
-ns.TortoiseCanvasService = function TortoiseCanvasService(Block)
+ns.MethodsDispatcherService = function MethodsDispatcherService(Block)
 {
     var blocks = [];
 

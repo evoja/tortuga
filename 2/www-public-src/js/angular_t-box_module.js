@@ -4,7 +4,7 @@ var curry = Om.ns_get("Om.curry");
 
 angular.module('t_box_module.TBoxTortoiseCanvas', [])
     .value('TBoxTortoiseCanvasBlock', Om.ns_get("Trtg.TBox.TBlocks.TortoiseCanvasBlock"))
-    .service('TBoxTortoiseCanvasService', ['TBoxTortoiseCanvasBlock', Trtg.TBox.Ang.TBlocks.TortoiseCanvasService])
+    .service('TBoxTortoiseCanvasService', ['TBoxTortoiseCanvasBlock', Om.ns_get("Trtg.TBox.Ang.MethodsDispatcherService")])
     .controller('TBoxTortoiseCanvasController', ['$scope', 'TBoxTortoiseCanvasService', Om.ns_get("Trtg.TBox.Ang.ServiceProxyController")])
     .directive('tboxTortoiseCanvas', curry(Trtg.TBox.Ang.TBlocks.TortoiseCanvasDirective, 'TBoxTortoiseCanvasController'))
     ;
