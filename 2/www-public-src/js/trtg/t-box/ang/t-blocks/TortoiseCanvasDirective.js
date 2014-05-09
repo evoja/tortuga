@@ -18,18 +18,11 @@ Om.ns_run("Trtg.TBox.Ang.TBlocks", function(ns)
                 div = $div[0];
             })();
 
-            var block = new (Om.ns_get("Trtg.TBox.TBlocks.TortoiseCanvasBlock"))(canvas, div);
-
-            var handler = function(commandName)
-            {
-                var args = slice.call(arguments, 1);
-                return block[commandName].apply(block, args);
-            };
-            scope.add_handler(handler);
+            var block = scope.register_block(canvas, div);
 
             $element.on("$destroy", function()
             {
-                scope.remove_handler(handler);
+                scope.unregister_block(block);
             });
 
             // // Example 1: 
@@ -39,8 +32,8 @@ Om.ns_run("Trtg.TBox.Ang.TBlocks", function(ns)
 
             // // Example 2:
             // var service = angular.element(document.getElementById('t_box_module')).injector().get('TBoxTortoiseCanvasService');
-            // var result = service.dispatch("createTortoise");
-            // service.dispatch("placeTortoise", result, 0, 0, 45, false, "#f00");
+            // var result = service.createTortoise();
+            // service.placeTortoise(result, 0, 0, 45, false, "#f00");
         };
 
         return {
