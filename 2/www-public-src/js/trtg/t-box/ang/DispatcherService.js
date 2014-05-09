@@ -25,10 +25,19 @@ Om.ns_run("Trtg.TBox.Ang", function(ns)
             {
                 var context = this;
                 var args = arguments;
-                handlers.forEach(function(handler)
+                var process_handler = function(handler)
                 {
-                    handler.apply(context, args);
-                });
+                    return handler.apply(context, args);
+                };
+
+                if(handlers.length == 1)
+                {
+                    return process_handler(handlers[0]);
+                }
+                else
+                {
+                    handlers.forEach(process_handler);
+                }
             }
         };
     };

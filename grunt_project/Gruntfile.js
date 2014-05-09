@@ -127,11 +127,13 @@ module.exports = function(grunt) {
                     'om/Om.func.js',
                     'om/Om.text.js',
                     'om/Om.is_browser.js',
+                    'trtg/t-box/t-blocks/TortoiseCanvasBlock.js',
                     'lib/angular.js',
                     'trtg/t-box/ang/ServiceProxyController.js',
                     'trtg/t-box/ang/DispatcherService.js',
                     'trtg/t-box/ang/DispatcherController.js',
                     'trtg/t-box/ang/console_directives.js',
+                    'trtg/t-box/ang/t-blocks/TortoiseCanvasDirective.js',
                     'angular_t-box_module.js'
                 ],[
                     'www-public-test/lib/*.js'

@@ -26,4 +26,23 @@ describe('DispatcherService', function()
         service.dispatch("ololo");
         expect(str).not.toEqual("ololo");
     });
+
+    it('Test returns from one handler', function()
+    {
+        var handler = function(value){return value + '1';};
+        service.add_handler(handler);
+        var result = service.dispatch("hello");
+        expect(result).toEqual("hello1");
+        service.remove_handler(handler);
+    });
+
+    it('Test doesnt return from more than one handler', function()
+    {
+        var handler1 = function(value){return value + '1';};
+        var handler2 = function(value){return value + '2';};
+        var result = service.dispatch("hello");
+        expect(result).toBeUndefined();
+        service.remove_handler(handler1);
+        service.remove_handler(handler2);
+    });
 });

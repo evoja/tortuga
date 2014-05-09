@@ -9,6 +9,10 @@ var module = angular.module('t_box_module', [])
     .controller('DispatcherController', ['$scope', 'DispatcherService', Trtg.TBox.Ang.DispatcherController])
     .directive('consoleOut', curry(Trtg.TBox.Ang.ConsoleOutDirective, 'DispatcherController'))
     .directive('consoleIn', curry(Trtg.TBox.Ang.ConsoleInDirective, 'DispatcherController'))
+
+    .service('TBoxTortoiseCanvasService', Trtg.TBox.Ang.DispatcherService)
+    .controller('TBoxTortoiseCanvasController', ['$scope', 'TBoxTortoiseCanvasService', Trtg.TBox.Ang.DispatcherController])
+    .directive('tboxTortoiseCanvas', curry(Trtg.TBox.Ang.TBlocks.TortoiseCanvasDirective, 'TBoxTortoiseCanvasController'))
     ;
 angular.bootstrap(document.getElementById('t_box_module'), ['t_box_module']);
 

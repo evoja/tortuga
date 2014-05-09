@@ -46,4 +46,23 @@ describe('DispatcherController', function()
         service.dispatch("ololo");
         expect(str).not.toEqual("ololo");
     });
+
+    it('Test returns from one handler', function()
+    {
+        var handler = function(value){return value + '1';};
+        scope.add_handler(handler);
+        var result = scope.dispatch("hello");
+        expect(result).toEqual("hello1");
+        scope.remove_handler(handler);
+    });
+
+    it('Test doesnt return from more than one handler', function()
+    {
+        var handler1 = function(value){return value + '1';};
+        var handler2 = function(value){return value + '2';};
+        var result = scope.dispatch("hello");
+        expect(result).toBeUndefined();
+        scope.remove_handler(handler1);
+        scope.remove_handler(handler2);
+    });
 });
