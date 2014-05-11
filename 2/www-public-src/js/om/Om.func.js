@@ -134,7 +134,7 @@ Returns function that negate result of argument function
 @function
 @memberof om
 @param {function} fun - Negated function
-@returns {function} - Function that returns boolean
+@returns {function():boolean} - Function that returns boolean
 */
 var not = function(fun)
 {
