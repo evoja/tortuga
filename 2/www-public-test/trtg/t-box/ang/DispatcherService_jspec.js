@@ -7,7 +7,7 @@ describe('DispatcherService', function()
     var service;
     // Store references to $rootScope and $compile
     // so they are available to all tests in this describe block
-    beforeEach(inject(['DispatcherService', function(serv){
+    beforeEach(inject(['dispatcher_service', function(serv){
         // The injector unwraps the underscores (_) from around the parameter names when matching
         service = serv;
     }]));

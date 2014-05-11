@@ -10,7 +10,7 @@ describe('DispatcherController', function()
     // injection du service $controller et du $rootScope, 
     // attention l'identification du service se fait sur son nom
     // il faut bien respecter $controller et pas écrire $controleur
-    beforeEach(inject(['DispatcherService', '$controller', '$rootScope', function(serv, $controller, $rootScope) {
+    beforeEach(inject(['dispatcher_service', '$controller', '$rootScope', function(serv, $controller, $rootScope) {
         // creation du controller avec le nouveau scope
         scope = $rootScope.$new();
         var controller = $controller('DispatcherController', {
