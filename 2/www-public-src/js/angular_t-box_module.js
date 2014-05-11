@@ -10,11 +10,11 @@ angular.module('t_box_module.TBoxTortoiseCanvas', [])
     .value('TBoxTortoiseCanvasBlock',
                  tbox_get('TBlocks.TortoiseCanvasBlock'))
 
-    .service('TBoxTortoiseCanvasService',
+    .service('tbox_tortoise_canvas_service',
                 ['TBoxTortoiseCanvasBlock', tang_get('MethodsDispatcherService')])
 
     .controller('TBoxTortoiseCanvasController',
-                ['$scope', 'TBoxTortoiseCanvasService', tang_get('ServiceProxyController')])
+                ['$scope', 'tbox_tortoise_canvas_service', tang_get('ServiceProxyController')])
 
     .directive('tboxTortoiseCanvas',
                 curry(tang_get('TBlocks.TortoiseCanvasDirective'), 'TBoxTortoiseCanvasController'))
@@ -22,11 +22,11 @@ angular.module('t_box_module.TBoxTortoiseCanvas', [])
 
 
 angular.module('t_box_module', ['t_box_module.TBoxTortoiseCanvas'])
-    .service('DispatcherService',
+    .service('dispatcher_service',
                 tang_get('DispatcherService'))
 
     .controller('DispatcherController',
-                ['$scope', 'DispatcherService', tang_get('DispatcherController')])
+                ['$scope', 'dispatcher_service', tang_get('DispatcherController')])
 
     .directive('consoleOut',
                 curry(tang_get('ConsoleOutDirective'), 'DispatcherController'))

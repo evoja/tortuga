@@ -31,7 +31,7 @@ Om.ns_run('Trtg.TBox.Ang.TBlocks', function(ns)
             // var text = $element.text();
 
             // // Example 2:
-            // var service = angular.element(document.getElementById('t_box_module')).injector().get('TBoxTortoiseCanvasService');
+            // var service = angular.element(document.getElementById('t_box_module')).injector().get('tbox_tortoise_canvas_service');
             // var result = service.createTortoise();
             // service.placeTortoise(result, 0, 0, 45, false, '#f00');
         };
