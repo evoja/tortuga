@@ -1,5 +1,13 @@
 om.ns_run('trtg.tbox.ang', function(ns)
 {
+    /**
+     * Listens messages from scope and writes to element that is argumented by this directive.
+     *
+     * It was written as experiment and unnecessary now.
+     * @deprecated
+     * @memberOf  trtg.tbox.ang
+     * @param {string} controllerName - name of controller that manages messages exchange.
+     */
     function ConsoleOutDirective(controllerName)
     {
         var link = function(scope, $element, attrs)
@@ -25,6 +33,14 @@ om.ns_run('trtg.tbox.ang', function(ns)
         };
     };
 
+    /**
+     * Sends typed in text as messages to scope.
+     *
+     * It was written as experiment and unnecessary now.
+     * @deprecated
+     * @memberOf  trtg.tbox.ang
+     * @param {string} controllerName - name of controller that manages messages exchange.
+     */
     function ConsoleInDirective(controllerName)
     {
         var link = function(scope, $element, attrs)

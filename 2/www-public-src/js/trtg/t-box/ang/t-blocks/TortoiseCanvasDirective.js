@@ -1,5 +1,14 @@
 om.ns_run('trtg.tbox.ang.tblocks', function(ns)
 {
+    /**
+     * Displays Tortoise canvas that gets commands and can draw lines
+     * and display tortoises. It works in math coordinate system, where OY 
+     * goes from down to up.
+     * @alias TortoiseCanvasDirective
+     * @memberOf  trtg.tbox.ang.tblocks
+     * @param {string} dispatcherControllerName - name of controller that manages 
+     * messages exchange.
+     */
     ns.TortoiseCanvasDirective = function TortoiseCanvasDirective(dispatcherControllerName)
     {
         var link = function(scope, $element, attrs)
