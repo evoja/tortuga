@@ -44,7 +44,7 @@ module.exports = {
         test.expect(4);
 
         test.strictEqual(Om.ns_get.trololo, undefined, "There are no property 'ololo' of Om.ns_get");
-        test.throws(function(){Om.ns_get("Om.ns_get.trololo.ololo")}, Error, "Must trhow exception on Om.ns_get.trololo");
+        test.throws(function(){Om.ns_get("Om.ns_get.trololo.ololo")}, Om.ns_get.NsNotFoundError, "Must trhow exception on Om.ns_get.trololo");
 
         var ololo = Om.ns("Om.ns_get.trololo.ololo");
         test.doesNotThrow(function(){Om.ns_get("Om.ns_get.trololo.ololo")});

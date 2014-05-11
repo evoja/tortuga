@@ -3,13 +3,18 @@ Om.ns_run('Om', function(ns)
 var slice = Om.ns_get('Array.prototype.slice')
 var bind = Om.ns_get('Function.prototype.bind')
 
-/*
-Оборачивает константу в функцию, которая её возвращает.
+/**
+Wraps argument to function that returns its value;
+@function
+@memberof Om
+@param {*} arg Value that will be returned by returned function
+@returns {function} function that returns arg's value
 */
 var func = function(arg){return function(){return arg}}
 
 
 /**
+## Пример использования:
 Пример использования:
 1. Без контекста:
 		var div = function(a, b){return a / b}
@@ -40,6 +45,12 @@ var func = function(arg){return function(){return arg}}
 
 		//curry way:
 		arr.forEach(curry(pushSum, const))
+
+@function
+@memberof Om
+@param {function} fun - Curried function
+@param {...*} args - Partial arguments
+@returns {function}
 */
 var curry = function(fun /*, arguments */)
 {
@@ -64,6 +75,12 @@ var curry_through_bind = function(fun /*, arguments */)
 		var d5 = curryL(div, 5);
 		d5(10) // 2
 		d5(60) // 12
+
+@function
+@memberof Om
+@param {function} fun - Curried function
+@param {...*} args - Partial arguments
+@returns {function}
 */
 var curryL = function(fun /* other */)
 {
@@ -75,7 +92,7 @@ var curryL = function(fun /* other */)
 	}
 }
 
-/*
+/**
 ## Пример использования:
 1. Без контекста
 		var div = function(a, b, c){return a / b + c}
@@ -83,6 +100,12 @@ var curryL = function(fun /* other */)
 		d10_x_1(10) // 2
 		d10_x_1(2)  // 6
 		d10_x_1(5)  // 3
+
+@function
+@memberof Om
+@param {function} fun - Curried function
+@param {...*} args - Partial arguments with undefined as gaps
+@returns {function}
 */
 var curry_gaps = function(fun /* other */)
 {
@@ -106,7 +129,13 @@ var curry_gaps = function(fun /* other */)
 	}
 }
 
-
+/**
+Returns function that negate result of argument function
+@function
+@memberof Om
+@param {function} fun - Negated function
+@returns {function} - Function that returns boolean
+*/
 var not = function(fun)
 {
 	return function()

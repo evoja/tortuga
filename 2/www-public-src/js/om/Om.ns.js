@@ -1,5 +1,10 @@
 /**
-Неймспейсы нужны затем же, зачем и во всех остальных языках.
+@namespace Om
+*/
+/**
+@function ns
+@name Om.ns
+@description Неймспейсы нужны затем же, зачем и во всех остальных языках.
 Чтобы разрграничить пространства имён классов, функций, объектов и прочих переменных.
 
 Однако в JS никаких неймспейсов нет и приходится как-то извращаться.
@@ -10,6 +15,7 @@ org.omich.fun1 и org.omich.fun2
 Т.е. смысл таков, что это функции fun1 и fun2, лежащие в пространстве имён org.omich.
 
 Но по сути, эту систему можно представить так:
+
 	window.org = {
 		omich: {
 			fun1: function(){},
@@ -92,20 +98,45 @@ org.omich.fun1 и org.omich.fun2
 			});
 	};
 
+	/** 
+		Gets or creates necessary namespace. Runs second parameter function
+		and puts there namespace object as argument.
+		@param {!string} namespace - Name of namespace
+		@param {!function} fun - Function that adds members to namespace
+		@memberof Om
+	*/
 	function ns_run(namespace, fun)
 	{
 		return fun(Om.ns(namespace));
 	};
 
+	/**
+		@constructor Om.ns_get.NsNotFoundError
+		@memberof Om.ns_get
+		@param {string} namespace - Contains key that was looked for
+		@param {string} key - Contains highest unexisting key
+		@property {string} namespace - Contains key that was looked for
+		@property {string} undefined_key - Contains highest unexisting key
+	*/
+	function NsNotFoundError (namespace, key) {
+		Error.call(this, 'Namespace "' + namespace + '" is not found. Problem key is "' + key + '"');
+		this.namespace = namespace
+		this.undefined_key = key;
+	};
+	/** 
+		Gets necessary namespace if exists. Otherwise throws error.
+		@param {!string} namespace - Name of namespace
+		@throws {Om.ns_get.NsNotFoundError} Error throws if object not found. contains 
+		@memberof Om
+	*/
 	function ns_get(namespace)
 	{
 		return analyse_namespace(namespace, function(key)
 			{
-				throw new Error('Namespace "' + namespace + '" is not found. Problem key is "' + key + '"');
+				throw new NsNotFoundError(namespace, key);
 			});
 	};
-
-
+	ns_get.NsNotFoundError = NsNotFoundError;
 
 	Om = {
 		ns     : ns,

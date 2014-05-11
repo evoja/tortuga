@@ -144,6 +144,21 @@ module.exports = function(grunt)
                 helpers: 'www-public-test/**/*_jhelper.js'
             }
         }
+    },
+
+    jsdoc: {
+        dist : {
+            src: [
+                '../2/www-public-src/js/**/*.js',
+                '../2/www-public-test/**/*.js',
+                '!../2/www-public-src/js/lib/**/*.js',
+                '!../2/www-public-test/lib/**/*.js'
+                ], 
+            options: {
+                destination: '../2/doc-js',
+                configure: 'jsdoc_conf.json'
+            }
+        }
     }
   });
 
@@ -155,13 +170,22 @@ module.exports = function(grunt)
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
+  grunt.loadNpmTasks('grunt-jsdoc');
   // Default task(s).
   grunt.registerTask('default', ['concat', 'uglify', 'cssmin']);
 
-  grunt.registerTask('test', 'hi', function() {
+  grunt.registerTask('rebase2', 'Set base path to ../2', function()
+  {
     grunt.file.setBase('../2');
-    grunt.task.run('nodeunit');
-    grunt.task.run('jasmine');
   });
+
+  grunt.registerTask('rebase_default', 'Set base path to ../2', function()
+  {
+    grunt.file.setBase('../grunt_project');
+  });
+
+  grunt.registerTask('test', ['rebase2', 'nodeunit', 'jasmine', 'rebase_default']);
+  grunt.registerTask('build2', ['test', 'jsdoc']);
+
 
 };
