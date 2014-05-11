@@ -1,12 +1,19 @@
-var combine_files = function(prefix, array, post_array) {
+var combine_files = function() // prefix1, array1, prefix2, array2, ...
+{
+    if(arguments.length <= 1)
+        return [];
+
+    var prefix = arguments[0];
+    var array = arguments[1];
     var result = [];
     array.forEach(function(elem){result.push(prefix + elem)});
-    result = result.concat(post_array);
+    result = result.concat(combine_files.apply(this, Array.prototype.slice.call(arguments,2)));
     return result;
 };
 
 
-module.exports = function(grunt) {
+module.exports = function(grunt)
+{
 
   // Project configuration.
   grunt.initConfig({
@@ -122,23 +129,16 @@ module.exports = function(grunt) {
     // Description of jasmine is here: http://jasmine.github.io/1.3/introduction.html
     jasmine: {
         pivotal: {
-            src: combine_files('www-public-src/js/', [
+            src: combine_files(
+                'www-public-src/js/', [
                     'om/Om.ns.js',
                     'om/Om.func.js',
                     'om/Om.text.js',
                     'om/Om.is_browser.js',
                     'lib/angular.js',
-                    'trtg/t-box/t-blocks/TortoiseCanvasBlock.js',
-                    'trtg/t-box/ang/MethodsDispatcherService.js',
-                    'trtg/t-box/ang/ServiceProxyController.js',
-                    'trtg/t-box/ang/t-blocks/TortoiseCanvasDirective.js',
-                    'trtg/t-box/ang/DispatcherService.js',
-                    'trtg/t-box/ang/DispatcherController.js',
-                    'trtg/t-box/ang/console_directives.js',
-                    'angular_t-box_module.js'
-                ],[
-                    'www-public-test/lib/*.js'
-                ]),
+                    'trtg/**/*.js',
+                    'angular_t-box_module.js'],
+                '', ['www-public-test/lib/*.js']),
             options: {
                 specs: 'www-public-test/**/*_jspec.js',
                 helpers: 'www-public-test/**/*_jhelper.js'

@@ -40,9 +40,17 @@ describe('DispatcherService', function()
     {
         var handler1 = function(value){return value + '1';};
         var handler2 = function(value){return value + '2';};
-        var result = service.dispatch('hello');
-        expect(result).toBeUndefined();
+
+        service.add_handler(handler1);
+        expect(service.dispatch('hello')).toEqual('hello1');
+
+        service.add_handler(handler2);
+        expect(service.dispatch('hello')).toBeUndefined();
+
         service.remove_handler(handler1);
+        expect(service.dispatch('hello')).toEqual('hello2');
+
         service.remove_handler(handler2);
+        expect(service.dispatch('hello')).toBeUndefined();
     });
 });
