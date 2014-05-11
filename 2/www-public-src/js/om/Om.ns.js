@@ -1,9 +1,9 @@
 /**
-@namespace Om
+@namespace om
 */
 /**
 @function ns
-@name Om.ns
+@name om.ns
 @description Неймспейсы нужны затем же, зачем и во всех остальных языках.
 Чтобы разрграничить пространства имён классов, функций, объектов и прочих переменных.
 
@@ -103,16 +103,16 @@ org.omich.fun1 и org.omich.fun2
 		and puts there namespace object as argument.
 		@param {!string} namespace - Name of namespace
 		@param {!function} fun - Function that adds members to namespace
-		@memberof Om
+		@memberof om
 	*/
 	function ns_run(namespace, fun)
 	{
-		return fun(Om.ns(namespace));
+		return fun(om.ns(namespace));
 	};
 
 	/**
-		@constructor Om.ns_get.NsNotFoundError
-		@memberof Om.ns_get
+		@constructor om.ns_get.NsNotFoundError
+		@memberof om.ns_get
 		@param {string} namespace - Contains key that was looked for
 		@param {string} key - Contains highest unexisting key
 		@property {string} namespace - Contains key that was looked for
@@ -126,8 +126,8 @@ org.omich.fun1 и org.omich.fun2
 	/** 
 		Gets necessary namespace if exists. Otherwise throws error.
 		@param {!string} namespace - Name of namespace
-		@throws {Om.ns_get.NsNotFoundError} Error throws if object not found. contains 
-		@memberof Om
+		@throws {om.ns_get.NsNotFoundError} Error throws if object not found. contains 
+		@memberof om
 	*/
 	function ns_get(namespace)
 	{
@@ -138,7 +138,7 @@ org.omich.fun1 и org.omich.fun2
 	};
 	ns_get.NsNotFoundError = NsNotFoundError;
 
-	Om = {
+	om = {
 		ns     : ns,
 		ns_run : ns_run,
 		ns_get : ns_get

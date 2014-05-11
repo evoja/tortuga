@@ -1,4 +1,4 @@
-Om.ns_run('Trtg.TBox.Ang', function(ns)
+om.ns_run('trtg.tbox.ang', function(ns)
 {
     function DispatcherService ()
     {

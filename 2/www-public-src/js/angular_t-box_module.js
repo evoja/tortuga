@@ -1,14 +1,14 @@
 (function() {
-var ns_get = Om.ns_get;
-var curry = ns_get('Om.curry');
+var ns_get = om.ns_get;
+var curry = ns_get('om.curry');
 
-var tbox_get = function(postfix){return ns_get('Trtg.TBox.' + postfix)};
-var tang_get = function(postfix){return ns_get('Trtg.TBox.Ang.' + postfix)};
+var tbox_get = function(postfix){return ns_get('trtg.tbox.' + postfix)};
+var tang_get = function(postfix){return ns_get('trtg.tbox.ang.' + postfix)};
 
 
 angular.module('t_box_module.TBoxTortoiseCanvas', [])
     .value('TBoxTortoiseCanvasBlock',
-                 tbox_get('TBlocks.TortoiseCanvasBlock'))
+                 tbox_get('tblocks.TortoiseCanvasBlock'))
 
     .service('tbox_tortoise_canvas_service',
                 ['TBoxTortoiseCanvasBlock', tang_get('MethodsDispatcherService')])
@@ -17,7 +17,7 @@ angular.module('t_box_module.TBoxTortoiseCanvas', [])
                 ['$scope', 'tbox_tortoise_canvas_service', tang_get('ServiceProxyController')])
 
     .directive('tboxTortoiseCanvas',
-                curry(tang_get('TBlocks.TortoiseCanvasDirective'), 'TBoxTortoiseCanvasController'))
+                curry(tang_get('tblocks.TortoiseCanvasDirective'), 'TBoxTortoiseCanvasController'))
     ;
 
 

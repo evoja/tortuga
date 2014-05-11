@@ -22,7 +22,7 @@ describe('MethodsDispatcherService', function()
 
     angular.module('test_module', [])
         .value('TestBlock', TestBlock)
-        .service('service', ['TestBlock', Om.ns_get("Trtg.TBox.Ang.MethodsDispatcherService")]);
+        .service('service', ['TestBlock', om.ns_get("trtg.tbox.ang.MethodsDispatcherService")]);
 
 
 

@@ -5,7 +5,7 @@ describe('DispatcherService', function()
 
     it('first', function()
     {
-        var SPC = Trtg.TBox.Ang.ServiceProxyController;
+        var SPC = trtg.tbox.ang.ServiceProxyController;
         expect(SPC).toBeDefined();
         var scope = {x: 3};
         var res_x;

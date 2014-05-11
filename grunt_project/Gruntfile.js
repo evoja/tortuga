@@ -131,10 +131,10 @@ module.exports = function(grunt)
         pivotal: {
             src: combine_files(
                 'www-public-src/js/', [
-                    'om/Om.ns.js',
-                    'om/Om.func.js',
-                    'om/Om.text.js',
-                    'om/Om.is_browser.js',
+                    'om/om.ns.js',
+                    'om/om.func.js',
+                    'om/om.text.js',
+                    'om/om.is_browser.js',
                     'lib/angular.js',
                     'trtg/**/*.js',
                     'angular_t-box_module.js'],

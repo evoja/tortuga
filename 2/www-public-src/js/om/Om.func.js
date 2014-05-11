@@ -1,12 +1,12 @@
-Om.ns_run('Om', function(ns)
+om.ns_run('om', function(ns)
 {
-var slice = Om.ns_get('Array.prototype.slice')
-var bind = Om.ns_get('Function.prototype.bind')
+var slice = om.ns_get('Array.prototype.slice')
+var bind = om.ns_get('Function.prototype.bind')
 
 /**
 Wraps argument to function that returns its value;
 @function
-@memberof Om
+@memberof om
 @param {*} arg Value that will be returned by returned function
 @returns {function} function that returns arg's value
 */
@@ -47,7 +47,7 @@ var func = function(arg){return function(){return arg}}
 		arr.forEach(curry(pushSum, const))
 
 @function
-@memberof Om
+@memberof om
 @param {function} fun - Curried function
 @param {...*} args - Partial arguments
 @returns {function}
@@ -77,7 +77,7 @@ var curry_through_bind = function(fun /*, arguments */)
 		d5(60) // 12
 
 @function
-@memberof Om
+@memberof om
 @param {function} fun - Curried function
 @param {...*} args - Partial arguments
 @returns {function}
@@ -102,7 +102,7 @@ var curryL = function(fun /* other */)
 		d10_x_1(5)  // 3
 
 @function
-@memberof Om
+@memberof om
 @param {function} fun - Curried function
 @param {...*} args - Partial arguments with undefined as gaps
 @returns {function}
@@ -132,7 +132,7 @@ var curry_gaps = function(fun /* other */)
 /**
 Returns function that negate result of argument function
 @function
-@memberof Om
+@memberof om
 @param {function} fun - Negated function
 @returns {function} - Function that returns boolean
 */

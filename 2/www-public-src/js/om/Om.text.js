@@ -1,4 +1,4 @@
-Om.ns_run('Om', function(ns)
+om.ns_run('om', function(ns)
 {
 
 /**

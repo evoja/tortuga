@@ -14,7 +14,7 @@
 Методы TortoiseCanvasBlock вызываются из TortoiseRunner.
 */
 
-Om.ns_run('Trtg.TBox.TBlocks', function(ns)
+om.ns_run('trtg.tbox.tblocks', function(ns)
 {
     //==== Context functions ==================================================
     var extractCtxFromCanvasAndConfigure = function(canvas)

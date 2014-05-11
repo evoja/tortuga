@@ -1,10 +1,10 @@
-Om.ns_run('Trtg.TBox.Ang.TBlocks', function(ns)
+om.ns_run('trtg.tbox.ang.tblocks', function(ns)
 {
     ns.TortoiseCanvasDirective = function TortoiseCanvasDirective(dispatcherControllerName)
     {
         var link = function(scope, $element, attrs)
         {
-            var slice = Om.ns_get('Array.prototype.slice');
+            var slice = om.ns_get('Array.prototype.slice');
             var canvas;
             var div;
 

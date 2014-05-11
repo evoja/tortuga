@@ -1,8 +1,8 @@
-// Requires Om.func
-Om.ns_run('Om', function(ns)
+// Requires om.func
+om.ns_run('om', function(ns)
 {
-var func = Om.ns_get('Om.func')
-var not = Om.ns_get('Om.logic.not')
+var func = om.ns_get('om.func')
+var not = om.ns_get('om.logic.not')
 
 
 
