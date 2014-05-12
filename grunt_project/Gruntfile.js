@@ -136,6 +136,7 @@ module.exports = function(grunt)
                     'om/om.text.js',
                     'om/om.is_browser.js',
                     'lib/angular.js',
+                    'trtg/t-box/tortoise-vm/TortoiseRunner.js',
                     'trtg/**/*.js',
                     'angular_t-box_module.js'],
                 '', ['www-public-test/lib/*.js']),

@@ -14,8 +14,11 @@ angular.module('t_box_module.TBoxTortoiseCanvas', [])
     .service('tbox_tortoise_canvas_service',
                 ['TBoxTortoiseCanvasBlock', tang_get('MethodsDispatcherService')])
 
-    .service('tbox_tortoisevm_tortoise_runner',
+    .service('tbox_tortoisevm_tortoise-runner',
                 ['tbox_tortoise_canvas_service', tbox_get('tortoise_vm.TortoiseRunner')])
+
+    .service('tbox_tortoisevm_js-converter',
+                ['tbox_tortoisevm_tortoise-runner', tbox_get('tortoise_vm.JsConverter')])
 
     .controller('TBoxTortoiseCanvasController',
                 ['$scope', 'tbox_tortoise_canvas_service', tang_get('ServiceProxyController')])

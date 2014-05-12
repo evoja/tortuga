@@ -18,7 +18,7 @@ om.ns_run("trtg.tbox.tortoise_vm", function(ns)
 
 @example <caption>Пример использования:</caption>
 
-var runner = angular.element(document.getElementById('t_box_module')).injector().get('tbox_tortoisevm_tortoise_runner');
+var runner = angular.element(document.getElementById('t_box_module')).injector().get('tbox_tortoisevm_tortoise-runner');
 // короткий доступ к библиотеке:
 var Tr = runner.constructor
 
@@ -426,28 +426,28 @@ TortoiseRunner.prototype = {
 };
 
 TortoiseRunner.commands = {
-    create   : runCreate,
-    clearCanvas : runClearCanvas,
-    go       : runGo,
-    tailDown : runTailDown,
-    tailUp   : runTailUp,
-    rotate   : runRotate,
-    setColor : runSetColor,
-    setWidth : runSetWidth,
-    setX     : runSetX,
-    getX     : runGetX,
-    setY     : runSetY,
-    getY     : runGetY,
-    getAngle : runGetAngle,
-    setAngle : runSetAngle,
-    capsRound : runCapsRound,
-    capsSquare : runCapsSquare,
-    kill     : runKill,
-    nil      : runNil,
-    pair     : runPair,
-    seq      : runSeq,
-    repeat   : runRepeat,
-    getColorUnderTail : runGetColorUnderTail
+    create:      runCreate,
+    clearCanvas: runClearCanvas,
+    go:          runGo,
+    tailDown:    runTailDown,
+    tailUp:      runTailUp,
+    rotate:      runRotate,
+    setColor:    runSetColor,
+    setWidth:    runSetWidth,
+    setX:        runSetX,
+    getX:        runGetX,
+    setY:        runSetY,
+    getY:        runGetY,
+    getAngle:    runGetAngle,
+    setAngle:    runSetAngle,
+    capsRound:   runCapsRound,
+    capsSquare:  runCapsSquare,
+    kill:        runKill,
+    nil:         runNil,
+    pair:        runPair,
+    seq:         runSeq,
+    repeat:      runRepeat,
+    getColorUnderTail: runGetColorUnderTail
 };
 TortoiseRunner.constructCommand = constructCommand;
 TortoiseRunner.appendCommandToSeq = appendCommandToSeq;
