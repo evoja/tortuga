@@ -75,22 +75,33 @@ om.ns_run('trtg.tbox.ang.tblocks', function(ns)
             // runner.run(td)
             // runner.run(goCommand)
 
-            // Example 4.
-            var myJc = angular.element(document.getElementById('t_box_module')).injector().get('tbox_tortoisevm_js-converter');
-            //Создаём черепаху
-            var t = myJc.parseNode(myJc.nodes.create, 0, 0, "green", 1, "round")
-            //Прём вперёд
-            myJc.parseNode(myJc.nodes.go, t, 100)
 
-            //Начинаем цепочку
-            myJc.parseNode(myJc.nodes.begin)
-            //Делаем три вызова, ничего не происходит
-            myJc.parseNode(myJc.nodes.go, t, 100)
-            myJc.parseNode(myJc.nodes.go, t, 100)
-            myJc.parseNode(myJc.nodes.go, t, 100)
-            //Обрываем цепочку, выполняются все три команды
-            myJc.parseNode(myJc.nodes.end)
 
+            // // Example 4.
+            // var myJc = angular.element(document.getElementById('t_box_module')).injector().get('tbox_tortoisevm_js-converter');
+            // //Создаём черепаху
+            // var t = myJc.parseNode(myJc.nodes.create, 0, 0, "green", 1, "round")
+            // //Прём вперёд
+            // myJc.parseNode(myJc.nodes.go, t, 100)
+
+            // //Начинаем цепочку
+            // myJc.parseNode(myJc.nodes.begin)
+            // //Делаем три вызова, ничего не происходит
+            // myJc.parseNode(myJc.nodes.go, t, 100)
+            // myJc.parseNode(myJc.nodes.go, t, 100)
+            // myJc.parseNode(myJc.nodes.go, t, 100)
+            // //Обрываем цепочку, выполняются все три команды
+            // myJc.parseNode(myJc.nodes.end)
+
+
+            // // Example 5
+            // var globals = angular.element(document.getElementById('t_box_module')).injector().get('tbox_tortoisevm_tortoise-globals');
+            // var t = createTortoise();
+            // t.rotate(45);
+            // t.tailDown().go(10).tailUp().go(10).tailDown().go(10).rotate(-45);
+            // repeat(30);
+            //     t.go(2).rotate(90).go(2).rotate(-90);
+            // end();
         };
 
         return {
