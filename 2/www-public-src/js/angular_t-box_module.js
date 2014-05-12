@@ -2,6 +2,7 @@
 var ns_get = om.ns_get;
 var curry = ns_get('om.func.curry');
 
+var trtg_get = function(postfix){return ns_get('trtg.' + postfix)};
 var tbox_get = function(postfix){return ns_get('trtg.tbox.' + postfix)};
 var tang_get = function(postfix){return ns_get('trtg.tbox.ang.' + postfix)};
 
@@ -12,6 +13,9 @@ angular.module('t_box_module.TBoxTortoiseCanvas', [])
 
     .service('tbox_tortoise_canvas_service',
                 ['TBoxTortoiseCanvasBlock', tang_get('MethodsDispatcherService')])
+
+    .service('tbox_tortoisevm_tortoise_runner',
+                ['tbox_tortoise_canvas_service', tbox_get('tortoise_vm.TortoiseRunner')])
 
     .controller('TBoxTortoiseCanvasController',
                 ['$scope', 'tbox_tortoise_canvas_service', tang_get('ServiceProxyController')])

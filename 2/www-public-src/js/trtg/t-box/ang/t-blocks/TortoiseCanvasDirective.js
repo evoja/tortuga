@@ -43,6 +43,37 @@ om.ns_run('trtg.tbox.ang.tblocks', function(ns)
             // var service = angular.element(document.getElementById('t_box_module')).injector().get('tbox_tortoise_canvas_service');
             // var result = service.createTortoise();
             // service.placeTortoise(result, 0, 0, 45, false, '#f00');
+
+            // // Example 3:
+            // var runner = angular.element(document.getElementById('t_box_module')).injector().get('tbox_tortoisevm_tortoise_runner');
+            // // короткий доступ к библиотеке:
+            // var Tr = runner.constructor
+
+            // var t; // это будет черепаха.
+            // // // создаём команду, создающую черепаху:
+            // var command = Tr.constructCommand(Tr.commands.create, 0, 20, "green", 1, "round", function(tt){t = tt});
+
+            // // // создаём команды опускания и поднимания хвоста:
+            // var td = Tr.constructCommand(Tr.commands.tailDown, function(){return t})
+            // var tu = Tr.constructCommand(Tr.commands.tailUp, function(){return t})
+
+            // // // выполняем команду, черепаха создаётся:
+            // runner.run(command)
+
+            // // // создаём комадну, двигающую черепаху вперёд:
+            // var goCommand = Tr.constructCommand(Tr.commands.go, function(){return t}, 10)
+
+            // // выполняем движение черепахи.
+            // runner.run(td)
+            // runner.run(goCommand)
+            // runner.run(tu)
+            // runner.run(goCommand)
+            // runner.run(td)
+            // runner.run(goCommand)
+            // runner.run(tu)
+            // runner.run(goCommand)
+            // runner.run(td)
+            // runner.run(goCommand)
         };
 
         return {

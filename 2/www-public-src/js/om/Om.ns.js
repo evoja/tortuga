@@ -119,10 +119,14 @@ org.omich.fun1 и org.omich.fun2
      * @property {string} undefined_key - Contains highest unexisting key
      */
     function NsNotFoundError (namespace, key) {
-        Error.call(this, 'Namespace "' + namespace + '" is not found. Problem key is "' + key + '"');
         this.namespace = namespace
         this.undefined_key = key;
+        this.message = 'Namespace "' + namespace + '" is not found. Problem key is "' + key + '"';
+        this.stack = (new Error()).stack
     };
+    NsNotFoundError.prototype = new Error();
+    NsNotFoundError.prototype.constructor = NsNotFoundError;
+    NsNotFoundError.prototype.name = "NsNotFoundError";
 
     /** 
      * Gets necessary namespace if exists. Otherwise throws error.
@@ -134,7 +138,7 @@ org.omich.fun1 и org.omich.fun2
     {
         return analyse_namespace(namespace, function(key)
             {
-               throw new NsNotFoundError(namespace, key);
+                throw new NsNotFoundError(namespace, key);
             });
     };
     ns_get.NsNotFoundError = NsNotFoundError;

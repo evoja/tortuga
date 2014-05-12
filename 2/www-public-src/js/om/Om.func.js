@@ -19,15 +19,13 @@ var func = function(arg){return function(){return arg}}
 
 
 /**
-#### Пример использования:
-Пример использования:
-1. Без контекста:
+@example <caption>1. Без контекста:</caption>
         var div = function(a, b){return a / b}
         var d60 = curry(div, 60);
         d60(2) // 30
         d60(10) // 6
 
-2. В контексте:
+@example <caption>2. В контексте:</caption>
         var Koeff = function(k){this.k = k}
         Koeff.prototype.sum = function(a, b){return (a + b) * this.k}
 
@@ -39,7 +37,7 @@ var func = function(arg){return function(){return arg}}
         k2sum3(4) // --> 14
         k2sum3(0) // --> 6
 
-3. Ещё пример:
+@example <caption>3. Ещё пример:</caption>
         var result = []
         var pushSum = function(a, b){result.push(a + b)}
         var arr = [1, 2, 3, 4]
@@ -74,8 +72,7 @@ var curry_through_bind = function(fun /*, arguments */)
 }
 
 /*
-#### Пример использования:
-1. Без контекста
+@example <caption>1. Без контекста</caption>
         var div = function(a, b){return a / b}
         var d5 = curryL(div, 5);
         d5(10) // 2
@@ -98,8 +95,7 @@ var curryL = function(fun /* other */)
 }
 
 /**
-#### Пример использования:
-1. Без контекста
+@ecample <caption>1. Без контекста</caption>
         var div = function(a, b, c){return a / b + c}
         var d10_x_1 = curry_gaps(div, 10, undefined, 1);
         d10_x_1(10) // 2
@@ -136,6 +132,16 @@ var curry_gaps = function(fun /* other */)
 
 /**
 Returns function that negate result of argument function
+@example
+var every = function(arr, cond)
+{
+    return array_every.call(arr, cond)
+}
+
+var some = function(arr, cond)
+{
+    return !every(arr, not(cond))
+}
 @function
 @memberof om.func.logic
 @param {function} fun - Negated function
