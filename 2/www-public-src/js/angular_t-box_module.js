@@ -26,9 +26,17 @@ angular.module('t_box_module.TBoxTortoiseCanvas', [])
     .service('tbox_tortoisevm_mouse_manager',
                 ['tbox_tortoise_canvas_service', trtgvm_get('MouseManager')])
 
+    .service('tbox_tortoise_canvas_bg_dispatcher',
+                tang_get('DispatcherService'))
+
     .controller('TBoxTortoiseCanvasController',
-                ['$scope', 'tbox_tortoise_canvas_service', 'tbox_tortoisevm_mouse_manager', 
-                    tang_get('tblocks.TortoiseCanvasController')])
+                [
+                    '$scope', 
+                    'tbox_tortoise_canvas_service', 
+                    'tbox_tortoisevm_mouse_manager', 
+                    'tbox_tortoise_canvas_bg_dispatcher',
+                    tang_get('tblocks.TortoiseCanvasController')
+                ])
 
     .directive('tboxTortoiseCanvas',
                 curry(tang_get('tblocks.TortoiseCanvasDirective'), 'TBoxTortoiseCanvasController'))

@@ -112,7 +112,10 @@ om.ns_run('trtg.tbox.ang.tblocks', function(ns)
             link : link,
             scope : {},
             controller : dispatcherControllerName,
-            template: '<div class="tortuga-canvasContainer"><canvas class="tortuga-canvasContainer-canvas"></canvas></div>'
+            template: '<div class="tortuga-canvasContainer">'
+                + '<div class="tortuga-canvasContainer-bg" ng-attr-style="background-image:url({{background_url}})"></div>'
+                + '<canvas class="tortuga-canvasContainer-canvas"></canvas>'
+                + '</div>'
         };
     };
 });

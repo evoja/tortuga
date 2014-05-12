@@ -118,22 +118,20 @@
 
 
 
+<script src="js/lib/rawdeflate.js"></script>
+<script src="js/lib/rawinflate.js"></script>
+
 <script src="js/om/om.ns.js"></script>
 <script src="js/om/om.func.js"></script>
 <script src="js/om/om.text.js"></script>
 <script src="js/om/om.is_browser.js"></script>
 
 <!--
-<script src="js/lib/rawdeflate.js"></script>
-<script src="js/lib/rawinflate.js"></script>
 <script src="js/config.js"></script>
 <script src="js/vm/vm.js"></script>
 <script src="js/files.js"></script>
 <script src="js/help.js"></script>
 <script src="js/Agent.js"></script>
-<script src="js/lessons/lessons.js"></script>
-<script src="js/lessons/ParamsUtil.js"></script>
-<script src="js/tortuga.js"></script>
 <script src="js/mouse.js"></script>
 //-->
 
@@ -154,6 +152,11 @@
 
 <script src="js/angular_t-box_module.js"></script>
 
+<script src="js/trtg/lessons/ParamsUtil.js"></script>
+<script src="js/trtg/lessons/lessons.js"></script>
+<script src="js/files.js"></script>
+<script src="js/tortuga.js"></script>
+
 <script>
 /**
 Первоначальный код в index.html. Здесь в функции init() из веб-страницы
@@ -164,32 +167,32 @@
 * *Tortuga.initApp()* из файла *tortuga.js*
 * и *Tortuga.initHelp()* из файла *help.js*
 */
-// var init;
-// (function()
-// {
-// 	var gebid = function(id){return document.getElementById(id)}
-// 	init = function()
-// 	{
-// 		Tortuga.initApp(gebid("canvasContainer"),
-// 			gebid("lessonsList"),
-// 			gebid("lessonItemDescription"),
-// 			[gebid("lessonsContainer")],
-// 			gebid("files"),
-// 			gebid("canvasBalloon"))
+var init;
+(function()
+{
+	var gebid = function(id){return document.getElementById(id)}
+	init = function()
+	{
+		Tortuga.initApp(
+			gebid("lessonsList"),
+			gebid("lessonItemDescription"),
+			[gebid("lessonsContainer")],
+			gebid("files"),
+			gebid("canvasBalloon"))
 
-// 		Tortuga.initHelp([gebid("tortoiseMan"), gebid("help-help"), gebid("help-hint")],
-// 			[gebid("help-help"), gebid("help-underHelp"), gebid("canvasBalloon"),gebid("help-hint")])
+		// Tortuga.initHelp([gebid("tortoiseMan"), gebid("help-help"), gebid("help-hint")],
+		// 	[gebid("help-help"), gebid("help-underHelp"), gebid("canvasBalloon"),gebid("help-hint")])
 
-// 		gebid("help-hotkey-text").innerHTML = Tortuga.Agent.helpText;
-// 	}
+		// gebid("help-hotkey-text").innerHTML = Tortuga.Agent.helpText;
+	}
 
-// 	if(Tortuga.Agent.showTop)
-// 	{
-// 		gebid("topTextArea").innerHTML = Tortuga.Agent.topText;
-// 	}
+	// if(Tortuga.Agent.showTop)
+	// {
+	// 	gebid("topTextArea").innerHTML = Tortuga.Agent.topText;
+	// }
 
-// 	init();
-// })()
+	init();
+})()
 </script>
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
