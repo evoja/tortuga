@@ -52,63 +52,66 @@ runner.run(goCommand)
 
 fun = function(n)
 {
-	var m1 = new Date().getTime()
-	var tr = Tortuga.Vm.TortoiseRunner
-	var t;
-	var command = tr.constructCommand(tr.commands.create, 0, 0, "green", 1,
-		function(trTortoise)
-		{
-			t = trTortoise
-		})
-	MyTr.run(command)
-	var pair = function(f, s){return tr.constructCommand(tr.commands.pair, f, s)}
+    var m1 = new Date().getTime()
+    var runner = angular.element(document.getElementById('t_box_module')).injector().get('tbox_tortoisevm_tortoise_runner');
+    var Tr = runner.constructor;
+    var t;
+    var command = Tr.constructCommand(Tr.commands.create, 0, 0, "green", 1, "round",
+    	function(trTortoise)
+    	{
+    		t = trTortoise
+    	})
+    runner.run(command)
+    var get_t = function(){return t;};
+    var pair = function(f, s){return Tr.constructCommand(Tr.commands.pair, f, s)}
 
+    var td = Tr.constructCommand(Tr.commands.tailDown, get_t)
+    var tu = Tr.constructCommand(Tr.commands.tailUp, get_t)
+    var right = Tr.constructCommand(Tr.commands.rotate, get_t, -90)
+    var left = Tr.constructCommand(Tr.commands.rotate, get_t, 90)
 
-	var td = tr.constructCommand(tr.commands.tailDown, t)
-	var tu = tr.constructCommand(tr.commands.tailUp, t)
-	var right = tr.constructCommand(tr.commands.rotate, t, -90)
-	var left = tr.constructCommand(tr.commands.rotate, t, 90)
+    var go = Tr.constructCommand(Tr.commands.go, get_t, 3)
+    var kill = Tr.constructCommand(Tr.commands.kill, get_t)
+    var nil = Tr.constructCommand(Tr.commands.nil)
 
-	var go = tr.constructCommand(tr.commands.go, t, 3)
-	var kill = tr.constructCommand(tr.commands.kill, t)
-	var nil = tr.constructCommand(tr.commands.nil)
-
-	var seq = pair(nil, td)
-	for(var i = 0; i < n;++i)
-	{
-	   seq = pair(pair(pair(pair(seq, left), go), right), go)
-	}
-	seq = pair(seq, kill)
-	MyTr.run(seq)
-	var m2 = new Date().getTime()
-	return m2 - m1
+    var seq = pair(nil, td)
+    for(var i = 0; i < n;++i)
+    {
+       seq = pair(pair(pair(pair(seq, left), go), right), go)
+    }
+    seq = pair(seq, kill)
+    runner.run(seq)
+    var m2 = new Date().getTime()
+    return m2 - m1
 }
 
 fun(500)
 
 fun2 = function(n)
 {
-	var m1 = new Date().getTime()
-	var tr = Tortuga.Vm.TortoiseRunner
-	var t
-	var command = tr.constructCommand(tr.commands.create, 0, 0, "green", 1,
-		function(trTortoise){t = trTortoise})
-	MyTr.run(command)
+    var m1 = new Date().getTime()
+    var runner = angular.element(document.getElementById('t_box_module')).injector().get('tbox_tortoisevm_tortoise_runner');
+    var Tr = runner.constructor;
+    var t
+    var command = Tr.constructCommand(Tr.commands.create, 0, 0, "green", 1, "round", 
+                           function(trTortoise){t = trTortoise})
+    runner.run(command)
+    var get_t = function(){return t;};
 
-	var td = tr.constructCommand(tr.commands.tailDown, t)
-	var tu = tr.constructCommand(tr.commands.tailUp, t)
-	var right = tr.constructCommand(tr.commands.rotate, t, -90)
-	var left = tr.constructCommand(tr.commands.rotate, t, 90)
+    var td = Tr.constructCommand(Tr.commands.tailDown, get_t)
+    var tu = Tr.constructCommand(Tr.commands.tailUp, get_t)
+    var right = Tr.constructCommand(Tr.commands.rotate, get_t, -90)
+    var left = Tr.constructCommand(Tr.commands.rotate, get_t, 90)
 
-	var go = tr.constructCommand(tr.commands.go, t, 3)
-	var kill = tr.constructCommand(tr.commands.kill, t)
+    var go = Tr.constructCommand(Tr.commands.go, get_t, 3)
+    var kill = Tr.constructCommand(Tr.commands.kill, get_t)
 
-	var seq1 = tr.constructCommand(tr.commands.seq, [left, go, right, go])
-    var repeat = tr.constructCommand(tr.commands.repeat, n, seq1)
-    var seq = tr.constructCommand(tr.commands.seq, [td, repeat, kill])
-	MyTr.run(seq)
-	var m2 = new Date().getTime()
-	return m2 - m1
+    var seq1 = Tr.constructCommand(Tr.commands.seq, [left, go, right, go])
+    var repeat = Tr.constructCommand(Tr.commands.repeat, n, seq1)
+    var seq = Tr.constructCommand(Tr.commands.seq, [td, repeat, kill])
+    runner.run(seq)
+    var m2 = new Date().getTime()
+    return m2 - m1
 }
 
 fun2(10000)
