@@ -2,7 +2,11 @@
 
 describe('DispatcherService', function()
 {
-    beforeEach(module('t_box_module'));
+    angular.module('dispatcher_service_test_module', [])
+        .service('dispatcher_service',
+                    om.ns_get('trtg.tbox.ang.DispatcherService'))
+
+    beforeEach(module('dispatcher_service_test_module'));
 
     var service;
     // Store references to $rootScope and $compile

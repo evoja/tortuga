@@ -10,28 +10,6 @@
 
 </head>
 <body>
-	<div id="t_box_module">
-		<h3>t-box module</h3>
-		<div>
-			<textarea console-in></textarea>
-		</div>
-		<div>
-			<input type="text" console-in></input>
-		</div>
-		<div>
-			<div console-out></div>
-		</div>
-		<div>
-			<div console-out></div>
-		</div>
-		<tbox-tortoise-canvas width="200" height="100"/>
-	</div>
-	<div id="other_module">
-		<h3>other module</h3>
-		<input type="text" ng-model="ololo"></input>
-		{{ololo}}
-	</div>
-	<hr/>
 <div id="topTextArea"></div>
 <div class="skyGradient"><div class="skyObjects">
 	<div class="workingArea-wrapper"><div class="workingArea">
@@ -46,7 +24,9 @@
 
 		<div class="balloon-shadow balloon" id="canvasBalloon">
 			<div id="help-underHelp">
-				<div id="canvasContainer"></div>
+				<div id="t_box_module" class="canvasContainer">
+					<tbox-tortoise-canvas/>
+				</div>
 				<div class="help-hint" id="help-hint">Помощь</div>
 				<div id="files"></div>
 			</div>
@@ -147,9 +127,6 @@
 <script src="js/lib/rawdeflate.js"></script>
 <script src="js/lib/rawinflate.js"></script>
 <script src="js/config.js"></script>
-<script src="js/vm/TortoiseRunner.js"></script>
-<script src="js/vm/JsConverter.js"></script>
-<script src="js/vm/Tortoise.js"></script>
 <script src="js/vm/vm.js"></script>
 <script src="js/files.js"></script>
 <script src="js/help.js"></script>
@@ -185,36 +162,36 @@
 * *Tortuga.initApp()* из файла *tortuga.js*
 * и *Tortuga.initHelp()* из файла *help.js*
 */
-var init;
-(function()
-{
-	var gebid = function(id){return document.getElementById(id)}
-	init = function()
-	{
-		Tortuga.initApp(gebid("canvasContainer"),
-			gebid("lessonsList"),
-			gebid("lessonItemDescription"),
-			[gebid("lessonsContainer")],
-			gebid("files"),
-			gebid("canvasBalloon"))
+// var init;
+// (function()
+// {
+// 	var gebid = function(id){return document.getElementById(id)}
+// 	init = function()
+// 	{
+// 		Tortuga.initApp(gebid("canvasContainer"),
+// 			gebid("lessonsList"),
+// 			gebid("lessonItemDescription"),
+// 			[gebid("lessonsContainer")],
+// 			gebid("files"),
+// 			gebid("canvasBalloon"))
 
-		Tortuga.initHelp([gebid("tortoiseMan"), gebid("help-help"), gebid("help-hint")],
-			[gebid("help-help"), gebid("help-underHelp"), gebid("canvasBalloon"),gebid("help-hint")])
+// 		Tortuga.initHelp([gebid("tortoiseMan"), gebid("help-help"), gebid("help-hint")],
+// 			[gebid("help-help"), gebid("help-underHelp"), gebid("canvasBalloon"),gebid("help-hint")])
 
-		gebid("help-hotkey-text").innerHTML = Tortuga.Agent.helpText;
-	}
+// 		gebid("help-hotkey-text").innerHTML = Tortuga.Agent.helpText;
+// 	}
 
-	if(Tortuga.Agent.showTop)
-	{
-		gebid("topTextArea").innerHTML = Tortuga.Agent.topText;
-	}
+// 	if(Tortuga.Agent.showTop)
+// 	{
+// 		gebid("topTextArea").innerHTML = Tortuga.Agent.topText;
+// 	}
 
-	init();
-})()
+// 	init();
+// })()
 </script>
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
-if(Tortuga && Tortuga.Config && Tortuga.Config.yandexMetrikaId)
+if(this.Tortuga && Tortuga.Config && Tortuga.Config.yandexMetrikaId)
 {
 	(function (d, w, c) {
 	    (w[c] = w[c] || []).push(function() {

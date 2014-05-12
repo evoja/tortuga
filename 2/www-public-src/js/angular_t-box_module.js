@@ -14,14 +14,14 @@ angular.module('t_box_module.TBoxTortoiseCanvas', [])
     .service('tbox_tortoise_canvas_service',
                 ['TBoxTortoiseCanvasBlock', tang_get('MethodsDispatcherService')])
 
-    .service('tbox_tortoisevm_tortoise-runner',
+    .service('tbox_tortoisevm_tortoise_runner',
                 ['tbox_tortoise_canvas_service', trtgvm_get('TortoiseRunner')])
 
-    .service('tbox_tortoisevm_js-converter',
-                ['tbox_tortoisevm_tortoise-runner', trtgvm_get('JsConverter')])
+    .service('tbox_tortoisevm_js_converter',
+                ['tbox_tortoisevm_tortoise_runner', trtgvm_get('JsConverter')])
 
-    .service('tbox_tortoisevm_tortoise-globals',
-                ['tbox_tortoisevm_js-converter', trtgvm_get('TortoiseGlobals')])
+    .service('tbox_tortoisevm_tortoise_globals',
+                ['tbox_tortoisevm_js_converter', trtgvm_get('TortoiseGlobals')])
 
     .controller('TBoxTortoiseCanvasController',
                 ['$scope', 'tbox_tortoise_canvas_service', tang_get('ServiceProxyController')])
@@ -29,23 +29,23 @@ angular.module('t_box_module.TBoxTortoiseCanvas', [])
     .directive('tboxTortoiseCanvas',
                 curry(tang_get('tblocks.TortoiseCanvasDirective'), 'TBoxTortoiseCanvasController'))
     .run(function($injector){
-        $injector.get('tbox_tortoisevm_tortoise-globals');
+        $injector.get('tbox_tortoisevm_tortoise_globals');
     })
     ;
 
 
 angular.module('t_box_module', ['t_box_module.TBoxTortoiseCanvas'])
-    .service('dispatcher_service',
-                tang_get('DispatcherService'))
+    // .service('dispatcher_service',
+    //             tang_get('DispatcherService'))
 
-    .controller('DispatcherController',
-                ['$scope', 'dispatcher_service', tang_get('DispatcherController')])
+    // .controller('DispatcherController',
+    //             ['$scope', 'dispatcher_service', tang_get('DispatcherController')])
 
-    .directive('consoleOut',
-                curry(tang_get('ConsoleOutDirective'), 'DispatcherController'))
+    // .directive('consoleOut',
+    //             curry(tang_get('ConsoleOutDirective'), 'DispatcherController'))
 
-    .directive('consoleIn',
-                curry(tang_get('ConsoleInDirective'), 'DispatcherController'))
+    // .directive('consoleIn',
+    //             curry(tang_get('ConsoleInDirective'), 'DispatcherController'))
     ;
 
 angular.bootstrap(document.getElementById('t_box_module'), ['t_box_module']);
@@ -53,7 +53,7 @@ angular.bootstrap(document.getElementById('t_box_module'), ['t_box_module']);
 
 
 
-angular.module('other', []);
-angular.bootstrap(document.getElementById('other_module'), ['other']);
+// angular.module('other', []);
+// angular.bootstrap(document.getElementById('other_module'), ['other']);
 
 })();

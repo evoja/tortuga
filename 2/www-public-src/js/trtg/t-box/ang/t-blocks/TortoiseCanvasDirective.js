@@ -19,12 +19,9 @@ om.ns_run('trtg.tbox.ang.tblocks', function(ns)
 
             (function init(){
                 var $canvas = $element.find('canvas');
-                $canvas.attr('width', attrs.width).attr('height', attrs.height);
-                $canvas.css('background', '#0ff');
-                var $div = $element.find('div');
-                $div.css('position', 'relative');
                 canvas = $canvas[0];
-                div = $div[0];
+                $canvas.attr('width', canvas.offsetWidth).attr('height', canvas.offsetHeight);
+                div = $element.find('div')[0];
             })();
 
             var block = scope.register_block(canvas, div);
@@ -109,7 +106,7 @@ om.ns_run('trtg.tbox.ang.tblocks', function(ns)
             link : link,
             scope : {},
             controller : dispatcherControllerName,
-            template: '<div><canvas></canvas></div>'
+            template: '<div class="tortuga-canvasContainer"><canvas class="tortuga-canvasContainer-canvas"></canvas></div>'
         };
     };
 });

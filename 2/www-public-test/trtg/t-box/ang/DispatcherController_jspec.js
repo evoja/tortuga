@@ -5,7 +5,15 @@ describe('DispatcherController', function()
     var scope;
     var service;
 
-    beforeEach(module('t_box_module'));
+    var ns_get = om.ns_get;
+    angular.module('dispatcher_controller_test_module', [])
+        .service('dispatcher_service',
+                    ns_get('trtg.tbox.ang.DispatcherService'))
+        .controller('DispatcherController',
+                    ['$scope', 'dispatcher_service', ns_get('trtg.tbox.ang.DispatcherController')]);
+
+
+    beforeEach(module('dispatcher_controller_test_module'));
 
     // injection du service $controller et du $rootScope, 
     // attention l'identification du service se fait sur son nom
