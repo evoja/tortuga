@@ -23,13 +23,18 @@ angular.module('t_box_module.TBoxTortoiseCanvas', [])
     .service('tbox_tortoisevm_tortoise_globals',
                 ['tbox_tortoisevm_js_converter', trtgvm_get('TortoiseGlobals')])
 
+    .service('tbox_tortoisevm_mouse_manager',
+                ['tbox_tortoise_canvas_service', trtgvm_get('MouseManager')])
+
     .controller('TBoxTortoiseCanvasController',
-                ['$scope', 'tbox_tortoise_canvas_service', tang_get('ServiceProxyController')])
+                ['$scope', 'tbox_tortoise_canvas_service', 'tbox_tortoisevm_mouse_manager', 
+                    tang_get('tblocks.TortoiseCanvasController')])
 
     .directive('tboxTortoiseCanvas',
                 curry(tang_get('tblocks.TortoiseCanvasDirective'), 'TBoxTortoiseCanvasController'))
     .run(function($injector){
         $injector.get('tbox_tortoisevm_tortoise_globals');
+        $injector.get('tbox_tortoisevm_mouse_manager');
     })
     ;
 

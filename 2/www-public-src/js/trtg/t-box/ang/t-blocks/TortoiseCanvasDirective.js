@@ -18,17 +18,23 @@ om.ns_run('trtg.tbox.ang.tblocks', function(ns)
             var div;
 
             (function init(){
+                var $div = $element.find('div');
+                div = $div[0];
+                $div.css('height', div.offsetWidth / 2 + "px");
+
                 var $canvas = $element.find('canvas');
                 canvas = $canvas[0];
                 $canvas.attr('width', canvas.offsetWidth).attr('height', canvas.offsetHeight);
-                div = $element.find('div')[0];
+                scope.mouse_service.subscribe_on_canvas(canvas);
+                e = $element;
             })();
 
-            var block = scope.register_block(canvas, div);
+            var block = scope.tortuga_service.register_block(canvas, div);
 
             $element.on('$destroy', function()
             {
-                scope.unregister_block(block);
+                scope.tortuga_service.unregister_block(block);
+                scope.mouse_service.unsubscribe_from_canvas(canvas);
             });
 
             // // Example 1: 
