@@ -1,6 +1,6 @@
 (function() {
 var ns_get = om.ns_get;
-var curry = ns_get('om.curry');
+var curry = ns_get('om.func.curry');
 
 var tbox_get = function(postfix){return ns_get('trtg.tbox.' + postfix)};
 var tang_get = function(postfix){return ns_get('trtg.tbox.ang.' + postfix)};
