@@ -107,7 +107,7 @@ module.exports = function(grunt)
             }
         }
     },
-
+     
     assemble: {
         options: {
             layout: "src/layouts/default.hbs",
