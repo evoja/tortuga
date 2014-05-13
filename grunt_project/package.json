@@ -2,7 +2,7 @@
   "name": "my-grunt",
   "version": "0.0.0",
   "devDependencies": {
-    "grunt": "^0.4.4",
+    "grunt": "^0.4.5",
     "grunt-contrib-jshint": "^0.6.5",
     "grunt-contrib-nodeunit": "~0.2.0",
     "grunt-contrib-jasmine": "^0.6.4",
@@ -10,7 +10,8 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-contrib-cssmin": "^0.9.0",
     "grunt-contrib-concat": "^0.4.0",
-    "grunt-jsdoc": "^0.5.4"
+    "grunt-jsdoc": "^0.5.4",
+    "assemble": "^0.4.37"
   },
   "main": "Gruntfile.js",
   "dependencies": {

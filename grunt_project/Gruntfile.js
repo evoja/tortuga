@@ -108,6 +108,18 @@ module.exports = function(grunt)
         }
     },
 
+    assemble: {
+        options: {
+            layout: "src/layouts/default.hbs",
+            flatten: true
+        },
+        pages: {
+            files: {
+                '../www-public-src/build/www-public-release/': ['src/pages/*.hbs']
+            }
+        }
+    },
+
     jsdoc: {
         dist : {
             src: [
@@ -133,6 +145,7 @@ module.exports = function(grunt)
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-jsdoc');
+  grunt.loadNpmTasks('assemble');
 
   grunt.registerTask('rebase_www_public', 'Set base path to ..', function()
   {
@@ -154,9 +167,9 @@ module.exports = function(grunt)
     grunt.file.setBase('grunt_project');
   });
 
-  grunt.registerTask('test', ['rebase_test', 'nodeunit', 'jasmine', 'restore_test']);
-  grunt.registerTask('release', ['rebase_www_public', 'concat', 'uglify', 'cssmin', 'restore_www_public']);
-  grunt.registerTask('build2', ['test', 'jsdoc']);
+  grunt.registerTask('test', [ 'rebase_test', 'nodeunit', 'jasmine', 'assemble', 'restore_test']);
+  grunt.registerTask('release', ['rebase_www_public', 'concat', 'uglify', 'cssmin', 'assemble', 'restore_www_public']);
+  grunt.registerTask('build2', ['test', 'jsdoc', 'assemble']);
 
   grunt.registerTask('default', ['test', 'jsdoc', 'release']);
 
