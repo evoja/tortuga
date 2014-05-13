@@ -1,6 +1,6 @@
-config.js
-vagrant/.vagrant
+/build
+www-public-src/build
 grunt_project/node_modules/
 grunt_project/npm-debug.log
-www-public/build
-2/doc-js
+config.js
+vagrant/.vagrant

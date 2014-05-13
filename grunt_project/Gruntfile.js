@@ -6,11 +6,29 @@ var combine_files = function() // prefix1, array1, prefix2, array2, ...
     var prefix = arguments[0];
     var array = arguments[1];
     var result = [];
-    array.forEach(function(elem){result.push(prefix + elem)});
+    array.forEach(function(elem)
+        {
+            if(elem.charAt(0) != '!')
+            {
+                result.push(prefix + elem);
+            }
+            else
+            {
+                result.push('!' + prefix + elem.substring(1));
+            }
+        });
     result = result.concat(combine_files.apply(this, Array.prototype.slice.call(arguments,2)));
     return result;
 };
 
+var www_src_js_files = [
+    'om/om.ns.js',
+    'om/*.js',
+    'trtg/t-box/tortoise-vm/TortoiseRunner.js',
+    'trtg/**/*.js',
+    '*.js',
+    '!*.template.js'
+];
 
 module.exports = function(grunt)
 {
@@ -24,25 +42,8 @@ module.exports = function(grunt)
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       build: {
-        src: ['../www-public/js/lib/rawdeflate.js',
-        '../www-public/js/lib/rawinflate.js',
-        '../www-public/js/Helper.js',
-        '../www-public/js/Om.js',
-        '../www-public/js/config.js',
-        '../www-public/js/vm/DrawingSystem.js',
-        '../www-public/js/vm/TortoiseRunner.js',
-        '../www-public/js/vm/JsConverter.js',
-        '../www-public/js/vm/Tortoise.js',
-        '../www-public/js/vm/vm.js',
-        '../www-public/js/files.js',
-        '../www-public/js/help.js',
-        '../www-public/js/Agent.js',
-        '../www-public/js/lessons/lessons.js',
-        '../www-public/js/lessons/ParamsUtil.js',
-        '../www-public/js/tortuga.js',
-        '../www-public/js/mouse.js'
-        ],
-        dest: '../www-public/build/min.js'
+        src: combine_files('js/', www_src_js_files),
+        dest: 'build/min.js'
       }
     },
 
@@ -51,62 +52,29 @@ module.exports = function(grunt)
         separator: ';',
       },
       dist: {
-        src: ['../www-public/js/lib/rawdeflate.js',
-        '../www-public/js/lib/rawinflate.js',
-        '../www-public/js/Helper.js',
-        '../www-public/js/Om.js',
-        '../www-public/js/config.js',
-        '../www-public/js/vm/DrawingSystem.js',
-        '../www-public/js/vm/TortoiseRunner.js',
-        '../www-public/js/vm/JsConverter.js',
-        '../www-public/js/vm/Tortoise.js',
-        '../www-public/js/vm/vm.js',
-        '../www-public/js/files.js',
-        '../www-public/js/help.js',
-        '../www-public/js/Agent.js',
-        '../www-public/js/lessons/lessons.js',
-        '../www-public/js/lessons/ParamsUtil.js',
-        '../www-public/js/tortuga.js',
-        '../www-public/js/mouse.js'
-        ],
-        dest: '../www-public/build/min.js'
+        src: combine_files('js/', www_src_js_files),
+        dest: 'build/min.js'
       },
     },
 
     cssmin: {
-      combine: {
-        files: {
-          '../www-public/build/min.css': 
-              ['../www-public/css/reset.css',
-              '../www-public/css/tortuga.css',
-              '../www-public/css/tortoise.css',
-              '../www-public/css/page.css']
+        combine: {
+            files: {
+                'build/min.css': [
+                    'css/reset.css',
+                    'css/tortuga.css',
+                    'css/tortoise.css',
+                    'css/page.css'
+                ]
+            }
         }
-      }
     },
 
 
     watch: {
       scripts: {
-        files: ['../www-public/js/lib/rawdeflate.js',
-          '../www-public/js/lib/rawinflate.js',
-          '../www-public/js/Helper.js',
-          '../www-public/js/Om.js',
-          '../www-public/js/config.js',
-          '../www-public/js/vm/DrawingSystem.js',
-          '../www-public/js/vm/TortoiseRunner.js',
-          '../www-public/js/vm/JsConverter.js',
-          '../www-public/js/vm/Tortoise.js',
-          '../www-public/js/vm/vm.js',
-          '../www-public/js/files.js',
-          '../www-public/js/help.js',
-          '../www-public/js/Agent.js',
-          '../www-public/js/lessons/lessons.js',
-          '../www-public/js/lessons/ParamsUtil.js',
-          '../www-public/js/tortuga.js',
-          '../www-public/js/mouse.js'
-          ],
-        tasks: ['uglify'],
+        files: combine_files('../www-public-src/js/', www_src_js_files),
+        tasks: ['rebase_www_public', 'uglify', 'restore_www_public'],
         options: {
           spawn: false
         }
@@ -130,15 +98,8 @@ module.exports = function(grunt)
     jasmine: {
         pivotal: {
             src: combine_files(
-                'www-public-src/js/', [
-                    'om/om.ns.js',
-                    'om/om.func.js',
-                    'om/om.text.js',
-                    'om/om.is_browser.js',
-                    'lib/angular.js',
-                    'trtg/t-box/tortoise-vm/TortoiseRunner.js',
-                    'trtg/**/*.js',
-                    'angular_t-box_module.js'],
+                'www-public-src/js/', ['lib/angular.js'],
+                'www-public-src/js/', www_src_js_files,
                 '', ['www-public-test/lib/*.js']),
             options: {
                 specs: 'www-public-test/**/*_jspec.js',
@@ -150,13 +111,13 @@ module.exports = function(grunt)
     jsdoc: {
         dist : {
             src: [
-                '../2/www-public-src/js/**/*.js',
-                '../2/www-public-test/**/*.js',
-                '!../2/www-public-src/js/lib/**/*.js',
-                '!../2/www-public-test/lib/**/*.js'
+                '../www-public-src/js/**/*.js',
+                '../www-public-test/**/*.js',
+                '!../www-public-src/js/lib/**/*.js',
+                '!../www-public-test/lib/**/*.js'
                 ], 
             options: {
-                destination: '../2/doc-js',
+                destination: '../build/doc-js',
                 configure: 'jsdoc_conf.json'
             }
         }
@@ -173,20 +134,31 @@ module.exports = function(grunt)
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-jsdoc');
   // Default task(s).
-  grunt.registerTask('default', ['concat', 'uglify', 'cssmin']);
 
-  grunt.registerTask('rebase2', 'Set base path to ../2', function()
+  grunt.registerTask('rebase_www_public', 'Set base path to ..', function()
   {
-    grunt.file.setBase('../2');
+    grunt.file.setBase('../www-public-src');
   });
 
-  grunt.registerTask('rebase_default', 'Set base path to ../2', function()
+  grunt.registerTask('restore_www_public', 'Set base path to ..', function()
   {
     grunt.file.setBase('../grunt_project');
   });
 
-  grunt.registerTask('test', ['rebase2', 'nodeunit', 'jasmine', 'rebase_default']);
+  grunt.registerTask('rebase_test', 'Set base path to ..', function()
+  {
+    grunt.file.setBase('..');
+  });
+
+  grunt.registerTask('restore_test', 'Set base path to ../2', function()
+  {
+    grunt.file.setBase('grunt_project');
+  });
+
+  grunt.registerTask('test', ['rebase_test', 'nodeunit', 'jasmine', 'restore_test']);
+  grunt.registerTask('release', ['rebase_www_public', 'concat', 'uglify', 'cssmin', 'restore_www_public']);
   grunt.registerTask('build2', ['test', 'jsdoc']);
 
+  grunt.registerTask('default', ['test', 'jsdoc', 'release']);
 
 };

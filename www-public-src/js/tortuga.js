@@ -72,7 +72,8 @@ ns.initApp = function(
 
     var bg_service = angular.element(document.getElementById('t_box_module'))
                         .injector().get('tbox_tortoise_canvas_bg_dispatcher');
-    Tortuga.initFiles(filesObjects.button, dropFilesArea, begin,end);
+    var do_nothing = function(){};
+    Tortuga.initFiles(filesObjects.button, dropFilesArea, do_nothing, do_nothing);
     trtg.lessons.initLessons(bg_service, lessonsListContainer, lessonItemDescription,
         new TortugaEnv(), lessonsContainers);
 }
