@@ -167,8 +167,8 @@ module.exports = function(grunt)
     grunt.file.setBase('grunt_project');
   });
 
-  grunt.registerTask('test', [ 'rebase_test', 'nodeunit', 'jasmine', 'assemble', 'restore_test']);
-  grunt.registerTask('release', ['rebase_www_public', 'concat', 'uglify', 'cssmin', 'assemble', 'restore_www_public']);
+  grunt.registerTask('test', [ 'rebase_test', 'nodeunit', 'jasmine', 'restore_test']);
+  grunt.registerTask('release', ['rebase_www_public', 'concat', 'uglify', 'cssmin', 'restore_www_public', 'assemble']);
   grunt.registerTask('build2', ['test', 'jsdoc', 'assemble']);
 
   grunt.registerTask('default', ['test', 'jsdoc', 'release']);
