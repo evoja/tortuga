@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Задачи на переправы \ Тортуга</title>
+<title>Тортуга</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="shortcut icon" href="img/favicon32.png">
 <link rel="stylesheet" type="text/css" href="css/reset.css">
@@ -24,26 +24,26 @@
 
 		<div class="balloon-shadow balloon" id="canvasBalloon">
 			<div id="help-underHelp">
-				<div id="canvasContainer"></div>
+				<div id="t_box_module" class="canvasContainer">
+					<tbox-tortoise-canvas/>
+				</div>
 				<div class="help-hint" id="help-hint">Помощь</div>
 				<div id="files"></div>
 			</div>
 
 			<div id="help-help" class="sideHelp"><div class="sideHelp-inner">
-				<h2>Что это за страница</h2>
-				<iframe width="362" height="210" src="http:////www.youtube.com/embed/dfhYUnvnqnA" frameborder="0" allowfullscreen></iframe>
 				<h2>Работа из консоли</h2>
 				<p id="help-hotkey-text">
 				</p>
 				<h2>Основные команды</h2>
 				<ul>
-					<li><b>help()</b>&nbsp;&mdash; отобразить список доступных команд</li>
-					<li><b>lessons()</b>&nbsp;&mdash; отобразить список уроков</li>
-					<li><b>lesson(0)</b>&nbsp;&mdash; выбрать нужный урок</li>
-					<li><b>problems()</b>&nbsp;&mdash; отобразить список задач</li>
-					<li><b>start(4)</b>&nbsp;&mdash; выбрать нужную задачу</li>
-					<li><b>show()</b>&nbsp;&mdash; прочитать условие задачи</li>
-					<li><b>move("волк, лодочник")</b>&nbsp;&mdash; перевезти героев с берега на берег.</li>
+					<li><b>var x = createTortoise()</b>&nbsp;&mdash; создать черепаху в&nbsp;начале координат.</li>
+					<li><b>var t = createTortoise(100, 50, "green")</b>&nbsp;&mdash; создать черепаху в&nbsp;нужном месте определённого цвета</li>
+					<li><b>t.go(50)</b>&nbsp;&mdash; пройти вперёд на&nbsp;нужное расстояние</li>
+					<li><b>t.rotate(45)</b>&nbsp;&mdash; повернуться против часовой стрелки на&nbsp;нужное количество градусов</li>
+					<li><b>t.tailDown()</b>&nbsp;&mdash; опустить хвост, чтобы рисовать линию.</li>
+					<li><b>t.tailUp()</b>&nbsp;&mdash; поднять хвост, чтобы просто перемещаться.</li>
+					<li><b>t.setColor("red")</b>&nbsp;&mdash; поменять цвет черепахе.</li>
 				</ul>
 				<p class="help-hint">Назад</p>
 			</div></div>
@@ -118,10 +118,12 @@
 
 
 
+<script src="js/lib/rawdeflate.js"></script>
+<script src="js/lib/rawinflate.js"></script>
+<script src="js/lib/angular.js"></script>
 
+<script src="build/min.js"></script>
 
-<script src="js/build/min.js"></script>
-<script src="js/examples/perepravy_shapovalov.js"></script>
 
 <script>
 /**
@@ -136,21 +138,21 @@
 var init;
 (function()
 {
-	var gebid = function(id){return document.getElementById(id)}
+	var gebid = function(id){return document.getElementById(id)};
 	init = function()
 	{
-		Tortuga.initApp(gebid("canvasContainer"),
+		Tortuga.initApp(
 			gebid("lessonsList"),
 			gebid("lessonItemDescription"),
 			[gebid("lessonsContainer")],
 			gebid("files"),
-			gebid("canvasBalloon"))
+			gebid("canvasBalloon"));
 
 		Tortuga.initHelp([gebid("tortoiseMan"), gebid("help-help"), gebid("help-hint")],
-			[gebid("help-help"), gebid("help-underHelp"), gebid("canvasBalloon"),gebid("help-hint")])
+			[gebid("help-help"), gebid("help-underHelp"), gebid("canvasBalloon"),gebid("help-hint")]);
 
 		gebid("help-hotkey-text").innerHTML = Tortuga.Agent.helpText;
-	}
+	};
 
 	if(Tortuga.Agent.showTop)
 	{
@@ -158,11 +160,11 @@ var init;
 	}
 
 	init();
-})()
+})();
 </script>
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
-if(Tortuga && Tortuga.Config && Tortuga.Config.yandexMetrikaId)
+if(this.Tortuga && Tortuga.Config && Tortuga.Config.yandexMetrikaId)
 {
 	(function (d, w, c) {
 	    (w[c] = w[c] || []).push(function() {
