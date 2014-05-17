@@ -8,9 +8,9 @@ describe('DispatcherController', function()
     var ns_get = om.ns_get;
     angular.module('dispatcher_controller_test_module', [])
         .service('dispatcher_service',
-                    ns_get('trtg.tbox.ang.DispatcherService'))
+                    ns_get('trtg.tbox.app_msg.DispatcherService'))
         .controller('DispatcherController',
-                    ['$scope', 'dispatcher_service', ns_get('trtg.tbox.ang.DispatcherController')]);
+                    ['$scope', 'dispatcher_service', ns_get('trtg.tbox.app_msg.DispatcherController')]);
 
 
     beforeEach(module('dispatcher_controller_test_module'));

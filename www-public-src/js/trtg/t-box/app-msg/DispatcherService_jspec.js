@@ -4,7 +4,7 @@ describe('DispatcherService', function()
 {
     angular.module('dispatcher_service_test_module', [])
         .service('dispatcher_service',
-                    om.ns_get('trtg.tbox.ang.DispatcherService'))
+                    om.ns_get('trtg.tbox.app_msg.DispatcherService'))
 
     beforeEach(module('dispatcher_service_test_module'));
 

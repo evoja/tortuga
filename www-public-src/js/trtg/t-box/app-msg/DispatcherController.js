@@ -1,4 +1,4 @@
-om.ns_run('trtg.tbox.ang', function(ns)
+om.ns_run('trtg.tbox.app_msg', function(ns)
 {
 
 function DispatcherController(scope, service)

@@ -4,7 +4,7 @@ var curry = ns_get('om.func.curry');
 
 var trtgvm_get = function(postfix){return ns_get('trtg.tbox.tortoise_vm.' + postfix)};
 var tbox_get = function(postfix){return ns_get('trtg.tbox.' + postfix)};
-var tang_get = function(postfix){return ns_get('trtg.tbox.ang.' + postfix)};
+var tang_get = function(postfix){return ns_get('trtg.tbox.app_msg.' + postfix)};
 
 
 angular.module('t_box_module.TBoxTortoiseCanvas', [])
@@ -40,25 +40,14 @@ angular.module('t_box_module.TBoxTortoiseCanvas', [])
 
     .directive('tboxTortoiseCanvas',
                 curry(tbox_get('tblocks.TortoiseCanvasDirective'), 'TBoxTortoiseCanvasController'))
-    .run(['$injector', function($injector){
-        $injector.get('tbox_tortoisevm_tortoise_globals');
-        $injector.get('tbox_tortoisevm_mouse_manager');
-    }])
     ;
 
 
 angular.module('t_box_module', ['t_box_module.TBoxTortoiseCanvas'])
-    // .service('dispatcher_service',
-    //             tang_get('DispatcherService'))
-
-    // .controller('DispatcherController',
-    //             ['$scope', 'dispatcher_service', tang_get('DispatcherController')])
-
-    // .directive('consoleOut',
-    //             curry(tang_get('ConsoleOutDirective'), 'DispatcherController'))
-
-    // .directive('consoleIn',
-    //             curry(tang_get('ConsoleInDirective'), 'DispatcherController'))
+    .run(['$injector', function($injector){
+        $injector.get('tbox_tortoisevm_tortoise_globals');
+        $injector.get('tbox_tortoisevm_mouse_manager');
+    }])
     ;
 
 angular.bootstrap(document.getElementById('t_box_module'), ['t_box_module']);

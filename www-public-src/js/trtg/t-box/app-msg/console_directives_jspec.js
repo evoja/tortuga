@@ -7,7 +7,7 @@ describe('Console directives', function()
 
     var ns_get = om.ns_get;
     var curry = ns_get('om.func.curry');
-    var tang_get = function(postfix){return ns_get('trtg.tbox.ang.' + postfix)};
+    var tang_get = function(postfix){return ns_get('trtg.tbox.app_msg.' + postfix)};
     angular.module('console_directives_test_module', ['t_box_module.TBoxTortoiseCanvas'])
         .service('dispatcher_service',
                     tang_get('DispatcherService'))

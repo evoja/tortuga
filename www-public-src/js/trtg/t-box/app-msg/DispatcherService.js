@@ -1,9 +1,9 @@
-om.ns_run('trtg.tbox.ang', function(ns)
+om.ns_run('trtg.tbox.app_msg', function(ns)
 {
     /**
      * AngularJS service registers callbacks and dispatches messages to registered callbacks
      * @constructor
-     * @memberof trtg.tbox.ang
+     * @memberof trtg.tbox.app_msg
      */
     function DispatcherService ()
     {

@@ -1,9 +1,9 @@
-om.ns_run('trtg.tbox.ang', function(ns)
+om.ns_run('trtg.tbox.app_msg', function(ns)
 {
 
 /**
  * Controller that proxies all methods of injected service to injected scope.
- * @memberOf trtg.tbox.ang
+ * @memberOf trtg.tbox.app_msg
  * @param scope
  * @param service
  */

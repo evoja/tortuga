@@ -1,10 +1,10 @@
-om.ns_run('trtg.tbox.ang', function(ns)
+om.ns_run('trtg.tbox.app_msg', function(ns)
 {
 /**
  * AngularJS service creates handlers and dispatches messages to registered handlers.
  * Messages are method calls.
  * @constructor
- * @memberOf  trtg.tbox.ang
+ * @memberOf  trtg.tbox.app_msg
  * @alias MethodsDispatcherService
  * @param {function} Block - Constructor. Its prototype definces methods to call.
  * Itself is used for creating handlers instances.
@@ -25,7 +25,7 @@ ns.MethodsDispatcherService = function MethodsDispatcherService(Block)
          * Creates and registers messages receiver.
          * @method
          * @instance
-         * @memberOf trtg.tbox.ang.MethodsDispatcherService
+         * @memberOf trtg.tbox.app_msg.MethodsDispatcherService
          * @param {...*} - Arguments of injected constructor to create handler instance
          * @returns {Block} handler
          */
@@ -40,7 +40,7 @@ ns.MethodsDispatcherService = function MethodsDispatcherService(Block)
          * Unregisters messages receiver.
          * @method
          * @instance
-         * @memberOf trtg.tbox.ang.MethodsDispatcherService
+         * @memberOf trtg.tbox.app_msg.MethodsDispatcherService
          * @param {Block} block - handler instance that should be removed
          */
         unregister_block : function(block)
