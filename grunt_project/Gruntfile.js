@@ -28,7 +28,10 @@ var www_src_js_files = [
     'trtg/**/*.js',
     '*.js',
     '!*.template.js',
-    '!**/*_test_util.js'
+    '!**/*_jspec.js',
+    '!**/*_jhelper.js',
+    '!**/*_nu-test.js',
+    '!test-lib/**/*.js'
 ];
 
 module.exports = function(grunt)
@@ -99,14 +102,9 @@ module.exports = function(grunt)
     jasmine: {
         pivotal: {
             src: combine_files(
-                'www-public-src/js/', ['lib/angular.js'],
-                'www-public-src/js/', www_src_js_files,
-                'www-public-src/js/', [
-                    '!**/*_jspec.js',
-                    '!**/*_jhelper.js',
-                    '!**/*_nu-test.js',
-                    'test-lib/*.js'
-                ]),
+                'www-public-src/js/', ['lib/angular.js']
+                                        .concat(www_src_js_files)
+                                        .concat(['test-lib/**/*.js'])),
             options: {
                 specs: 'www-public-src/**/*_jspec.js',
                 helpers: 'www-public-src/**/*_jhelper.js'

@@ -1,4 +1,4 @@
-om.ns_run('trtg.tbox.ang.tblocks', function(ns)
+om.ns_run('trtg.tbox.tblocks', function(ns)
 {
     /**
      * Displays Tortoise canvas that gets commands and can draw lines

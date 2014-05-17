@@ -35,11 +35,11 @@ angular.module('t_box_module.TBoxTortoiseCanvas', [])
                     'tbox_tortoise_canvas_service', 
                     'tbox_tortoisevm_mouse_manager', 
                     'tbox_tortoise_canvas_bg_dispatcher',
-                    tang_get('tblocks.TortoiseCanvasController')
+                    tbox_get('tblocks.TortoiseCanvasController')
                 ])
 
     .directive('tboxTortoiseCanvas',
-                curry(tang_get('tblocks.TortoiseCanvasDirective'), 'TBoxTortoiseCanvasController'))
+                curry(tbox_get('tblocks.TortoiseCanvasDirective'), 'TBoxTortoiseCanvasController'))
     .run(['$injector', function($injector){
         $injector.get('tbox_tortoisevm_tortoise_globals');
         $injector.get('tbox_tortoisevm_mouse_manager');
