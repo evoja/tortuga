@@ -1,4 +1,4 @@
-require("./../include.js")("om/om.ns.js");
+require("./om.ns.js");
 
 module.exports = {
     ns: function(test)

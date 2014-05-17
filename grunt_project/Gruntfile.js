@@ -27,7 +27,8 @@ var www_src_js_files = [
     'trtg/t-box/tortoise-vm/TortoiseRunner.js',
     'trtg/**/*.js',
     '*.js',
-    '!*.template.js'
+    '!*.template.js',
+    '!**/*_test_util.js'
 ];
 
 module.exports = function(grunt)
@@ -84,7 +85,7 @@ module.exports = function(grunt)
     // Description of plugin is here: https://github.com/caolan/nodeunit
     // https://github.com/gruntjs/grunt-contrib-nodeunit
     nodeunit: {
-        all: ['www-public-test/**/*_nu-test.js'],
+        all: ['www-public-src/**/*_nu-test.js'],
         options: {
             reporter: 'junit',
             reporterOptions: {
@@ -100,10 +101,15 @@ module.exports = function(grunt)
             src: combine_files(
                 'www-public-src/js/', ['lib/angular.js'],
                 'www-public-src/js/', www_src_js_files,
-                '', ['www-public-test/lib/*.js']),
+                'www-public-src/js/', [
+                    '!**/*_jspec.js',
+                    '!**/*_jhelper.js',
+                    '!**/*_nu-test.js',
+                    'test-lib/*.js'
+                ]),
             options: {
-                specs: 'www-public-test/**/*_jspec.js',
-                helpers: 'www-public-test/**/*_jhelper.js'
+                specs: 'www-public-src/**/*_jspec.js',
+                helpers: 'www-public-src/**/*_jhelper.js'
             }
         }
     },
@@ -112,9 +118,8 @@ module.exports = function(grunt)
         dist : {
             src: [
                 '../www-public-src/js/**/*.js',
-                '../www-public-test/**/*.js',
                 '!../www-public-src/js/lib/**/*.js',
-                '!../www-public-test/lib/**/*.js'
+                '!../www-public-src/js/test-lib/**/*.js'
                 ], 
             options: {
                 destination: '../build/doc-js',
