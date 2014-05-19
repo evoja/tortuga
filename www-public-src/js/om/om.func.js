@@ -33,8 +33,7 @@ var func = function(arg){return function(){return arg}}
         var koeff = new Koeff(2);
         koeff.sum(3, 4) // --> 14
 
-        var k2sum3 = curry.call(koeff, koeff.sum, 3)
-        //////////// var k2sum3 = curry.apply(koeff, [koeff.sum, 3])
+        var k2sum3 = curry(koeff.sum.bind(koeff), 3) // === koeff.sum.bind(koeff, 3);
         k2sum3(4) // --> 14
         k2sum3(0) // --> 6
 
@@ -53,30 +52,22 @@ var func = function(arg){return function(){return arg}}
 @function
 @memberof om.func
 @param {function} fun - Curried function
-@param {...*} args - Partial arguments
+@param {...*} var_args - Partial arguments
 @returns {function}
 */
-var curry = function(fun /*, arguments */)
+function curry(fun /*, arguments */)
 {
-    var scope = this
     var args1 = slice.call(arguments, 1)
     return function(/* arguments */)
     {
-        var fun_scope = scope !== main_context && scope || this;
-        return fun.apply(fun_scope, args1.concat(slice.apply(arguments)));
+        return fun.apply(this, args1.concat(slice.apply(arguments)));
     }
-}
-
-var curry_through_bind = function(fun /*, arguments */)
-{
-    arguments[0] = this
-    return bind.apply(fun, arguments)
 }
 
 /*
 @example <caption>1. Без контекста</caption>
         var div = function(a, b){return a / b}
-        var d5 = curryL(div, 5);
+        var d5 = curry_l(div, 5);
         d5(10) // 2
         d5(60) // 12
 
@@ -86,13 +77,12 @@ var curry_through_bind = function(fun /*, arguments */)
 @param {...*} args - Partial arguments
 @returns {function}
 */
-var curryL = function(fun /* other */)
+function curry_l(fun /* other */)
 {
-    var scope = this
     var args1 = slice.call(arguments, 1)
     return function(/* arguments */)
     {
-        return fun.apply(scope, slice.apply(arguments).concat(args1))
+        return fun.apply(this, slice.apply(arguments).concat(args1))
     }
 }
 
@@ -110,25 +100,24 @@ var curryL = function(fun /* other */)
 @param {...*} args - Partial arguments with undefined as gaps
 @returns {function}
 */
-var curry_gaps = function(fun /* other */)
+function curry_gaps(fun /* other */)
 {
-    var scope = this
-    var args1 = slice.call(arguments, 1)
+    var args = slice.call(arguments, 1)
     return function(/* arguments */)
     {
-        var args2 = slice.call(args1)
-        var len = args2.length
+        var args_copy = slice.call(args)
+        var len = args_copy.length
         var arguments_index = 0
         for(var i = 0; i < len; ++i)
         {
-            if(args2[i] === undefined)
+            if(args_copy[i] === undefined)
             {
-                args2[i] = arguments[arguments_index]
+                args_copy[i] = arguments[arguments_index]
                 ++arguments_index
             }
         }
 
-        return fun.apply(scope, args2)
+        return fun.apply(this, args_copy)
     }
 }
 
@@ -160,8 +149,8 @@ var not = function(fun)
 
 
 ns.curry              = curry
-ns.curryL             = curryL
-ns.curry_through_bind = curry_through_bind
+ns.curry_l             = curry_l
+ns.curryL             = curry_l
 ns.curry_gaps         = curry_gaps
 ns.func               = func
 
