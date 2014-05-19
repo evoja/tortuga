@@ -11,12 +11,13 @@ om.ns_run('trtg.tbox.tblocks', function(ns)
 ns.TortoiseCanvasController = function TortoiseCanvasController(scope, 
                                     tortuga_service, mouse_service, url_service)
 {
-    this.tortuga_service = tortuga_service;
-    this.mouse_service = mouse_service;
-    this.background_url = "";
+    var context = this;
+    context.tortuga_service = tortuga_service;
+    context.mouse_service = mouse_service;
+    context.background_url = "";
 
     url_service.add_handler(function(url){
-        scope.background_url = url;
+        context.background_url = url;
         scope.$apply();
     });
 };

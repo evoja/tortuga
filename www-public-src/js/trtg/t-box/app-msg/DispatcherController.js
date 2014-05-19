@@ -2,20 +2,20 @@ om.ns_run('trtg.tbox.app_msg', function(ns)
 {
 var add_handler = function(handler)
 {
-    var scope = this;
-    scope.handlers_.push(handler);
-    scope.service_.add_handler(handler);
+    var context = this;
+    context.handlers_.push(handler);
+    context.service_.add_handler(handler);
 };
 
 var remove_handler = function(handler)
 {
-    var scope = this;
-    var index = scope.handlers_.indexOf(handler);
+    var context = this;
+    var index = context.handlers_.indexOf(handler);
     if(index >= 0)
     {
-        scope.handlers_.splice(index, 1);
+        context.handlers_.splice(index, 1);
     }
-    scope.service_.remove_handler(handler);
+    context.service_.remove_handler(handler);
 };
 
 var dispatch = function(var_args)
@@ -26,8 +26,8 @@ var dispatch = function(var_args)
 
 var on_destroy_ = function()
 {
-    var scope = this;
-    scope.handlers_.forEach(remove_handler.bind(scope));
+    var context = this;
+    context.handlers_.forEach(remove_handler.bind(context));
 };
 
 function DispatcherController(scope, service)

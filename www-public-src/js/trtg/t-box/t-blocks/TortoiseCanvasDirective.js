@@ -115,7 +115,8 @@ om.ns_run('trtg.tbox.tblocks', function(ns)
             scope : {},
             controller : dispatcher_controller_name + ' as ' + dispatcher_controller_field,
             template: '<div class="tortuga-canvasContainer">'
-                + '<div class="tortuga-canvasContainer-bg" ng-attr-style="background-image:url({{background_url}})"></div>'
+                + '<div class="tortuga-canvasContainer-bg" ng-attr-style="background-image:url({{' +
+                    dispatcher_controller_field + '.background_url}})"></div>'
                 + '<canvas class="tortuga-canvasContainer-canvas"></canvas>'
                 + '</div>'
         };
