@@ -11,9 +11,9 @@ om.ns_run('trtg.tbox.tblocks', function(ns)
 ns.TortoiseCanvasController = function TortoiseCanvasController(scope, 
                                     tortuga_service, mouse_service, url_service)
 {
-    scope.tortuga_service = tortuga_service;
-    scope.mouse_service = mouse_service;
-    scope.background_url = "";
+    this.tortuga_service = tortuga_service;
+    this.mouse_service = mouse_service;
+    this.background_url = "";
 
     url_service.add_handler(function(url){
         scope.background_url = url;
