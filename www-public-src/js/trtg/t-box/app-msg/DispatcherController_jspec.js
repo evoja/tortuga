@@ -3,6 +3,7 @@
 describe('DispatcherController', function()
 {
     var scope;
+    var controller;
     var service;
 
     var ns_get = om.ns_get;
@@ -21,23 +22,22 @@ describe('DispatcherController', function()
     beforeEach(inject(['dispatcher_service', '$controller', '$rootScope', function(serv, $controller, $rootScope) {
         // creation du controller avec le nouveau scope
         scope = $rootScope.$new();
-        var controller = $controller('DispatcherController', {
-            $scope: scope
-        });
+        $controller('DispatcherController as controller_field', {$scope: scope});
         service = serv;
+        controller = scope.controller_field;
     }]));
 
     it('test dispatches', function()
     {
         var str;
         var handler = function(value){str = value;};
-        scope.add_handler(handler);
-        scope.dispatch('hello');
+        controller.add_handler(handler);
+        controller.dispatch('hello');
         expect(str).toEqual('hello');
         service.dispatch('service says hello');
         expect(str).toEqual('service says hello');
-        scope.remove_handler(handler);
-        scope.dispatch('ololo');
+        controller.remove_handler(handler);
+        controller.dispatch('ololo');
         expect(str).not.toEqual('ololo');
         service.dispatch('service says ololo');
         expect(str).not.toEqual('service says ololo');
@@ -47,7 +47,7 @@ describe('DispatcherController', function()
     {
         var str;
         var handler = function(value){str = value;};
-        scope.add_handler(handler);
+        controller.add_handler(handler);
         service.dispatch('hello');
         expect(str).toEqual('hello');
         scope.$destroy();
@@ -58,19 +58,19 @@ describe('DispatcherController', function()
     it('Test returns from one handler', function()
     {
         var handler = function(value){return value + '1';};
-        scope.add_handler(handler);
-        var result = scope.dispatch('hello');
+        controller.add_handler(handler);
+        var result = controller.dispatch('hello');
         expect(result).toEqual('hello1');
-        scope.remove_handler(handler);
+        controller.remove_handler(handler);
     });
 
     it('Test doesnt return from more than one handler', function()
     {
         var handler1 = function(value){return value + '1';};
         var handler2 = function(value){return value + '2';};
-        var result = scope.dispatch('hello');
+        var result = controller.dispatch('hello');
         expect(result).toBeUndefined();
-        scope.remove_handler(handler1);
-        scope.remove_handler(handler2);
+        controller.remove_handler(handler1);
+        controller.remove_handler(handler2);
     });
 });

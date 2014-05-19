@@ -6,30 +6,31 @@ om.ns_run('trtg.tbox.app_msg', function(ns)
      * It was written as experiment and unnecessary now.
      * @deprecated
      * @memberOf  trtg.tbox.app_msg
-     * @param {string} controllerName - name of controller that manages messages exchange.
+     * @param {string} controller_name - name of controller that manages messages exchange.
      */
-    function ConsoleOutDirective(controllerName)
+    function ConsoleOutDirective(controller_name, controller_field)
     {
         var link = function(scope, $element, attrs)
         {
             var text = $element.text();
+            var controller = scope[controller_field];
             var handler = function(message)
             {
                 text += message;
                 $element.text(text);
             }
-            scope.add_handler(handler);
+            controller.add_handler(handler);
 
             $element.on('$destroy', function()
             {
-                scope.remove_handler(handler);
+                controller.remove_handler(handler);
             });
         };
 
         return {
             restrict : 'A',
             link : link,
-            controller : controllerName
+            controller : controller_name + ' as ' + controller_field
         };
     };
 
@@ -39,9 +40,9 @@ om.ns_run('trtg.tbox.app_msg', function(ns)
      * It was written as experiment and unnecessary now.
      * @deprecated
      * @memberOf  trtg.tbox.app_msg
-     * @param {string} controllerName - name of controller that manages messages exchange.
+     * @param {string} controller_name - name of controller that manages messages exchange.
      */
-    function ConsoleInDirective(controllerName)
+    function ConsoleInDirective(controller_name, controller_field)
     {
         var link = function(scope, $element, attrs)
         {
@@ -49,7 +50,7 @@ om.ns_run('trtg.tbox.app_msg', function(ns)
             {
                 if(event.keyCode == 13)
                 {
-                    scope.dispatch($element.val());
+                    scope[controller_field].dispatch($element.val());
                     $element.val('');
                     event.preventDefault();
                 }
@@ -59,7 +60,7 @@ om.ns_run('trtg.tbox.app_msg', function(ns)
         return {
             restrict : 'A',
             link : link,
-            controller : controllerName
+            controller : controller_name + ' as ' + controller_field
         };
     };
 

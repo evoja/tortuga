@@ -14,9 +14,9 @@ describe('Console directives', function()
         .controller('DispatcherController',
                     ['$scope', 'dispatcher_service', tang_get('DispatcherController')])
         .directive('consoleOut',
-                    curry(tang_get('ConsoleOutDirective'), 'DispatcherController'))
+                    curry(tang_get('ConsoleOutDirective'), 'DispatcherController', 'controller_field'))
         .directive('consoleIn',
-                    curry(tang_get('ConsoleInDirective'), 'DispatcherController'))
+                    curry(tang_get('ConsoleInDirective'), 'DispatcherController', 'controller_field'))
         ;
     beforeEach(module('console_directives_test_module'));
 
@@ -33,9 +33,9 @@ describe('Console directives', function()
         var scope = $rootScope.$new();
         // Compile a piece of HTML containing the directive
         var element = $compile('<div console-out></div>')(scope);
-        scope.dispatch('ololo');
+        scope.controller_field.dispatch('ololo');
         expect(element.html()).toEqual('ololo');
-        scope.dispatch('alala');
+        scope.controller_field.dispatch('alala');
         expect(element.html()).toEqual('ololoalala');
     });
 });

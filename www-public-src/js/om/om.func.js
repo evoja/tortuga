@@ -7,6 +7,7 @@ om.ns_run('om.func', function(ns)
 {
 var slice = om.ns_get('Array.prototype.slice')
 var bind = om.ns_get('Function.prototype.bind')
+var main_context = this;
 
 /**
 Wraps argument to function that returns its value;
@@ -61,7 +62,8 @@ var curry = function(fun /*, arguments */)
     var args1 = slice.call(arguments, 1)
     return function(/* arguments */)
     {
-       return fun.apply(scope, args1.concat(slice.apply(arguments)));
+        var fun_scope = scope !== main_context && scope || this;
+        return fun.apply(fun_scope, args1.concat(slice.apply(arguments)));
     }
 }
 

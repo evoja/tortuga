@@ -6,16 +6,18 @@ om.ns_run('trtg.tbox.tblocks', function(ns)
      * goes from down to up.
      * @alias TortoiseCanvasDirective
      * @memberOf  trtg.tbox.ang.tblocks
-     * @param {string} dispatcherControllerName - name of controller that manages 
+     * @param {string} dispatcher_controller_name - name of controller that manages 
+     * @param {string} dispatcher_controller_field - scope field name that controller will be attached to.
      * messages exchange.
      */
-    ns.TortoiseCanvasDirective = function TortoiseCanvasDirective(dispatcherControllerName)
+    ns.TortoiseCanvasDirective = function TortoiseCanvasDirective(dispatcher_controller_name, dispatcher_controller_field)
     {
         var link = function(scope, $element, attrs)
         {
             var slice = om.ns_get('Array.prototype.slice');
             var canvas;
             var div;
+            var controller = scope[dispatcher_controller_field];
 
             (function init(){
                 var $div = $element.find('div');
@@ -25,16 +27,16 @@ om.ns_run('trtg.tbox.tblocks', function(ns)
                 var $canvas = $element.find('canvas');
                 canvas = $canvas[0];
                 $canvas.attr('width', canvas.offsetWidth).attr('height', canvas.offsetHeight);
-                scope.mouse_service.subscribe_on_canvas(canvas);
+                controller.mouse_service.subscribe_on_canvas(canvas);
                 e = $element;
             })();
 
-            var block = scope.tortuga_service.register_block(canvas, div);
+            var block = controller.tortuga_service.register_block(canvas, div);
 
             $element.on('$destroy', function()
             {
-                scope.tortuga_service.unregister_block(block);
-                scope.mouse_service.unsubscribe_from_canvas(canvas);
+                controller.tortuga_service.unregister_block(block);
+                controller.mouse_service.unsubscribe_from_canvas(canvas);
             });
 
             // // Example 1: 
@@ -111,7 +113,7 @@ om.ns_run('trtg.tbox.tblocks', function(ns)
             restrict : 'E',
             link : link,
             scope : {},
-            controller : dispatcherControllerName,
+            controller : dispatcher_controller_name + ' as ' + dispatcher_controller_field,
             template: '<div class="tortuga-canvasContainer">'
                 + '<div class="tortuga-canvasContainer-bg" ng-attr-style="background-image:url({{background_url}})"></div>'
                 + '<canvas class="tortuga-canvasContainer-canvas"></canvas>'
