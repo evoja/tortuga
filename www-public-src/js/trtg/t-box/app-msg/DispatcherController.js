@@ -16,19 +16,19 @@ var remove_handler = function(handler)
         scope.handlers_.splice(index, 1);
     }
     scope.service_.remove_handler(handler);
-}
+};
 
 var dispatch = function(var_args)
 {
     var service = this.service_;
     return service.dispatch.apply(service, arguments);
-}
+};
 
 var on_destroy_ = function()
 {
     var scope = this;
     scope.handlers_.forEach(remove_handler.bind(scope));
-}
+};
 
 function DispatcherController(scope, service)
 {
