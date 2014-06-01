@@ -110,13 +110,34 @@ module.exports = function(grunt)
      
     assemble: {
         options: {
-            layout: "src/layouts/default.hbs",
-            flatten: true
+            layout: "templates/layouts/default.hbs",
+            flatten: true,
+            assets: 'site/src/**/*',
+            helpers: 'templates/helpers/*.js',
+            partials: 'templates/includes/*.hbs',
+            layoutdir: 'templates/layouts',
+            layout: 'default.hbs',
         },
-        pages: {
-            files: {
-                '../www-public-src/build/www-public-release/': ['src/pages/*.hbs']
-            }
+        index: {
+          files: {'../www-public-src/build/www-public-release/': ['btrtg/index.hbs']},
+                  //'../www-public-src/build/www-public-release/': ['btrtg/perepravy.hbs']
+          options: {
+            data: 'btrtg/*.json'
+          }
+        },
+
+        perepravy: {
+          files: {'../www-public-src/build/www-public-release/': ['btrtg/perepravy.hbs']},
+          options: {
+            data: 'btrtg/*.json'
+          }
+        },
+    },
+
+    clean: {
+      dist: ['../www-public-src/build/www-public-release/*.html'],
+      options: {
+          force: true
         }
     },
 
@@ -146,6 +167,7 @@ module.exports = function(grunt)
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-jsdoc');
   grunt.loadNpmTasks('assemble');
+  grunt.loadNpmTasks('grunt-contrib-clean');
 
   grunt.registerTask('rebase_www_public', 'Set base path to ..', function()
   {
@@ -170,7 +192,8 @@ module.exports = function(grunt)
   grunt.registerTask('test', [ 'rebase_test', 'nodeunit', 'jasmine', 'restore_test']);
   grunt.registerTask('release', ['rebase_www_public', 'concat', 'uglify', 'cssmin', 'restore_www_public', 'assemble']);
   grunt.registerTask('build2', ['test', 'jsdoc', 'assemble']);
+  grunt.registerTask('debug', ['assemble']);
 
-  grunt.registerTask('default', ['test', 'jsdoc', 'release']);
+  grunt.registerTask('default', ['clean','assemble']);
 
 };
