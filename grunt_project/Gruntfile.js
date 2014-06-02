@@ -37,6 +37,8 @@ module.exports = function(grunt)
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
+    //version: 'dev',
+
     uglify: {
       options: {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
@@ -109,29 +111,49 @@ module.exports = function(grunt)
     },
      
     assemble: {
-        options: {
-            layout: "templates/layouts/default.hbs",
-            flatten: true,
-            assets: 'site/src/**/*',
-            helpers: 'templates/helpers/*.js',
-            partials: 'templates/includes/*.hbs',
-            layoutdir: 'templates/layouts',
-            layout: 'default.hbs',
-        },
-        index: {
-          files: {'../www-public-src/build/www-public-release/': ['btrtg/index.hbs']},
-                  //'../www-public-src/build/www-public-release/': ['btrtg/perepravy.hbs']
           options: {
-            data: 'btrtg/*.json'
-          }
-        },
+              layout: "templates/layouts/default.hbs",
+              flatten: true,
+              assets: 'site/src/**/*',
+              helpers: 'templates/helpers/*.js',
+              partials: 'templates/includes/*.hbs',
+              layoutdir: 'templates/layouts',
+              layout: 'default.hbs',
+          },
 
-        perepravy: {
-          files: {'../www-public-src/build/www-public-release/': ['btrtg/perepravy.hbs']},
-          options: {
-            data: 'btrtg/*.json'
-          }
-        },
+          index: {
+            files: {'../www-public-src/build/www-public-release/': ['btrtg/index.hbs']},
+            options: {
+              data: 'btrtg/*.json'
+            }
+          },
+
+          perepravy: {
+            files: {'../www-public-src/build/www-public-release/': ['btrtg/perepravy.hbs']},
+            options: {
+              data: 'btrtg/*.json'
+            }
+          },
+
+          dev:{ 
+            files: {
+              '../www-public-src/build/www-public-release/index.html': ['btrtg/index.hbs'],
+              '../www-public-src/build/www-public-release/perepravy.html': ['btrtg/perepravy.hbs']
+            },
+            options: {
+              data: 'btrtg/json/dev/*.json'
+            }
+          },
+
+          release:{ 
+            files: {
+              '../www-public-src/build/www-public-release/index.html': ['btrtg/index.hbs'],
+              '../www-public-src/build/www-public-release/perepravy.html': ['btrtg/perepravy.hbs']
+            },
+            options: {
+              data: 'btrtg/json/release/*.json'
+            }
+          },
     },
 
     clean: {
@@ -189,11 +211,12 @@ module.exports = function(grunt)
     grunt.file.setBase('grunt_project');
   });
 
-  grunt.registerTask('test', [ 'rebase_test', 'nodeunit', 'jasmine', 'restore_test']);
-  grunt.registerTask('release', ['rebase_www_public', 'concat', 'uglify', 'cssmin', 'restore_www_public', 'assemble']);
-  grunt.registerTask('build2', ['test', 'jsdoc', 'assemble']);
-  grunt.registerTask('debug', ['assemble']);
 
-  grunt.registerTask('default', ['clean','assemble']);
+  grunt.registerTask('test', [ 'rebase_test', 'nodeunit', 'jasmine', 'restore_test']);
+  grunt.registerTask('release', ['clean', /*'rebase_www_public', 'concat', 'uglify', 'cssmin', 'restore_www_public',*/ 'assemble:release']);
+  grunt.registerTask('build2', ['test', 'jsdoc', 'assemble']);
+  grunt.registerTask('debug', ['clean', 'assemble:dev']);
+
+  grunt.registerTask('default', ['debug']);
 
 };
