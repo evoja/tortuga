@@ -281,10 +281,10 @@ module.exports = function(grunt)
 
 
   grunt.registerTask('test', [ 'rebase_test', 'nodeunit', 'jasmine', 'restore_test']);
-  grunt.registerTask('release', ['clean', 'rebase_www_public', 'concat', 'uglify', 'cssmin', 'restore_www_public', 'sails-linker:debug_css', 'assemble:release']);
+  grunt.registerTask('release', ['clean', 'rebase_www_public', 'concat', 'uglify', 'cssmin', 'restore_www_public', 'sails-linker:debug_js', 'sails-linker:debug_css', 'assemble:release']);
   grunt.registerTask('build2', ['test', 'jsdoc', 'assemble']);
   grunt.registerTask('debug', ['clean', 'copy', 'sails-linker:debug_js', 'sails-linker:debug_css', 'assemble:debug']);
 
-  grunt.registerTask('default', ['debug']);
+  grunt.registerTask('default', ['release']);
 
 };
