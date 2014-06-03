@@ -30,6 +30,13 @@ var www_src_js_files = [
     '!*.template.js'
 ];
 
+var www_src_css_files = [
+    'css/reset.css',
+    'css/tortuga.css',
+    'css/tortoise.css',
+    'css/page.css'
+];
+
 module.exports = function(grunt)
 {
 
@@ -62,12 +69,7 @@ module.exports = function(grunt)
     cssmin: {
         combine: {
             files: {
-                'build/min.css': [
-                    'css/reset.css',
-                    'css/tortuga.css',
-                    'css/tortoise.css',
-                    'css/page.css'
-                ]
+                'build/min.css': www_src_css_files
             }
         }
     },
@@ -135,7 +137,7 @@ module.exports = function(grunt)
             }
           },
 
-          dev:{ 
+          debug:{ 
             files: {
               '../www-public-src/build/www-public-release/index.html': ['btrtg/index.hbs'],
               '../www-public-src/build/www-public-release/perepravy.html': ['btrtg/perepravy.hbs']
@@ -157,10 +159,64 @@ module.exports = function(grunt)
     },
 
     clean: {
-      dist: ['../www-public-src/build/www-public-release/*.html'],
+      dist: ['../www-public-src/build/www-public-release/*.html', '../www-public-src/build/*'],
       options: {
           force: true
         }
+    },
+
+    'sails-linker': {
+        debug_js:{
+              options: {
+                startTag: '<!--SCRIPTS_JS-->',
+                endTag: '<!--SCRIPTS_JS END-->',
+                fileTmpl: '<script src="../%s"></script>',
+                appRoot: '../www-public-src/build/'
+              },
+              files: {
+                // Target-specific file lists and/or options go here.
+                'templates/includes/scripts.hbs': ['../www-public-src/build/*.js']
+              },
+        },
+
+        debug_css:{
+              options: {
+                startTag: '<!--SCRIPTS_CSS-->',
+                endTag: '<!--SCRIPTS_CSS END-->',
+                fileTmpl: '<link type="text/css" rel="stylesheet" href="../%s">',
+                appRoot: '../www-public-src/build/'
+              },
+              files: {
+                // Target-specific file lists and/or options go here.
+                'templates/includes/styles.hbs': ['../www-public-src/build/*.css']
+              },
+        },
+
+        release_js:{
+              options: {
+                startTag: '<!--SCRIPTS_JS-->',
+                endTag: '<!--SCRIPTS_JS END-->',
+                fileTmpl: '<script src="%s"></script>',
+                appRoot: ''
+              },
+              files: {
+                // Target-specific file lists and/or options go here.
+                'app/index_linker.html': ['app/js/*.js']
+              },
+        },
+
+        release_css:{
+              options: {
+                startTag: '<!--SCRIPTS_CSS-->',
+                endTag: '<!--SCRIPTS_CSS END-->',
+                fileTmpl: '<link type="text/css" rel="stylesheet" href="%s">',
+                appRoot: ''
+              },
+              files: {
+                // Target-specific file lists and/or options go here.
+                'app/index_linker.html': ['app/css/*.css']
+              },
+        },
     },
 
     jsdoc: {
@@ -176,7 +232,17 @@ module.exports = function(grunt)
                 configure: 'jsdoc_conf.json'
             }
         }
-    }
+    },
+
+    copy: {
+      main: {
+        files: [
+          {expand: true, flatten: true, filter: 'isFile', cwd: '../www-public-src/', src: www_src_css_files, dest: '../www-public-src/build/'},
+          {expand: true, flatten: true, filter: 'isFile', cwd: '../www-public-src/js/', src: www_src_js_files, dest: '../www-public-src/build/'}
+        ]
+      },
+    },
+
   });
 
   // Load the plugin that provides the "uglify" task.
@@ -190,6 +256,8 @@ module.exports = function(grunt)
   grunt.loadNpmTasks('grunt-jsdoc');
   grunt.loadNpmTasks('assemble');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-sails-linker');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
   grunt.registerTask('rebase_www_public', 'Set base path to ..', function()
   {
@@ -213,9 +281,9 @@ module.exports = function(grunt)
 
 
   grunt.registerTask('test', [ 'rebase_test', 'nodeunit', 'jasmine', 'restore_test']);
-  grunt.registerTask('release', ['clean', /*'rebase_www_public', 'concat', 'uglify', 'cssmin', 'restore_www_public',*/ 'assemble:release']);
+  grunt.registerTask('release', ['clean', 'rebase_www_public', 'concat', 'uglify', 'cssmin', 'restore_www_public', 'sails-linker:debug_css', 'assemble:release']);
   grunt.registerTask('build2', ['test', 'jsdoc', 'assemble']);
-  grunt.registerTask('debug', ['clean', 'assemble:dev']);
+  grunt.registerTask('debug', ['clean', 'copy', 'sails-linker:debug_js', 'sails-linker:debug_css', 'assemble:debug']);
 
   grunt.registerTask('default', ['debug']);
 
