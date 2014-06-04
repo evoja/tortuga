@@ -177,8 +177,47 @@ module.exports = function(grunt)
               },
               files: {
                 // Target-specific file lists and/or options go here.
-                'templates/includes/scripts.hbs': combine_files('../www-public-src/build/', ['lib/angular.js'], '../www-public-src/build/', www_src_js_files)
-                //['../www-public-src/build/*.js']
+                // 'templates/includes/scripts.hbs': combine_files('../www-public-src/build/', ['lib/angular.js'], '../www-public-src/build/', www_src_js_files)
+                //как было  'templates/includes/scripts.hbs': combine_files('../www-public-src/build/', ['lib/angular.js'], '../www-public-src/build/', www_src_js_files)
+                //как было ['../www-public-src/build/*.js']
+                '../www-public-src/build/www-public-release/index.html': [
+                        '../www-public-src/build/om.ns.js',
+
+                        '../www-public-src/build/om.text.js',
+                        '../www-public-src/build/om.is_browser.js',
+                        '../www-public-src/build/om.func.js',
+
+                        '../www-public-src/build/TortoiseRunner.js',
+
+                        '../www-public-src/build/lessons.js',
+                        '../www-public-src/build/ParamsUtil.js',
+
+                        '../www-public-src/build/DispatcherController.js',
+                        '../www-public-src/build/DispatcherService.js',
+                        '../www-public-src/build/JsConverter.js',
+                        '../www-public-src/build/MethodsDispatcherService.js',
+                        '../www-public-src/build/MouseManager.js',
+                        '../www-public-src/build/ServiceProxyController.js',
+                        '../www-public-src/build/TortoiseCanvasBlock.js',
+                        '../www-public-src/build/TortoiseCanvasController.js',
+                        '../www-public-src/build/TortoiseCanvasDirective.js',
+                        '../www-public-src/build/TortoiseGlobals.js',
+                        '../www-public-src/build/console_directives.js',
+                        '../www-public-src/build/ns.js',
+
+                        '../www-public-src/build/Agent.js',
+                        '../www-public-src/build/angular_t-box_module.js',
+                        '../www-public-src/build/files.js',
+                        '../www-public-src/build/help.js',
+                        '../www-public-src/build/tortuga.js']
+                        
+
+                // 'om/om.ns.js',
+                // 'om/*.js',
+                // 'trtg/t-box/tortoise-vm/TortoiseRunner.js',
+                // 'trtg/**/*.js',
+                // '*.js',
+                // '!*.template.js'
                 
               },
         },
@@ -192,7 +231,7 @@ module.exports = function(grunt)
               },
               files: {
                 // Target-specific file lists and/or options go here.
-                'templates/includes/styles.hbs': ['../www-public-src/build/*.css']
+                '../www-public-src/build/www-public-release/index.html': ['../www-public-src/build/*.css']
               },
         },
 
@@ -242,7 +281,7 @@ module.exports = function(grunt)
       main: {
         files: [
           {expand: true, flatten: true, filter: 'isFile', cwd: '../www-public-src/', src: www_src_css_files, dest: '../www-public-src/build/'},
-          {expand: true, flatten: true, filter: 'isFile', cwd: '../www-public-src/js/', src: www_src_js_files, dest: '../www-public-src/build/'}
+          {expand: true, flatten: true, filter: 'isFile', cwd: '../www-public-src/js/', src: www_src_js_files, dest: '../www-public-src/build/'},
         ]
       },
     },
@@ -287,7 +326,7 @@ module.exports = function(grunt)
   grunt.registerTask('test', [ 'rebase_test', 'nodeunit', 'jasmine', 'restore_test']);
   grunt.registerTask('release', ['clean', 'rebase_www_public', 'concat', 'uglify', 'cssmin', 'restore_www_public', 'sails-linker:debug_js', 'sails-linker:debug_css', 'assemble:release']);
   grunt.registerTask('build2', ['test', 'jsdoc', 'assemble']);
-  grunt.registerTask('debug', ['clean', 'copy', 'sails-linker:debug_js', 'sails-linker:debug_css', 'assemble:debug']);
+  grunt.registerTask('debug', ['clean', 'copy', 'assemble:debug', 'sails-linker:debug_css', 'sails-linker:debug_js']);
 
   grunt.registerTask('default', ['debug']);
 
