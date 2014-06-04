@@ -178,9 +178,10 @@ module.exports = function(grunt)
               files: {
                 // Target-specific file lists and/or options go here.
                 // 'templates/includes/scripts.hbs': combine_files('../www-public-src/build/', ['lib/angular.js'], '../www-public-src/build/', www_src_js_files)
-                //как было  'templates/includes/scripts.hbs': combine_files('../www-public-src/build/', ['lib/angular.js'], '../www-public-src/build/', www_src_js_files)
+                  '../www-public-src/build/www-public-release/index.html': combine_files('../www-public-src/build/', ['lib/angular.js'], '../www-public-src/build/', www_src_js_files),
+                  '../www-public-src/build/www-public-release/perepravy.html': combine_files('../www-public-src/build/', ['lib/angular.js'], '../www-public-src/build/', www_src_js_files, '../www-public-src/build/', ['lessons/perepravy_shapovalov.js']),
                 //как было ['../www-public-src/build/*.js']
-                '../www-public-src/build/www-public-release/index.html': [
+                /*'../www-public-src/build/www-public-release/*.html': [
                         '../www-public-src/build/om.ns.js',
 
                         '../www-public-src/build/om.text.js',
@@ -210,7 +211,7 @@ module.exports = function(grunt)
                         '../www-public-src/build/files.js',
                         '../www-public-src/build/help.js',
                         '../www-public-src/build/tortuga.js']
-                        
+                    */    
 
                 // 'om/om.ns.js',
                 // 'om/*.js',
@@ -231,7 +232,7 @@ module.exports = function(grunt)
               },
               files: {
                 // Target-specific file lists and/or options go here.
-                '../www-public-src/build/www-public-release/index.html': ['../www-public-src/build/*.css']
+                '../www-public-src/build/www-public-release/*.html': ['../www-public-src/build/*.css']
               },
         },
 
@@ -244,7 +245,10 @@ module.exports = function(grunt)
               },
               files: {
                 // Target-specific file lists and/or options go here.
-                'app/index_linker.html': ['app/js/*.js']
+                '../www-public-src/build/www-public-release/index.html': ['../www-public-src/build/*.js'],
+                '../www-public-src/build/www-public-release/perepravy.html': combine_files( '../www-public-src/build/', ['../www-public-src/build/*.js'], '../www-public-src/build/', ['lessons/perepravy_shapovalov.js']),
+                
+                
               },
         },
 
@@ -260,6 +264,7 @@ module.exports = function(grunt)
                 'app/index_linker.html': ['app/css/*.css']
               },
         },
+
     },
 
     jsdoc: {
@@ -282,6 +287,12 @@ module.exports = function(grunt)
         files: [
           {expand: true, flatten: true, filter: 'isFile', cwd: '../www-public-src/', src: www_src_css_files, dest: '../www-public-src/build/'},
           {expand: true, flatten: true, filter: 'isFile', cwd: '../www-public-src/js/', src: www_src_js_files, dest: '../www-public-src/build/'},
+        ]
+      },
+
+      lessons: {
+        files: [
+          {expand: true, flatten: true, filter: 'isFile', cwd: '../www-public-src/lessons/', src: ['perepravy_shapovalov.js'], dest: '../www-public-src/build/lessons/'},
         ]
       },
     },
@@ -324,9 +335,9 @@ module.exports = function(grunt)
 
 
   grunt.registerTask('test', [ 'rebase_test', 'nodeunit', 'jasmine', 'restore_test']);
-  grunt.registerTask('release', ['clean', 'rebase_www_public', 'concat', 'uglify', 'cssmin', 'restore_www_public', 'sails-linker:debug_js', 'sails-linker:debug_css', 'assemble:release']);
+  grunt.registerTask('release', ['clean', 'copy:lessons', 'rebase_www_public', 'concat', 'uglify', 'cssmin', 'restore_www_public', 'assemble:release', 'sails-linker:debug_js', 'sails-linker:debug_css']);
   grunt.registerTask('build2', ['test', 'jsdoc', 'assemble']);
-  grunt.registerTask('debug', ['clean', 'copy', 'assemble:debug', 'sails-linker:debug_css', 'sails-linker:debug_js']);
+  grunt.registerTask('debug', ['clean', 'copy:main', 'copy:lessons', 'assemble:debug', 'sails-linker:debug_css', 'sails-linker:debug_js']);
 
   grunt.registerTask('default', ['debug']);
 
