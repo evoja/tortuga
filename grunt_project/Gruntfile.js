@@ -18,6 +18,8 @@ var combine_files = function() // prefix1, array1, prefix2, array2, ...
             }
         });
     result = result.concat(combine_files.apply(this, Array.prototype.slice.call(arguments,2)));
+    console.log(result);
+    console.log('--------------------');
     return result;
 };
 
@@ -175,7 +177,9 @@ module.exports = function(grunt)
               },
               files: {
                 // Target-specific file lists and/or options go here.
-                'templates/includes/scripts.hbs': ['../www-public-src/build/*.js']
+                'templates/includes/scripts.hbs': combine_files('../www-public-src/build/', ['lib/angular.js'], '../www-public-src/build/', www_src_js_files)
+                //['../www-public-src/build/*.js']
+                
               },
         },
 
@@ -285,6 +289,6 @@ module.exports = function(grunt)
   grunt.registerTask('build2', ['test', 'jsdoc', 'assemble']);
   grunt.registerTask('debug', ['clean', 'copy', 'sails-linker:debug_js', 'sails-linker:debug_css', 'assemble:debug']);
 
-  grunt.registerTask('default', ['release']);
+  grunt.registerTask('default', ['debug']);
 
 };
