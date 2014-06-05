@@ -116,10 +116,7 @@ module.exports = function(grunt)
      
     assemble: {
           options: {
-              layout: "templates/layouts/default.hbs",
               flatten: true,
-              assets: 'site/src/**/*',
-              helpers: 'templates/helpers/*.js',
               partials: 'templates/includes/*.hbs',
               layoutdir: 'templates/layouts',
               layout: 'default.hbs',
@@ -171,55 +168,14 @@ module.exports = function(grunt)
         debug_js:{
               options: {
                 startTag: '<!--SCRIPTS_JS-->',
-                endTag: '<!--SCRIPTS_JS END-->',
+                 endTag: '<!--SCRIPTS_JS END-->',
                 fileTmpl: '<script src="../%s"></script>',
                 appRoot: '../www-public-src/build/'
               },
               files: {
                 // Target-specific file lists and/or options go here.
-                // 'templates/includes/scripts.hbs': combine_files('../www-public-src/build/', ['lib/angular.js'], '../www-public-src/build/', www_src_js_files)
                   '../www-public-src/build/www-public-release/index.html': combine_files('../www-public-src/build/', ['lib/angular.js'], '../www-public-src/build/', www_src_js_files),
                   '../www-public-src/build/www-public-release/perepravy.html': combine_files('../www-public-src/build/', ['lib/angular.js'], '../www-public-src/build/', www_src_js_files, '../www-public-src/build/', ['lessons/perepravy_shapovalov.js']),
-                //как было ['../www-public-src/build/*.js']
-                /*'../www-public-src/build/www-public-release/*.html': [
-                        '../www-public-src/build/om.ns.js',
-
-                        '../www-public-src/build/om.text.js',
-                        '../www-public-src/build/om.is_browser.js',
-                        '../www-public-src/build/om.func.js',
-
-                        '../www-public-src/build/TortoiseRunner.js',
-
-                        '../www-public-src/build/lessons.js',
-                        '../www-public-src/build/ParamsUtil.js',
-
-                        '../www-public-src/build/DispatcherController.js',
-                        '../www-public-src/build/DispatcherService.js',
-                        '../www-public-src/build/JsConverter.js',
-                        '../www-public-src/build/MethodsDispatcherService.js',
-                        '../www-public-src/build/MouseManager.js',
-                        '../www-public-src/build/ServiceProxyController.js',
-                        '../www-public-src/build/TortoiseCanvasBlock.js',
-                        '../www-public-src/build/TortoiseCanvasController.js',
-                        '../www-public-src/build/TortoiseCanvasDirective.js',
-                        '../www-public-src/build/TortoiseGlobals.js',
-                        '../www-public-src/build/console_directives.js',
-                        '../www-public-src/build/ns.js',
-
-                        '../www-public-src/build/Agent.js',
-                        '../www-public-src/build/angular_t-box_module.js',
-                        '../www-public-src/build/files.js',
-                        '../www-public-src/build/help.js',
-                        '../www-public-src/build/tortuga.js']
-                    */    
-
-                // 'om/om.ns.js',
-                // 'om/*.js',
-                // 'trtg/t-box/tortoise-vm/TortoiseRunner.js',
-                // 'trtg/**/*.js',
-                // '*.js',
-                // '!*.template.js'
-                
               },
         },
 
@@ -286,7 +242,7 @@ module.exports = function(grunt)
       main: {
         files: [
           {expand: true, flatten: true, filter: 'isFile', cwd: '../www-public-src/', src: www_src_css_files, dest: '../www-public-src/build/'},
-          {expand: true, flatten: true, filter: 'isFile', cwd: '../www-public-src/js/', src: www_src_js_files, dest: '../www-public-src/build/'},
+          {expand: true, cwd: '../www-public-src/js/', src: www_src_js_files, dest: '../www-public-src/build/'},
         ]
       },
 
