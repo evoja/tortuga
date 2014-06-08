@@ -1,0 +1,20 @@
+/*** Tortoise page *******************************************************/
+.skyObjects
+{
+	position: relative;
+	background:
+		url("../img/titlebackground_birthday.png") no-repeat center top,
+		url("../img/green_back_trees.png") repeat-x center bottom,
+		url("../img/clouds.png") center 300px no-repeat;
+	background-size: auto 200px, auto auto, auto auto;
+	min-width: 760px;
+}
+
+.tortoiseMan
+{/*560x900*/
+	width: 280px;
+	height:450px;
+	background: left top no-repeat url("../img/tortoiseman_birthday.png");
+	background-size: 100% 100%;
+	bottom: -474px;
+}
