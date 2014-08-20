@@ -174,4 +174,295 @@ var getLessonTextFromGetUriValue = function(u){
 \end{verbatim}
 
 % % % % % % % % % % % % % % % % % % % % %
+\vspace{16mm}
+\textbf{\Large A6. Изменение урока \# без перезагрузки страницы}
+\vspace{6mm}
 
+описание действия
+\begin{verbatim}
+
+if ("onhashchange" in window)
+    {
+        window.onhashchange = function () 
+        {
+            replacementDOMListOfTabs(bg, list, descrDiv, env, lesson);
+        }
+    }
+    else
+    {
+        var storedHash = window.location.hash;
+        window.setInterval(function () 
+            {
+                if (window.location.hash != storedHash) 
+                {
+                    replacementDOMListOfTabs(bg, list, descrDiv, env, lesson);
+                }
+            }, 100);
+    }
+
+var buildListOfTabs = function(bg, list, descrDiv, env, lesson)
+{
+    list.appendChild(createList(lesson.items, bg, descrDiv,
+    new LessonEnv(env, lesson.title))); 
+}
+
+var replacementDOMListOfTabs = function(bg, list, descrDiv, env, lesson)
+{
+    for(var i=1; i<=list.children.length; i++) 
+    {
+        var child = list.children[i];
+        list.removeChild(child);
+    }
+
+    buildListOfTabs(bg, list, descrDiv, env, lesson);
+}
+
+\end{verbatim}
+
+% % % % % % % % % % % % % % % % % % % % %
+\vspace{16mm}
+\textbf{\Large A8. Методы изменения координат угла и поворота черепашки}
+\vspace{6mm}
+
+\textbf{TORTOISE}
+\begin{verbatim}
+var setCoords = function(jsConverter, jsTortoise, x, y)
+    {
+        if (typeof x == "number")
+        {
+            jsConverter.parseNode(jsConverter.nodes.setX, jsTortoise, x)
+            jsConverter.parseNode(jsConverter.nodes.setY, jsTortoise, y)
+        } else 
+        {
+            jsConverter.parseNode(jsConverter.nodes.setX, jsTortoise, x.x)
+            jsConverter.parseNode(jsConverter.nodes.setY, jsTortoise, x.y)
+        }	
+    }
+
+var getAngle = function(jsConverter, jsTortoise)
+    {
+    return jsConverter.parseNode(jsConverter.nodes.getAngle, jsTortoise).value
+    }
+\end{verbatim}
+
+Добавлены в конструктор комманд
+\begin{verbatim}
+var constructProto = function(jsConverter)
+    {
+        return {
+            .........
+            getAngle: jsConverter.nodes.getAngle,
+            setAngle: jsConverter.nodes.setAngle,
+        }
+    }
+\end{verbatim}
+
+
+
+добавлены в свойства черепахи
+\begin{verbatim}
+Tortoise.prototype.getAngle = function()
+        {
+            return getAngle(jsConverter, this.jsTortoise)
+        }
+\end{verbatim}
+
+
+\textbf{JS CONVERTER}
+добавлены  ноды
+\begin{verbatim}
+........
+    var NODE_GET_ANGLE  = new FirstParamIsVariableResultNode(TR.commands.getAngle)
+    var NODE_SET_ANGLE  = new FirstParamIsVariableNode(TR.commands.setAngle)
+    var NODE_SET_X      = new FirstParamIsVariableNode(TR.commands.setX)
+    var NODE_SET_Y      = new FirstParamIsVariableNode(TR.commands.setY)
+
+JsConverter.prototype.nodes = {
+        ........
+        setX     : NODE_SET_X,
+        setY     : NODE_SET_Y,
+        getAngle : 	NODE_GET_ANGLE,
+        setAngle :  NODE_SET_ANGLE,
+    }
+\end{verbatim}
+
+
+\textbf{JS CONVERTER}
+\begin{verbatim}
+var runGetAngle = function runGetAngle(runner, getTrTortoise, handler)
+    {
+        handler(getTrTortoise().deg)
+    }
+
+var runSetAngle = function runGetAngle(runner, getTrTortoise, deg)
+    {
+        getTrTortoise().deg = deg
+    }
+var runSetX = function runSetX(runner, getTrTortoise, x)
+    {
+        getTrTortoise().x = x
+    }
+var runSetY = function runSetX(runner, getTrTortoise, y)
+    {
+        getTrTortoise().y = y
+    }
+TortoiseRunner.commands = {
+        .......
+        setX     : runSetX,
+        setY     : runSetY,
+        getAngle : runGetAngle,
+        setAngle : runSetAngle,
+        .......
+    }
+\end{verbatim}
+
+
+
+
+
+% % % % % % % % % % % % % % % % % % % % %
+\vspace{16mm}
+\textbf{\Large A9. Обработка всех мышинных событий в рамках канвы}
+\vspace{6mm}
+
+\textbf{DRAWINGSISTEM}
+
+добавлены методы возвращающие координаты черепахи в координатах canvas, и наоборот
+\begin{verbatim}
+var convertCoordsTortugaToCanvas = function(ctx, tortugaX, tortugaY)
+    {
+        return {x : tortugaX, y : (ctx.canvas.height - tortugaY)}
+    }
+
+var convertCoordsCanvasToTortuga = function(ctx, canvasX, canvasY)
+    {
+        return {x : canvasX, y : (ctx.canvas.height - canvasY)}
+    }
+\end{verbatim}
+
+\textbf{MOUSEJS}
+\begin{verbatim}
+ns("Tortuga.Events");
+(function()
+{
+    var tortugaEventsHolder = Tortuga.Events;
+
+    Tortuga.initMouse = function(drawingSystem) 
+    {
+        var handlerEvent = function(e)
+        {
+            var point = drawingSystem.convertCoordsCanvasToTortuga(e.layerX, e.layerY)
+            var event_canvas = 
+                {
+                    tortugaX: point.x,
+                    tortugaY: point.y,
+                    originalEvent: e
+                }
+
+            var event_name = "on" + e.type
+            if (typeof tortugaEventsHolder[event_name] == "function")
+            {
+                tortugaEventsHolder[event_name](event_canvas)
+            }
+        }
+
+        var canvas = drawingSystem.getCanvas()
+        var events = [
+            "onclick", "onmousedown", "onmouseenter", "onmouseleave",
+            "onmousemove", "onmouseout", "onmouseover", "onmouseup",
+            "onmousewheel"
+        ]
+        events.forEach(function(event_name)
+        {
+            canvas[event_name] = handlerEvent
+            tortugaEventsHolder[event_name] = null
+        })
+    }
+})()
+
+
+
+\end{verbatim}
+
+
+% % % % % % % % % % % % % % % % % % % % %
+\vspace{16mm}
+\textbf{\Large A10. D\&D файлов}
+\vspace{6mm}
+
+\textbf{FILES.JS}
+\begin{verbatim}
+var processScript =  function(script)
+    {
+        preAction();
+        var scriptElement = document.createElement("script");
+        scriptElement.innerHTML = script;
+
+        var headElement = document.getElementsByTagName("head")[0];
+        headElement.appendChild(scriptElement);
+        postAction();
+    }
+
+var processFile = function(file)
+    {
+        var reader = new FileReader();
+        reader.onload = function(e)
+        {
+            processScript(e.target.result)
+        };
+
+        reader.readAsText(file);
+    }
+
+
+var processText = function(script)
+    {
+        processScript(script)
+    }
+
+var preventDefault = function(e)
+    {
+        e.preventDefault ? e.preventDefault() : (e.returnValue = false);
+    }
+
+
+var doDrop = function(e) {
+    canvasObjekt.classList.remove("tortuga-canvasContainer-dragging")
+        if (e.dataTransfer.files)
+        {
+            var file = e.dataTransfer.files;
+            for (var i=0; i<file.length; i++)
+            {
+                processFile(file[i]);
+            }
+            preventDefault(e)
+        }
+
+        if (e.dataTransfer.getData('Text'))
+        {
+            var text = e.dataTransfer.getData('Text');
+            processText(text);
+            preventDefault(e)
+        }
+        return false;
+    }
+
+var handleDragOver = function(e)
+    {
+        preventDefault(e)
+        canvasObjekt.classList.add("tortuga-canvasContainer-dragging")
+        console.log("rrr");
+    }
+var handleDragLeave = function()
+    {
+        canvasObjekt.classList.remove("tortuga-canvasContainer-dragging")
+    }
+
+
+...
+canvasObjekt.addEventListener("dragleave", handleDragLeave, false);
+canvasObjekt.addEventListener("dragover", handleDragOver, false);
+canvasObjekt.addEventListener("drop", dodrop, false);
+
+    }
+\end{verbatim}
