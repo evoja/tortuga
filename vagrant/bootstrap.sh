@@ -11,7 +11,7 @@ apt-get -y install make
 apt-get -y install g++
 apt-get -y install libfontconfig1
 apt-get -y install git
-apt-get -y install openjdk-7-jre
+apt-get -y install openjdk -7-jre
 
 
 echo "========================Install NodeJS and NPM==========================="
@@ -30,13 +30,16 @@ echo "========================Install GruntJS=================================="
 npm install -g grunt-cli
 
 echo "==========Install Tortuga Grunt project dependencies====================="
-mv /tortuga/grunt_project /t
-cd /t
+mkdir /tortuga_grunt_project
+cd /tortuga_grunt_project
+ln -s /tortuga/grunt_project/package.json
 npm install
+cp -LR node_modules /tortuga/grunt_project
 cd -
-mv /t /tortuga/grunt_project
-
-
+rm -rf /tortuga_grunt_project
+#cd /tortuga/grunt_project
+#npm install
+#cd -
 
 touch ~/runonce
 fi
