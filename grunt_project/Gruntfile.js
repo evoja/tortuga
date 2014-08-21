@@ -17,10 +17,7 @@ var combine_files = function() // prefix1, array1, prefix2, array2, ...
                 result.push('!' + prefix + elem.substring(1));
             }
         });
-    result = result.concat(combine_files.apply(this, Array.prototype.slice.call(arguments,2)));
-    console.log(result);
-    console.log('--------------------');
-    return result;
+    return result.concat(combine_files.apply(this, Array.prototype.slice.call(arguments,2)));
 };
 
 var www_src_js_files = [
@@ -39,54 +36,52 @@ var www_src_css_files = [
     'css/page.css'
 ];
 
+var path_debug = '../build/www-public-debug/';
+var path_release = '../build/www-public-release/';
+var path_src = '../www-public-src/';
+var path_from_debugrelease = '../../grunt_project/';
+var path_from_src = '../grunt_project/';
+var path_debugrelease_to_src = '../../www-public-src/';
+
+
 module.exports = function(grunt)
 {
+  var pkg = grunt.file.readJSON('package.json')
 
-  // Project configuration.
   grunt.initConfig({
-    pkg: grunt.file.readJSON('package.json'),
-
-    //version: 'dev',
+    pkg: pkg,
 
     uglify: {
       options: {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       build: {
-        src: combine_files('js/', www_src_js_files),
-        dest: 'build/min.js'
+        src: combine_files(path_src + 'js/', www_src_js_files),
+        dest: path_release + 'js/min.js'
       }
-    },
-
-    concat: {
-      options: {
-        separator: ';',
-      },
-      dist: {
-        src: combine_files('js/', www_src_js_files),
-        dest: 'build/min.js'
-      },
     },
 
     cssmin: {
         combine: {
             files: {
-                'build/min.css': www_src_css_files
+                'css/min.css': combine_files(path_debugrelease_to_src, www_src_css_files)
             }
         }
     },
 
 
-    watch: {
-      scripts: {
-        files: combine_files('../www-public-src/js/', www_src_js_files),
-        tasks: ['rebase_www_public', 'uglify', 'restore_www_public'],
-        options: {
-          spawn: false
-        }
-      }
-    },
+    // watch: {
+    //   scripts: {
+    //     files: combine_files('../www-public-src/js/', www_src_js_files),
+    //     tasks: ['rebase_www_public', 'uglify', 'restore_www_public'],
+    //     options: {
+    //       spawn: false
+    //     }
+    //   }
+    // },
 
+    // Test JS from console via NodeJS by NodeUnit tool.
+    //
     // Description of plugin is here: https://github.com/caolan/nodeunit
     // https://github.com/gruntjs/grunt-contrib-nodeunit
     nodeunit: {
@@ -99,6 +94,8 @@ module.exports = function(grunt)
         }
     },
 
+    // Test JS from console via browse emulator by Jasmine tool.
+    //
     // Description of plugin is here: https://github.com/gruntjs/grunt-contrib-jasmine
     // Description of jasmine is here: http://jasmine.github.io/1.3/introduction.html
     jasmine: {
@@ -113,112 +110,68 @@ module.exports = function(grunt)
             }
         }
     },
-     
-    assemble: {
-          options: {
-              flatten: true,
-              partials: 'templates/includes/*.hbs',
-              layoutdir: 'templates/layouts',
-              layout: 'default.hbs',
-          },
-
-          index: {
-            files: {'../www-public-src/build/www-public-release/': ['btrtg/index.hbs']},
-            options: {
-              data: 'btrtg/*.json'
-            }
-          },
-
-          perepravy: {
-            files: {'../www-public-src/build/www-public-release/': ['btrtg/perepravy.hbs']},
-            options: {
-              data: 'btrtg/*.json'
-            }
-          },
-
-          debug:{ 
-            files: {
-              '../www-public-src/build/www-public-release/index.html': ['btrtg/index.hbs'],
-              '../www-public-src/build/www-public-release/perepravy.html': ['btrtg/perepravy.hbs']
-            },
-            options: {
-              data: 'btrtg/json/dev/*.json'
-            }
-          },
-
-          release:{ 
-            files: {
-              '../www-public-src/build/www-public-release/index.html': ['btrtg/index.hbs'],
-              '../www-public-src/build/www-public-release/perepravy.html': ['btrtg/perepravy.hbs']
-            },
-            options: {
-              data: 'btrtg/json/release/*.json'
-            }
-          },
-    },
 
     clean: {
-      dist: ['../www-public-src/build/www-public-release/*.html', '../www-public-src/build/*'],
+      dist: ['../build/**/*', '../build/**/.*'],
       options: {
-          force: true
-        }
+        force: true
+      }
     },
 
     'sails-linker': {
         debug_js:{
-              options: {
-                startTag: '<!--SCRIPTS_JS-->',
-                 endTag: '<!--SCRIPTS_JS END-->',
-                fileTmpl: '<script src="../%s"></script>',
-                appRoot: '../www-public-src/build/'
-              },
-              files: {
-                // Target-specific file lists and/or options go here.
-                  '../www-public-src/build/www-public-release/index.html': combine_files('../www-public-src/build/', ['lib/angular.js'], '../www-public-src/build/', www_src_js_files),
-                  '../www-public-src/build/www-public-release/perepravy.html': combine_files('../www-public-src/build/', ['lib/angular.js'], '../www-public-src/build/', www_src_js_files, '../www-public-src/build/', ['lessons/perepravy_shapovalov.js']),
-              },
+          options: {
+            startTag: '<!--SCRIPTS_JS-->',
+            endTag: '<!--SCRIPTS_JS END-->',
+            fileTmpl: '<script src="%s"></script>',
+            appRoot: path_debug
+          },
+          files: {
+            'index.html': combine_files(path_debugrelease_to_src + 'js/', ['lib/angular.js'],
+                                        path_debugrelease_to_src + 'js/', www_src_js_files),
+            'perepravy.html': combine_files(path_debugrelease_to_src +'js/', ['lib/angular.js'],
+                                            path_debugrelease_to_src +'js/', www_src_js_files,
+                                            path_debugrelease_to_src, ['lessons/perepravy_shapovalov.js'])
+          }
         },
 
         debug_css:{
-              options: {
-                startTag: '<!--SCRIPTS_CSS-->',
-                endTag: '<!--SCRIPTS_CSS END-->',
-                fileTmpl: '<link type="text/css" rel="stylesheet" href="../%s">',
-                appRoot: '../www-public-src/build/'
-              },
-              files: {
-                // Target-specific file lists and/or options go here.
-                '../www-public-src/build/www-public-release/*.html': ['../www-public-src/build/*.css']
-              },
+          options: {
+            startTag: '<!--SCRIPTS_CSS-->',
+            endTag: '<!--SCRIPTS_CSS END-->',
+            fileTmpl: '<link type="text/css" rel="stylesheet" href="%s">',
+            appRoot: path_debug
+          },
+          files: {
+            'index.html': combine_files(path_debugrelease_to_src, www_src_css_files),
+            'perepravy.html': combine_files(path_debugrelease_to_src, www_src_css_files)
+          },
         },
 
         release_js:{
-              options: {
-                startTag: '<!--SCRIPTS_JS-->',
-                endTag: '<!--SCRIPTS_JS END-->',
-                fileTmpl: '<script src="%s"></script>',
-                appRoot: ''
-              },
-              files: {
-                // Target-specific file lists and/or options go here.
-                '../www-public-src/build/www-public-release/index.html': ['../www-public-src/build/*.js'],
-                '../www-public-src/build/www-public-release/perepravy.html': combine_files( '../www-public-src/build/', ['../www-public-src/build/*.js'], '../www-public-src/build/', ['lessons/perepravy_shapovalov.js']),
-                
-                
-              },
+          options: {
+            startTag: '<!--SCRIPTS_JS-->',
+            endTag: '<!--SCRIPTS_JS END-->',
+            fileTmpl: '<script src="%s"></script>',
+            appRoot: ''
+          },
+          files: {
+            'index.html': ['js/lib/angular.js', 'js/min.js'],
+            'perepravy.html': ['js/min.js', 'lessons/perepravy_shapovalov.js'],
+          },
         },
 
         release_css:{
-              options: {
-                startTag: '<!--SCRIPTS_CSS-->',
-                endTag: '<!--SCRIPTS_CSS END-->',
-                fileTmpl: '<link type="text/css" rel="stylesheet" href="%s">',
-                appRoot: ''
-              },
-              files: {
-                // Target-specific file lists and/or options go here.
-                'app/index_linker.html': ['app/css/*.css']
-              },
+          options: {
+            startTag: '<!--SCRIPTS_CSS-->',
+            endTag: '<!--SCRIPTS_CSS END-->',
+            fileTmpl: '<link type="text/css" rel="stylesheet" href="%s">',
+            appRoot: ''
+          },
+          files: {
+            'index.html': 'css/min.css',
+            'perepravy.html': 'css/min.css',
+          },
         },
 
     },
@@ -239,62 +192,61 @@ module.exports = function(grunt)
     },
 
     copy: {
-      main: {
-        files: [
-          {expand: true, flatten: true, filter: 'isFile', cwd: '../www-public-src/', src: www_src_css_files, dest: '../www-public-src/build/'},
-          {expand: true, cwd: '../www-public-src/js/', src: www_src_js_files, dest: '../www-public-src/build/'},
-        ]
+      debug: {
+        files: [{
+          expand: true,
+          flatten: false,
+          filter: 'isFile',
+          cwd: path_src,
+          src: ['*.*', '.*', 'img/*.*'],
+          dest: path_debug
+        }]
       },
-
-      lessons: {
-        files: [
-          {expand: true, flatten: true, filter: 'isFile', cwd: '../www-public-src/lessons/', src: ['perepravy_shapovalov.js'], dest: '../www-public-src/build/lessons/'},
-        ]
-      },
+      release: {
+        files: [{
+          expand: true,
+          flatten: false,
+          filter: 'isFile',
+          cwd: path_src,
+          src: ['*.*', '.*', 'img/*.*', 'js/lib/**/*.*'],
+          dest: path_release
+        }]
+      }
     },
 
   });
 
-  // Load the plugin that provides the "uglify" task.
   grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
-  grunt.loadNpmTasks('grunt-contrib-watch');
+  //grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-jsdoc');
-  grunt.loadNpmTasks('assemble');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-sails-linker');
   grunt.loadNpmTasks('grunt-contrib-copy');
 
-  grunt.registerTask('rebase_www_public', 'Set base path to ..', function()
+  var registerRebaseTask = function(task_name, path)
   {
-    grunt.file.setBase('../www-public-src');
-  });
+    grunt.registerTask(task_name, 'Rebase to ' + path, function()
+    {
+      grunt.file.setBase(path);
+    });
+  };
 
-  grunt.registerTask('restore_www_public', 'Set base path to ..', function()
-  {
-    grunt.file.setBase('../grunt_project');
-  });
-
-  grunt.registerTask('rebase_test', 'Set base path to ..', function()
-  {
-    grunt.file.setBase('..');
-  });
-
-  grunt.registerTask('restore_test', 'Set base path to ../2', function()
-  {
-    grunt.file.setBase('grunt_project');
-  });
-
+  registerRebaseTask('rebase_test', '..');
+  registerRebaseTask('restore_test', 'grunt_project');
+  registerRebaseTask('rebase_debug', path_debug);
+  registerRebaseTask('restore_debug', path_from_debugrelease);
+  registerRebaseTask('rebase_release', path_release);
+  registerRebaseTask('restore_release', path_from_debugrelease);
 
   grunt.registerTask('test', [ 'rebase_test', 'nodeunit', 'jasmine', 'restore_test']);
-  grunt.registerTask('release', ['clean', 'copy:lessons', 'rebase_www_public', 'concat', 'uglify', 'cssmin', 'restore_www_public', 'assemble:release', 'sails-linker:debug_js', 'sails-linker:debug_css']);
-  grunt.registerTask('build2', ['test', 'jsdoc', 'assemble']);
-  grunt.registerTask('debug', ['clean', 'copy:main', 'copy:lessons', 'assemble:debug', 'sails-linker:debug_css', 'sails-linker:debug_js']);
-
+  grunt.registerTask('debug', ['copy:debug', 'rebase_debug', 'sails-linker:debug_js', 'sails-linker:debug_css', 'restore_debug']);
+  // grunt.registerTask('clean', ['clean']);
+  grunt.registerTask('release', ['copy:release', 'uglify', 'rebase_release', 'cssmin', 'sails-linker:release_js', 'sails-linker:release_css', 'restore_release']);
+  // grunt.registerTask('build2', ['test', 'jsdoc', 'assemble']);
   grunt.registerTask('default', ['debug']);
 
 };

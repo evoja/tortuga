@@ -4,5 +4,4 @@ grunt_project/node_modules/
 grunt_project/npm-debug.log
 config.js
 vagrant/.vagrant
-/*.tgitconfig
 /grunt_project/src
