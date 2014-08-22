@@ -139,29 +139,6 @@ module.exports = function(grunt)
                 configure: 'jsdoc_conf.json'
             }
         }
-    },
-
-    copy: {
-      debug: {
-        files: [{
-          expand: true,
-          flatten: false,
-          filter: 'isFile',
-          cwd: path_src,
-          src: ['*.*', '.*', 'img/*.*'],
-          dest: path_debug
-        }]
-      },
-      release: {
-        files: [{
-          expand: true,
-          flatten: false,
-          filter: 'isFile',
-          cwd: path_src,
-          src: ['*.*', '.*', 'img/*.*', 'js/lib/**/*.*'],
-          dest: path_release
-        }]
-      }
     }
   };
 
@@ -219,6 +196,24 @@ var combine_files = function() // prefix1, array1, prefix2, array2, ...
     return result.concat(combine_files.apply(this, Array.prototype.slice.call(arguments,2)));
 };
 
+var invert_files = function(files)
+{
+  var result = []
+  for (var i = 0; i < files.length; ++i)
+  {
+    var file_name = files[i]
+    if(file_name.length > 0 && file_name.charAt(0) === '!')
+    {
+      result.push(file_name.substring(1));
+    }
+    else
+    {
+      result.push('!' + file_name);
+    }
+  }
+  return result;
+}
+
 var get_minified_module_file_name = function(name, type) {
   return type + '/' + name + '.min.' + type;
 }
@@ -229,7 +224,6 @@ var add_module = function(module, grunt_config)
   {
     grunt_config.uglify = grunt_config.uglify || {};
     grunt_config.uglify[module.name] = {
-      banner: '/*! <%= pkg.name %>, module: ' + module.name + ' <%= grunt.template.today("yyyy-mm-dd") %> */\n',
       src: combine_files(path_src, module.js),
       dest: path_release + get_minified_module_file_name(module.name, 'js')
     }
@@ -384,13 +378,41 @@ var add_page = function(page, modules, grunt_config)
   sl_conf.release_js.files[template] = files.js_release_files;
   sl_conf.debug_css.files[template] = combine_files(path_debugrelease_to_src, files.css_debug_files);
   sl_conf.release_css.files[template] = files.css_release_files;
+
+  return files;
 };
 
 var process_pages_config = function(config, grunt_config)
 {
+  var debug_files = [];
+  var release_files = [];
+
   for(var i = 0; i < config.pages.length; ++i)
   {
-    add_page(config.pages[i], config.modules, grunt_config);
+    var files = add_page(config.pages[i], config.modules, grunt_config);
+
+    debug_files = debug_files.concat(files.js_debug_files).concat(files.css_debug_files);
+    release_files = release_files.concat(files.js_release_files).concat(files.css_release_files);
   }
+
+  grunt_config.copy = {
+    debug: {
+      files: [{
+        expand: true,
+        cwd: path_src,
+        src: ['**/*.*', '**/.*'].concat(invert_files(debug_files)),
+        dest: path_debug
+      }]
+    },
+    release: {
+      files: [{
+        expand: true,
+        cwd: path_src,
+        src: ['**/*.*', '**/.*'].concat(invert_files(debug_files)).concat(release_files),
+        dest: path_release
+      }]
+    }
+  };
+
   return grunt_config;
 }
