@@ -30,13 +30,16 @@ echo "========================Install GruntJS=================================="
 npm install -g grunt-cli
 
 echo "==========Install Tortuga Grunt project dependencies====================="
-mv /tortuga/grunt_project /t
-cd /t
-npm install
+mkdir /tortuga_grunt_project
+cd /tortuga_grunt_project
+ln -s /tortuga/grunt_project/package.json
+npm install --no-optional
+cp -LR node_modules /tortuga/grunt_project
 cd -
-mv /t /tortuga/grunt_project
-
-
+rm -rf /tortuga_grunt_project
+#cd /tortuga/grunt_project
+#npm install --no-bin-links --no-optional
+#cd -
 
 touch ~/runonce
 fi
