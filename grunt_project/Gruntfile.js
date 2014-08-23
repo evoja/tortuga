@@ -1,6 +1,7 @@
 
 var path_debug = '../build/www-public-debug/';
 var path_release = '../build/www-public-release/';
+var path_jsdoc = '../build/doc-js/';
 var path_src = '../www-public-src/';
 var path_from_debugrelease = '../../grunt_project/';
 var path_from_src = '../grunt_project/';
@@ -123,26 +124,10 @@ module.exports = function(grunt)
       options: {
         force: true
       }
-    },
-
-    jsdoc: {
-        dist : {
-            src: [
-                '../www-public-src/js/**/*.js',
-                '../www-public-test/**/*.js',
-                '!../www-public-src/js/lib/**/*.js',
-                '!../www-public-test/lib/**/*.js'
-                ], 
-            options: {
-                destination: '../build/doc-js',
-                configure: 'jsdoc_conf.json'
-            }
-        }
     }
   };
 
   grunt.initConfig(process_pages_config(pages_config, grunt_config));
-  //grunt.initConfig(grunt_config);
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -226,6 +211,26 @@ var add_module = function(module, grunt_config)
       src: combine_files(path_src, module.js),
       dest: path_release + get_minified_module_file_name(module.name, 'js')
     }
+
+    grunt_config.jsdoc = grunt_config.jsdoc || {
+      dist : {
+        src: [], 
+        options: {
+          destination: '../build/doc-js',
+          configure: 'jsdoc_conf.json'
+        }
+      }
+    }
+    // I don't sure what is better group packages docs by folders or 
+    // compile it to one general folder.
+    grunt_config.jsdoc.dist.src = grunt_config.jsdoc.dist.src.concat(combine_files(path_src, module.js));
+    // grunt_config.jsdoc[module.name] = {
+    //   src: combine_files(path_src, module.js),
+    //   options: {
+    //     destination: path_jsdoc + module.name,
+    //     configure: 'jsdoc_conf.json'
+    //   }
+    // };
   }
 
   if (module.css)
