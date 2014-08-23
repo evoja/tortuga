@@ -19,22 +19,26 @@ module.exports = function(grunt)
   ]);
 
   var pages_config = {
-    modules: {
-      index: {
-        css: combine_files('css/', [
-                                    'reset.css',
-                                    'tortuga.css',
-                                    'tortoise.css',
-                                    'page.css'
-                                  ]),
-        js: www_src_js_files,
+    modules: [{
+        name: 'index',
+        files: {
+          css: combine_files('css/', [
+                                  'reset.css',
+                                  'tortuga.css',
+                                  'tortoise.css',
+                                  'page.css'
+                                ]),
+          js: www_src_js_files
+        },
         requires: ['js/lib/angular.js|auto']
-      },
-      perepravy: {
-        js: ['lessons/perepravy_shapovalov.js'],
+      },{
+        name: 'perepravy',
+        files: {
+            js: ['lessons/perepravy_shapovalov.js']
+        },
         requires: ['index']
       }
-    },
+    ],
 
     pages: [{
         template: 'index.html',
@@ -58,10 +62,6 @@ module.exports = function(grunt)
 
     register_rebase_task('rebase_test', '..');
     register_rebase_task('restore_test', 'grunt_project');
-    register_rebase_task('rebase_debug', path_debug);
-    register_rebase_task('restore_debug', path_from_debugrelease);
-    register_rebase_task('rebase_release', path_release);
-    register_rebase_task('restore_release', path_from_debugrelease);
 
     grunt.registerTask('test', [
       'rebase_test',
@@ -70,22 +70,23 @@ module.exports = function(grunt)
       'restore_test'
     ]);
     grunt.registerTask('debug', [
-      'copy:debug',
-      'rebase_debug',
       'sails-linker:debug_js',
       'sails-linker:debug_css',
-      'restore_debug'
     ]);
     grunt.registerTask('release', [
       'copy:release',
       'uglify',
       'cssmin',
-      'rebase_release',
       'sails-linker:release_js',
       'sails-linker:release_css',
-      'restore_release'
     ]);
-    // grunt.registerTask('clean', ['clean']);
+
+    grunt.task.renameTask('clean', 'delete_build_files')
+    grunt.registerTask('clean', [
+        'delete_build_files',
+        'sails-linker:clean_debug_js',
+        'sails-linker:clean_debug_css'
+    ]);
     // grunt.registerTask('jsdoc', ['jsdoc']);
     grunt.registerTask('default', ['debug']);
   }
@@ -119,7 +120,7 @@ module.exports = function(grunt)
         }
     },
 
-    clean: {
+    delete_build_files: {
       dist: ['../build/**/*', '../build/**/.*'],
       options: {
         force: true
@@ -196,90 +197,66 @@ var invert_files = function(files)
     }
   }
   return result;
-}
-
-var get_minified_module_file_name = function(name, type) {
-  return type + '/' + name + '.min.' + type;
-}
-
-var add_module = function(module, grunt_config)
-{
-  if (module.js)
-  {
-    grunt_config.uglify = grunt_config.uglify || {};
-    grunt_config.uglify[module.name] = {
-      src: combine_files(path_src, module.js),
-      dest: path_release + get_minified_module_file_name(module.name, 'js')
-    }
-
-    grunt_config.jsdoc = grunt_config.jsdoc || {
-      dist : {
-        src: [], 
-        options: {
-          destination: '../build/doc-js',
-          configure: 'jsdoc_conf.json'
-        }
-      }
-    }
-    // I don't sure what is better group packages docs by folders or 
-    // compile it to one general folder.
-    grunt_config.jsdoc.dist.src = grunt_config.jsdoc.dist.src.concat(combine_files(path_src, module.js));
-    // grunt_config.jsdoc[module.name] = {
-    //   src: combine_files(path_src, module.js),
-    //   options: {
-    //     destination: path_jsdoc + module.name,
-    //     configure: 'jsdoc_conf.json'
-    //   }
-    // };
-  }
-
-  if (module.css)
-  {
-    grunt_config.cssmin = grunt_config.cssmin || {};
-    grunt_config.cssmin[module.name] = {files: {}};
-    var src_files = combine_files(path_src, module.css);
-    var dest_file = path_release + get_minified_module_file_name(module.name, 'css');
-    grunt_config.cssmin[module.name].files[dest_file] = src_files;
-  }
 };
 
-var build_require_modules = function(module_name, modules)
+var build_modules_map = function(modules)
 {
-  var result;
-  var requires;
-  if(typeof module_name === 'string')
-  {
-    result = [module_name];
+    var result = {};
+    modules.forEach(function(module)
+        {
+            result[module.name] = module;
+        });
+    return result;
+};
 
-    if (!modules[module_name])
+var get_module_from_modules = function(module_name, modules_list)
+{
+    return modules_list.filter(function(module)
+        {
+            return module.name === module_name;
+        })[0];
+}
+
+var get_minified_module_file_name = function(name, type)
+{
+    return type + '/' + name + '.min.' + type;
+}
+
+var get_all_required_modules = function(module_name, modules_map)
+{
+    var result;
+    var requires;
+    if (typeof module_name === 'string')
     {
-      return result;
+        result = [module_name];
+
+        if (!modules_map[module_name])
+        {
+            return result;
+        }
+
+        requires = modules_map[module_name].requires;
     }
-
-    requires = modules[module_name].requires;
-  }
-  else
-  {
-    result = [];
-    requires = module_name;
-  }
-
-  for (var i = 0; i < requires.length; ++i)
-  {
-    var req_module_name = requires[i];
-    var req_require_modules = build_require_modules(req_module_name, modules);
-    for (var j = req_require_modules.length - 1; j >=  0; --j)
+    else
     {
-      var req_req_module = req_require_modules[j];
-      var pos_in_result = result.indexOf(req_req_module);
-      if (pos_in_result > 0)
-      {
-        result.splice(pos_in_result, 1);
-      }
-      result.unshift(req_req_module);
+        result = [];
+        requires = module_name;
     }
-  }
-  return result;
+    requires.forEach(function(req_module_name)
+    {
+        var req_require_modules = get_all_required_modules(req_module_name, modules_map);
+        for (var j = req_require_modules.length - 1; j >= 0; --j)
+        {
+            var req_req_module = req_require_modules[j];
+            var pos_in_result = result.indexOf(req_req_module);
+            if (pos_in_result > 0)
+            {
+                result.splice(pos_in_result, 1);
+            }
+            result.unshift(req_req_module);
+        }
+    });
+    return result;
 };
 
 var get_file_name = function(name, is_debug)
@@ -296,127 +273,235 @@ var get_file_name = function(name, is_debug)
   return {name: file_name, extension: extension};
 }
 
-var extend_file_names = function(name, modules, files, grunt_config)
-{
-  if (modules[name])
-  {
-    var module = modules[name];
-    module.name = name;
-    add_module(module, grunt_config);
-    if (module.js)
-    {
-      files.js_debug_files = files.js_debug_files.concat(module.js);
-      files.js_release_files.push(get_minified_module_file_name(name, 'js'));
-    }
-    if (module.css)
-    {
-      files.css_debug_files = files.css_debug_files.concat(module.css);
-      files.css_release_files.push(get_minified_module_file_name(name, 'css'));
-    }
-  }
-  else
-  {
-    var file_debug = get_file_name(name, true);
-    var file_release = get_file_name(name, false);
 
-    if (file_debug.extension === 'js')
+var get_files_required_by_page = function(page, modules_map)
+{
+    var result = {
+        debug_files: [],
+        release_files: []
+    };
+
+    var required = get_all_required_modules(page.modules, modules_map);
+
+    required.forEach(function(module_name)
     {
-      files.js_debug_files.push(file_debug.name);
-      files.js_release_files.push(file_release.name);
-    }
-    else if (file_debug.extension === 'css')
-    {
-      files.css_debug_files.push(file_debug.name);
-      files.css_release_files.push(file_release.name);
-    }
-  }
+        var module = modules_map[module_name];
+        if(module)
+        {
+            for (var type in module.files)
+            {
+                result.debug_files = result.debug_files.concat(module.files[type]);
+                result.release_files.push(get_minified_module_file_name(module_name, type));
+            }
+        }
+        else
+        {
+            result.debug_files.push(get_file_name(module_name, true).name);
+            result.release_files.push(get_file_name(module_name, false).name);
+        }
+    });
+
+    return result;
 }
 
-var add_page = function(page, modules, grunt_config)
+var concat_module_files = function(left_map, right_map)
 {
-  var requires = build_require_modules(page.modules, modules);
-  var files = {
-    js_debug_files: [],
-    js_release_files: [],
-    css_debug_files: [],
-    css_release_files: []
-  };
-
-  for (var i = 0; i < requires.length; ++i)
-  {
-    extend_file_names(requires[i], modules, files, grunt_config);
-  }
-
-  var options_js = {
-    startTag: '<!--SCRIPTS_JS-->',
-    endTag: '<!--SCRIPTS_JS END-->',
-    fileTmpl: '<script src="%s"></script>'
-  };
-  var options_css = {
-    startTag: '<!--SCRIPTS_CSS-->',
-    endTag: '<!--SCRIPTS_CSS END-->',
-    fileTmpl: '<link type="text/css" rel="stylesheet" href="%s">'
-  };
-  grunt_config['sails-linker'] = grunt_config['sails-linker'] || {
-    debug_js:{
-      options: options_js,
-      files: {}
-    },
-    debug_css:{
-      options: options_css,
-      files: {},
-    },
-    release_js:{
-      options: options_js,
-      files: {},
-    },
-    release_css:{
-      options: options_css,
-      files: {},
+    var result = {}
+    var process_map = function(map)
+    {
+        for(var type in map)
+        {
+            result[type] = result[type] || [];
+            result[type] = result[type].concat(map[type]);
+        }
     }
-  };
 
-  var sl_conf = grunt_config['sails-linker'];
-  var template = page.template;
-  sl_conf.debug_js.files[template] = combine_files(path_debugrelease_to_src, files.js_debug_files);
-  sl_conf.release_js.files[template] = files.js_release_files;
-  sl_conf.debug_css.files[template] = combine_files(path_debugrelease_to_src, files.css_debug_files);
-  sl_conf.release_css.files[template] = files.css_release_files;
+    process_map(left_map);
+    process_map(right_map);
+    return result;
+}
 
-  return files;
-};
+var get_module_files = function(module_name, modules_map)
+{
+    var debug_files = {};
+    var release_files = {};
+    var module = modules_map[module_name];
+    if (module)
+    {
+        debug_files = concat_module_files(debug_files, module.files);
+        for(var type in module.files)
+        {
+            release_files[type] = release_files[type] || [];
+            release_files[type].push(get_minified_module_file_name(module_name, type));
+        }
+    }
+    else
+    {
+        var process_lib = function(is_debug, files)
+        {
+            var file = get_file_name(module_name, is_debug);
+            var type = file.extension;
+            files[type] = files[type] || [];
+            files[type].push(file.name);
+        }
+        process_lib(true, debug_files);
+        process_lib(false, release_files);
+    }
+
+    return {
+        debug_files: debug_files,
+        release_files: release_files
+    };
+}
+
+
+var config_task_uglify = function(module, grunt_config)
+{
+    if (!module.files.js)
+        return;
+
+    grunt_config.uglify = grunt_config.uglify || {};
+    grunt_config.uglify[module.name] = {
+      src: combine_files(path_src, module.files.js),
+      dest: path_release + get_minified_module_file_name(module.name, 'js')
+    }
+}
+
+var config_task_cssmin = function(module, grunt_config)
+{
+    if(!module.files.css)
+        return;
+
+    grunt_config.cssmin = grunt_config.cssmin || {};
+    grunt_config.cssmin[module.name] = {files: {}};
+    var src_files = combine_files(path_src, module.files.css);
+    var dest_file = path_release + get_minified_module_file_name(module.name, 'css');
+    grunt_config.cssmin[module.name].files[dest_file] = src_files;
+}
+
+var config_task_jsdoc = function(module, grunt_config)
+{
+    if(!module.files.js)
+        return;
+
+    grunt_config.jsdoc = grunt_config.jsdoc || {
+        dist : {
+            src: [], 
+            options: {
+                destination: '../build/doc-js',
+                configure: 'jsdoc_conf.json'
+            }
+        }
+    }
+    // I don't sure what is better group packages docs by folders or 
+    // compile it to one general folder.
+    grunt_config.jsdoc.dist.src = grunt_config.jsdoc.dist.src.concat(combine_files(path_src, module.files.js));
+    // grunt_config.jsdoc[module.name] = {
+    //   src: combine_files(path_src, module.files.js),
+    //   options: {
+    //     destination: path_jsdoc + module.name,
+    //     configure: 'jsdoc_conf.json'
+    //   }
+    // };
+}
+
+var config_task_sailslinker = function(page, modules_map, grunt_config)
+{
+    var requires = get_all_required_modules(page.modules, modules_map);
+    var debug_files = {};
+    var release_files = {};
+    requires.forEach(function(module_name)
+    {
+        var module_files = get_module_files(module_name, modules_map);
+        debug_files = concat_module_files(debug_files, module_files.debug_files);
+        release_files = concat_module_files(release_files, module_files.release_files);
+    });
+    var templates = {
+        js: '<script src="%s"></script>',
+        css: '<link type="text/css" rel="stylesheet" href="%s">'
+    };
+    var default_template = '%s';
+
+
+    grunt_config['sails-linker'] = grunt_config['sails-linker'] || {};
+    var sl_conf = grunt_config['sails-linker'];
+
+    var process_files = function(files, task_group, dest_path)
+    {
+        for (var type in files)
+        {
+            var task_name = task_group + '_' + type;
+            sl_conf[task_name] = sl_conf[task_name] || {
+                options: {
+                    startTag: '<!--SCRIPTS_' + type.toUpperCase() + '-->',
+                    endTag: '<!--SCRIPTS_' + type.toUpperCase() + ' END-->',
+                    fileTmpl: templates[type] || default_template,
+                    appRoot: dest_path
+                },
+                files: {}
+            };
+
+            page_file_name = dest_path + page.template;
+            sl_conf[task_name].files[page_file_name] = combine_files(dest_path, files[type]);
+        }
+    }
+    process_files(debug_files, 'debug', path_src);
+    process_files(release_files, 'release', path_release);
+
+    var clean_debug_files = {};
+    for (var type in debug_files)
+    {
+        clean_debug_files[type] = [];
+    }
+    process_files(clean_debug_files, 'clean_debug', path_src);
+    //console.log(grunt_config['sails-linker']//.clean_debug_css.files['../build/www-public-release/index.html']);
+}
+
+var config_task_copy = function(pages, modules_map, grunt_config)
+{
+    var debug_files = [];
+    var release_files = [];
+    pages.forEach(function(page)
+    {
+        var files = get_files_required_by_page(page, modules_map);
+        debug_files = debug_files.concat(files.debug_files);
+        release_files = release_files.concat(files.release_files);
+    });
+    grunt_config.copy = {
+        // debug: {
+        //     files: [{
+        //         expand: true,
+        //         cwd: path_src,
+        //         src: ['**/*.*', '**/.*'].concat(invert_files(debug_files)),
+        //         dest: path_debug
+        //     }]
+        // },
+        release: {
+            files: [{
+                expand: true,
+                cwd: path_src,
+                src: ['**/*.*', '**/.*'].concat(invert_files(debug_files))
+                                        .concat(release_files),
+                dest: path_release
+            }]
+        }
+    };
+}
 
 var process_pages_config = function(config, grunt_config)
 {
-  var debug_files = [];
-  var release_files = [];
+    var modules_map = build_modules_map(config.modules);
+    config_task_copy(config.pages, modules_map, grunt_config);
+    config.modules.forEach(function(module)
+    {
+        config_task_uglify(module, grunt_config);
+        config_task_cssmin(module, grunt_config);
+        config_task_jsdoc(module, grunt_config);
+    });
+    config.pages.forEach(function(page)
+    {
+        config_task_sailslinker(page, modules_map, grunt_config);
+    });
 
-  for(var i = 0; i < config.pages.length; ++i)
-  {
-    var files = add_page(config.pages[i], config.modules, grunt_config);
-
-    debug_files = debug_files.concat(files.js_debug_files).concat(files.css_debug_files);
-    release_files = release_files.concat(files.js_release_files).concat(files.css_release_files);
-  }
-
-  grunt_config.copy = {
-    debug: {
-      files: [{
-        expand: true,
-        cwd: path_src,
-        src: ['**/*.*', '**/.*'].concat(invert_files(debug_files)),
-        dest: path_debug
-      }]
-    },
-    release: {
-      files: [{
-        expand: true,
-        cwd: path_src,
-        src: ['**/*.*', '**/.*'].concat(invert_files(debug_files)).concat(release_files),
-        dest: path_release
-      }]
-    }
-  };
-
-  return grunt_config;
+    return grunt_config;
 }
