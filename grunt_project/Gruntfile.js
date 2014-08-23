@@ -115,8 +115,8 @@ module.exports = function(grunt)
         pivotal: {
             src: combine_files(
                 'www-public-src/js/', ['lib/angular.js'],
-                'www-public-src', www_src_js_files,
-                'www-public-src', ['test-lib/**/*.js']),
+                'www-public-src/', www_src_js_files,
+                'www-public-src/js/', ['test-lib/**/*.js']),
             options: {
                 specs: 'www-public-src/**/*_jspec.js',
                 helpers: 'www-public-src/**/*_jhelper.js'
