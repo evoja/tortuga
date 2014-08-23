@@ -90,8 +90,7 @@ module.exports = function(grunt)
   }
 
   var grunt_config = {
-    pkg: grunt.file.readJSON('package.json'),
-
+    //pkg: grunt.file.readJSON('package.json'),
     nodeunit: {
         all: ['www-public-test/**/*_nu-test.js'],
         options: {
