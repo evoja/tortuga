@@ -33,12 +33,12 @@ echo "==========Install Tortuga Grunt project dependencies====================="
 mkdir /tortuga_grunt_project
 cd /tortuga_grunt_project
 ln -s /tortuga/grunt_project/package.json
-npm install
+npm install --no-optional
 cp -LR node_modules /tortuga/grunt_project
 cd -
 rm -rf /tortuga_grunt_project
 #cd /tortuga/grunt_project
-#npm install
+#npm install --no-bin-links --no-optional
 #cd -
 
 touch ~/runonce
