@@ -273,37 +273,6 @@ var get_file_name = function(name, is_debug)
   return {name: file_name, extension: extension};
 }
 
-
-var get_files_required_by_page = function(page, modules_map)
-{
-    var result = {
-        debug_files: [],
-        release_files: []
-    };
-
-    var required = get_all_required_modules(page.modules, modules_map);
-
-    required.forEach(function(module_name)
-    {
-        var module = modules_map[module_name];
-        if(module)
-        {
-            for (var type in module.files)
-            {
-                result.debug_files = result.debug_files.concat(module.files[type]);
-                result.release_files.push(get_minified_module_file_name(module_name, type));
-            }
-        }
-        else
-        {
-            result.debug_files.push(get_file_name(module_name, true).name);
-            result.release_files.push(get_file_name(module_name, false).name);
-        }
-    });
-
-    return result;
-}
-
 var concat_module_files = function(left_map, right_map)
 {
     var result = {}
@@ -354,6 +323,47 @@ var get_module_files = function(module_name, modules_map)
     };
 }
 
+var get_files_required_by_page_grouped_by_type = function(page, modules_map)
+{
+    var requires = get_all_required_modules(page.modules, modules_map);
+    var debug_files = {};
+    var release_files = {};
+    requires.forEach(function(module_name)
+    {
+        var module_files = get_module_files(module_name, modules_map);
+        debug_files = concat_module_files(debug_files, module_files.debug_files);
+        release_files = concat_module_files(release_files, module_files.release_files);
+    });
+
+    return {
+        debug_files: debug_files,
+        release_files: release_files
+    };
+};
+
+var get_files_required_by_page = function(page, modules_map)
+{
+    var result = {
+        debug_files: [],
+        release_files: []
+    };
+
+    var files = get_files_required_by_page_grouped_by_type(page, modules_map);
+    var process = function(group_name)
+    {
+        for (type in files[group_name])
+        {
+            result[group_name] = result[group_name].concat(files[group_name][type]);
+        }
+    };
+    process('debug_files');
+    process('release_files');
+
+    return result;
+}
+
+
+
 
 var config_task_uglify = function(module, grunt_config)
 {
@@ -403,25 +413,19 @@ var config_task_jsdoc = function(module, grunt_config)
     //     configure: 'jsdoc_conf.json'
     //   }
     // };
-}
+};
 
 var config_task_sailslinker = function(page, modules_map, grunt_config)
 {
-    var requires = get_all_required_modules(page.modules, modules_map);
-    var debug_files = {};
-    var release_files = {};
-    requires.forEach(function(module_name)
-    {
-        var module_files = get_module_files(module_name, modules_map);
-        debug_files = concat_module_files(debug_files, module_files.debug_files);
-        release_files = concat_module_files(release_files, module_files.release_files);
-    });
+    var files = get_files_required_by_page_grouped_by_type(page, modules_map);
+    var debug_files = files.debug_files;
+    var release_files = files.release_files;
+
     var templates = {
         js: '<script src="%s"></script>',
         css: '<link type="text/css" rel="stylesheet" href="%s">'
     };
     var default_template = '%s';
-
 
     grunt_config['sails-linker'] = grunt_config['sails-linker'] || {};
     var sl_conf = grunt_config['sails-linker'];
@@ -454,8 +458,34 @@ var config_task_sailslinker = function(page, modules_map, grunt_config)
         clean_debug_files[type] = [];
     }
     process_files(clean_debug_files, 'clean_debug', path_src);
-    //console.log(grunt_config['sails-linker']//.clean_debug_css.files['../build/www-public-release/index.html']);
-}
+};
+
+// /**
+//  * Test JS from console via browse emulator by Jasmine tool.
+//  * 
+//  * Description of plugin is here: https://github.com/gruntjs/grunt-contrib-jasmine
+//  * Description of jasmine is here: http://jasmine.github.io/1.3/introduction.html
+//  */
+// var config_task_jasmine = function(page, modules_map, grunt_config)
+// {
+//     var files = get_files_required_by_page_grouped_by_type(page, modules_map);
+//     var js_files = files.debug_files.js;
+
+//     if(!js_files)
+//     {
+//         return;
+//     }
+
+//     grunt_config.jasmine = grunt_config.jasmine || {};
+
+//     grunt_config.jasmine[page.template] = {
+//         src: combine_files(path_src, js_files),
+//         options: {
+//             specs: 'www-public-test/**/*_jspec.js',
+//             helpers: 'www-public-test/**/*_jhelper.js'
+//         }
+//     };
+// }
 
 var config_task_copy = function(pages, modules_map, grunt_config)
 {
@@ -501,6 +531,7 @@ var process_pages_config = function(config, grunt_config)
     config.pages.forEach(function(page)
     {
         config_task_sailslinker(page, modules_map, grunt_config);
+//        config_task_jasmine(page, modules_map, grunt_config);
     });
 
     return grunt_config;
