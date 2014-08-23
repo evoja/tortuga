@@ -1,7 +1,5 @@
 /build
-www-public-src/build
 grunt_project/node_modules/
 grunt_project/npm-debug.log
 config.js
 vagrant/.vagrant
-Om.ns_nu-test.js.xml

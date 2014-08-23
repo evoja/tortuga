@@ -102,7 +102,7 @@ module.exports = function(grunt)
         options: {
             reporter: 'junit',
             reporterOptions: {
-                output: 'outputdir'
+                output: 'build/test-log'
             }
         }
     },
