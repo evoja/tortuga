@@ -88,8 +88,8 @@ module.exports = function(grunt)
     grunt.task.renameTask('clean', 'delete_build_files')
     grunt.registerTask('clean', [
         'delete_build_files',
-        'sails-linker:clean_debug_js',
-        'sails-linker:clean_debug_css'
+        // 'sails-linker:clean_debug_js',
+        // 'sails-linker:clean_debug_css'
     ]);
     // grunt.registerTask('jsdoc', ['jsdoc']);
     grunt.registerTask('default', ['debug']);
