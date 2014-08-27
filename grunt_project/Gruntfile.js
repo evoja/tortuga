@@ -7,42 +7,67 @@ var path_from_debugrelease = '../../grunt_project/';
 var path_from_src = '../grunt_project/';
 var path_debugrelease_to_src = '../../www-public-src/';
 
+var copy_excluding = [
+    '!**/*.template.js',
+    '!**/*_jspec.js',
+    '!**/*_jhelper.js',
+    '!**/*_nu-test.js',
+    '!js/test-lib/**/*.js'
+];
+
 module.exports = function(grunt)
 {
-  var www_src_js_files = combine_files('js/', [
-      'om/om.ns.js',
-      'om/*.js',
-      'trtg/t-box/tortoise-vm/TortoiseRunner.js',
-      'trtg/**/*.js',
-      '*.js',
-      '!*.template.js',
-      '!**/*_jspec.js',
-      '!**/*_jhelper.js',
-      '!**/*_nu-test.js',
-      '!test-lib/**/*.js'
-  ]);
-
-  var pages_config = {
-    modules: [{
-        name: 'index',
-        files: {
-          css: combine_files('css/', [
-                                  'reset.css',
-                                  'tortuga.css',
-                                  'tortoise.css',
-                                  'page.css'
-                                ]),
-          js: www_src_js_files
-        },
-        requires: ['js/lib/angular.js|auto']
-      },{
-        name: 'perepravy',
-        files: {
-            js: ['lessons/perepravy_shapovalov.js']
-        },
-        requires: ['index']
-      }
-    ],
+    var pages_config = {
+        modules: [{
+                name: 'om',
+                files: {
+                    js: combine_files('js/', [
+                            'om/om.ns.js',
+                            'om/*.js'
+                        ])
+                },
+                test: {
+                    nodeunit: ['js/om/**/*_nu-test.js'],
+                    jasmine: {
+                        specs: ['js/om/**/*_jspec.js'],
+                        helpers: ['js/om/**/*_jhelper.js']
+                    }
+                },
+                requires: []
+            },{
+                name: 'index',
+                files: {
+                    css: combine_files('css/', [
+                            'reset.css',
+                            'tortuga.css',
+                            'tortoise.css',
+                            'page.css'
+                        ]),
+                    js: combine_files('js/', [
+                            'trtg/t-box/tortoise-vm/TortoiseRunner.js',
+                            'trtg/**/*.js',
+                            '*.js',
+                        ])
+                },
+                test: {
+                    jasmine: {
+                        files: [
+                            'js/test-lib/angular-mocks.js',
+                            'js/test-lib/angular-route.js'
+                        ],
+                        specs: ['js/trtg/**/*_jspec.js'],
+                        helpers: ['js/trtg/**/*_jhelper.js']
+                    }
+                },
+                requires: ['om', 'js/lib/angular.js|auto']
+            },{
+                name: 'perepravy',
+                files: {
+                    js: ['lessons/perepravy_shapovalov.js']
+                },
+                requires: ['index']
+            }
+        ],
 
     pages: [{
         template: 'index.html',
@@ -56,22 +81,9 @@ module.exports = function(grunt)
 
   var register_tasks = function()
   {
-    var register_rebase_task = function(task_name, path)
-    {
-      grunt.registerTask(task_name, 'Rebase to ' + path, function()
-      {
-        grunt.file.setBase(path);
-      });
-    };
-
-    register_rebase_task('rebase_test', '..');
-    register_rebase_task('restore_test', 'grunt_project');
-
     grunt.registerTask('test', [
-      'rebase_test',
       'nodeunit',
       'jasmine',
-      'restore_test'
     ]);
     grunt.registerTask('debug', [
       'sails-linker:debug_js',
@@ -93,36 +105,10 @@ module.exports = function(grunt)
     ]);
     // grunt.registerTask('jsdoc', ['jsdoc']);
     grunt.registerTask('default', ['debug']);
-  }
+  };
 
   var grunt_config = {
     //pkg: grunt.file.readJSON('package.json'),
-    nodeunit: {
-        all: ['www-public-src/**/*_nu-test.js'],
-        options: {
-            reporter: 'junit',
-            reporterOptions: {
-                output: 'build/test-log'
-            }
-        }
-    },
-
-    // Test JS from console via browse emulator by Jasmine tool.
-    //
-    // Description of plugin is here: https://github.com/gruntjs/grunt-contrib-jasmine
-    // Description of jasmine is here: http://jasmine.github.io/1.3/introduction.html
-    jasmine: {
-        pivotal: {
-            src: combine_files(
-                'www-public-src/js/', ['lib/angular.js'],
-                'www-public-src/', www_src_js_files,
-                'www-public-src/js/', ['test-lib/**/*.js']),
-            options: {
-                specs: 'www-public-src/**/*_jspec.js',
-                helpers: 'www-public-src/**/*_jhelper.js'
-            }
-        }
-    },
 
     delete_build_files: {
       dist: ['../build/**/*', '../build/**/.*'],
@@ -137,7 +123,6 @@ module.exports = function(grunt)
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
-  //grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-jsdoc');
@@ -219,12 +204,12 @@ var get_module_from_modules = function(module_name, modules_list)
         {
             return module.name === module_name;
         })[0];
-}
+};
 
 var get_minified_module_file_name = function(name, type)
 {
     return type + '/' + name + '.min.' + type;
-}
+};
 
 var get_all_required_modules = function(module_name, modules_map)
 {
@@ -275,7 +260,7 @@ var get_file_name = function(name, is_debug)
     ? clean_name + extension
     : clean_name + 'min.' + extension;
   return {name: file_name, extension: extension};
-}
+};
 
 var concat_module_files = function(left_map, right_map)
 {
@@ -287,12 +272,12 @@ var concat_module_files = function(left_map, right_map)
             result[type] = result[type] || [];
             result[type] = result[type].concat(map[type]);
         }
-    }
+    };
 
     process_map(left_map);
     process_map(right_map);
     return result;
-}
+};
 
 var get_module_files = function(module_name, modules_map)
 {
@@ -316,7 +301,7 @@ var get_module_files = function(module_name, modules_map)
             var type = file.extension;
             files[type] = files[type] || [];
             files[type].push(file.name);
-        }
+        };
         process_lib(true, debug_files);
         process_lib(false, release_files);
     }
@@ -325,11 +310,11 @@ var get_module_files = function(module_name, modules_map)
         debug_files: debug_files,
         release_files: release_files
     };
-}
+};
 
-var get_files_required_by_page_grouped_by_type = function(page, modules_map)
+var get_required_files_grouped_by_type = function(modules, modules_map)
 {
-    var requires = get_all_required_modules(page.modules, modules_map);
+    var requires = get_all_required_modules(modules, modules_map);
     var debug_files = {};
     var release_files = {};
     requires.forEach(function(module_name)
@@ -352,7 +337,7 @@ var get_files_required_by_page = function(page, modules_map)
         release_files: []
     };
 
-    var files = get_files_required_by_page_grouped_by_type(page, modules_map);
+    var files = get_required_files_grouped_by_type(page.modules, modules_map);
     var process = function(group_name)
     {
         for (type in files[group_name])
@@ -364,7 +349,7 @@ var get_files_required_by_page = function(page, modules_map)
     process('release_files');
 
     return result;
-}
+};
 
 
 
@@ -378,8 +363,8 @@ var config_task_uglify = function(module, grunt_config)
     grunt_config.uglify[module.name] = {
       src: combine_files(path_src, module.files.js),
       dest: path_release + get_minified_module_file_name(module.name, 'js')
-    }
-}
+    };
+};
 
 var config_task_cssmin = function(module, grunt_config)
 {
@@ -391,7 +376,7 @@ var config_task_cssmin = function(module, grunt_config)
     var src_files = combine_files(path_src, module.files.css);
     var dest_file = path_release + get_minified_module_file_name(module.name, 'css');
     grunt_config.cssmin[module.name].files[dest_file] = src_files;
-}
+};
 
 var config_task_jsdoc = function(module, grunt_config)
 {
@@ -406,7 +391,7 @@ var config_task_jsdoc = function(module, grunt_config)
                 configure: 'jsdoc_conf.json'
             }
         }
-    }
+    };
     // I don't sure what is better group packages docs by folders or 
     // compile it to one general folder.
     grunt_config.jsdoc.dist.src = grunt_config.jsdoc.dist.src.concat(combine_files(path_src, module.files.js));
@@ -421,7 +406,7 @@ var config_task_jsdoc = function(module, grunt_config)
 
 var config_task_sailslinker = function(page, modules_map, grunt_config)
 {
-    var files = get_files_required_by_page_grouped_by_type(page, modules_map);
+    var files = get_required_files_grouped_by_type(page.modules, modules_map);
     var debug_files = files.debug_files;
     var release_files = files.release_files;
 
@@ -452,7 +437,7 @@ var config_task_sailslinker = function(page, modules_map, grunt_config)
             page_file_name = dest_path + page.template;
             sl_conf[task_name].files[page_file_name] = combine_files(dest_path, files[type]);
         }
-    }
+    };
     process_files(debug_files, 'debug', path_src);
     process_files(release_files, 'release', path_release);
 
@@ -464,32 +449,56 @@ var config_task_sailslinker = function(page, modules_map, grunt_config)
     process_files(clean_debug_files, 'clean_debug', path_src);
 };
 
-// /**
-//  * Test JS from console via browse emulator by Jasmine tool.
-//  * 
-//  * Description of plugin is here: https://github.com/gruntjs/grunt-contrib-jasmine
-//  * Description of jasmine is here: http://jasmine.github.io/1.3/introduction.html
-//  */
-// var config_task_jasmine = function(page, modules_map, grunt_config)
-// {
-//     var files = get_files_required_by_page_grouped_by_type(page, modules_map);
-//     var js_files = files.debug_files.js;
+/**
+ * Test JS from console via browse emulator by Jasmine tool.
+ * 
+ * Description of plugin is here: https://github.com/gruntjs/grunt-contrib-jasmine
+ * Description of jasmine is here: http://jasmine.github.io/1.3/introduction.html
+ */
+var config_task_jasmine = function(module, modules_map, grunt_config)
+{
+    if (!module.test || !module.test.jasmine)
+        return;
 
-//     if(!js_files)
-//     {
-//         return;
-//     }
+    var files = get_required_files_grouped_by_type(module.name, modules_map);
+    var js_files = files.debug_files.js;
 
-//     grunt_config.jasmine = grunt_config.jasmine || {};
+    if (!js_files)
+    {
+        return;
+    }
+    
+    grunt_config.jasmine = grunt_config.jasmine || {};
 
-//     grunt_config.jasmine[page.template] = {
-//         src: combine_files(path_src, js_files),
-//         options: {
-//             specs: 'www-public-test/**/*_jspec.js',
-//             helpers: 'www-public-test/**/*_jhelper.js'
-//         }
-//     };
-// }
+    grunt_config.jasmine[module.name] = {
+        src: combine_files(path_src, js_files
+                .concat(copy_excluding)
+                .concat(module.test.jasmine.files || [])
+            ),
+        options: {
+            specs: combine_files(path_src, module.test.jasmine.specs),
+            helpers: combine_files(path_src, module.test.jasmine.helpers)
+        }
+    };
+};
+
+
+var config_task_nodeunit = function(module, grunt_config)
+{
+    if (!module.test || !module.test.nodeunit)
+        return;
+
+    grunt_config.nodeunit = grunt_config.nodeunit || {
+        options: {
+            reporter: 'junit',
+            reporterOptions: {
+                output: '../build/test-log'
+            }
+        }
+    };
+
+    grunt_config.nodeunit[module.name] = combine_files(path_src, module.test.nodeunit);
+};
 
 var config_task_copy = function(pages, modules_map, grunt_config)
 {
@@ -515,12 +524,13 @@ var config_task_copy = function(pages, modules_map, grunt_config)
                 expand: true,
                 cwd: path_src,
                 src: ['**/*.*', '**/.*'].concat(invert_files(debug_files))
-                                        .concat(release_files),
+                                        .concat(release_files)
+                                        .concat(copy_excluding),
                 dest: path_release
             }]
         }
     };
-}
+};
 
 var process_pages_config = function(config, grunt_config)
 {
@@ -531,12 +541,13 @@ var process_pages_config = function(config, grunt_config)
         config_task_uglify(module, grunt_config);
         config_task_cssmin(module, grunt_config);
         config_task_jsdoc(module, grunt_config);
+        config_task_nodeunit(module, grunt_config);
+        config_task_jasmine(module, modules_map, grunt_config);
     });
     config.pages.forEach(function(page)
     {
         config_task_sailslinker(page, modules_map, grunt_config);
-//        config_task_jasmine(page, modules_map, grunt_config);
     });
 
     return grunt_config;
-}
+};
