@@ -361,7 +361,7 @@ var config_task_uglify = function(module, grunt_config)
 
     grunt_config.uglify = grunt_config.uglify || {};
     grunt_config.uglify[module.name] = {
-      src: combine_files(path_src, module.files.js),
+      src: combine_files(path_src, module.files.js.concat(copy_excluding)),
       dest: path_release + get_minified_module_file_name(module.name, 'js')
     };
 };
@@ -435,7 +435,7 @@ var config_task_sailslinker = function(page, modules_map, grunt_config)
             };
 
             page_file_name = dest_path + page.template;
-            sl_conf[task_name].files[page_file_name] = combine_files(dest_path, files[type]);
+            sl_conf[task_name].files[page_file_name] = combine_files(dest_path, files[type].concat(copy_excluding));
         }
     };
     process_files(debug_files, 'debug', path_src);
