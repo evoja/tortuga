@@ -1,0 +1,31 @@
+<html ng-app>
+<head>
+<title>Песочница</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="shortcut icon" href="img/favicon32.png">
+<!--SCRIPTS_CSS-->
+<!--SCRIPTS_CSS END-->
+</head>
+<body>
+<div>
+    <label>Name:</label>
+    <input type="text" ng-model="yourName" placeholder="Enter a name here">
+    <hr>
+    <h1>Hello {{yourName}}!</h1>
+</div>
+<sb-title></sb-title>
+<sb-quest></sb-quest>
+<sb-lesson></sb-lesson>
+<sb-words></sb-words>
+
+
+<!--SCRIPTS_JS-->
+<script src="js/lib/angular.js"></script>
+<script src="js/om/om.ns.js"></script>
+<script src="js/om/om.func.js"></script>
+<script src="js/om/om.is_browser.js"></script>
+<script src="js/om/om.text.js"></script>
+<script src="js/angular_sandbox_module.js"></script>
+<!--SCRIPTS_JS END-->
+</body>
+</html>

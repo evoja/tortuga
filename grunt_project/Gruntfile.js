@@ -66,6 +66,12 @@ module.exports = function(grunt)
                     js: ['lessons/perepravy_shapovalov.js']
                 },
                 requires: ['index']
+            },{
+                name: 'sandbox',
+                files: {
+                    js: ['js/angular_sandbox_module.js']
+                },
+                requires: ['js/lib/angular.js|auto', 'om']
             }
         ],
 
@@ -75,6 +81,9 @@ module.exports = function(grunt)
       }, {
         template: 'perepravy.html',
         modules: ['perepravy']
+      }, {
+        template: 'sandbox.html',
+        modules: ['sandbox']
       }
     ]
   };
@@ -231,8 +240,9 @@ var get_all_required_modules = function(module_name, modules_map)
         result = [];
         requires = module_name;
     }
-    requires.forEach(function(req_module_name)
+    for(var i = requires.length - 1; i >= 0; --i)
     {
+        var req_module_name = requires[i];
         var req_require_modules = get_all_required_modules(req_module_name, modules_map);
         for (var j = req_require_modules.length - 1; j >= 0; --j)
         {
@@ -244,7 +254,7 @@ var get_all_required_modules = function(module_name, modules_map)
             }
             result.unshift(req_req_module);
         }
-    });
+    }
     return result;
 };
 
