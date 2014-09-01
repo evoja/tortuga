@@ -48,7 +48,10 @@ module.exports = function(grunt)
                         ]),
                     js: combine_files('js/', [
                             'trtg/t-box/tortoise-vm/TortoiseRunner.js',
+                            'trtg/values/**/*.js',
                             'trtg/**/*.js',
+                            '!trtg/*.js',
+                            'trtg/*.js',
                             '*.js',
                         ])
                 },
