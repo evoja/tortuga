@@ -1,14 +1,16 @@
 om.ns_run('trtg.values', function(ns){
     ns.lessons = {
         first_id : {
-            name: 'First lesson',
+            title: 'First lesson',
             tasks: [{
-                    name: 'House',
+                    title: 'House',
+                    description: 'This is a lesson about a house',
                     definition: function() {
                         console.log('First lesson, House');
                     }
                 },{
-                    name: 'Village',
+                    title: 'Village',
+                    description: 'This is a lesson about a village',
                     definition: function() {
                         console.log('First lesson, Village');
                     }
@@ -17,9 +19,10 @@ om.ns_run('trtg.values', function(ns){
             words: ['word-1.1', 'word-1.2']
         },
         second_id : {
-            name: 'Second lesson',
+            title: 'Second lesson',
             tasks: [{
-                    name: 'Only task',
+                    title: 'Only task',
+                    description: 'This is a lesson about something',
                     definition: function() {
                         console.log('Second lesson, Only task');
                     }

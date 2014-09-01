@@ -1,24 +1,64 @@
-<html>
+<html ng-app="sandbox_app">
 <head>
-<title>Песочница</title>
+<title>ПесочницаAAAAAAA</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="shortcut icon" href="img/favicon32.png">
 <!--SCRIPTS_CSS-->
+<link type="text/css" rel="stylesheet" href="css/reset.css">
+<link type="text/css" rel="stylesheet" href="css/tortuga.css">
+<link type="text/css" rel="stylesheet" href="css/tortoise.css">
+<link type="text/css" rel="stylesheet" href="css/page.css">
 <!--SCRIPTS_CSS END-->
 </head>
 <body>
-<div id='sandbox_module'>
-    <h1 ng-controller='TitleController as tc'>{{tc.text}}</h1>
-    <sb-quest></sb-quest>
-    <sb-lesson></sb-lesson>
-    <sb-words></sb-words>
+<div class="skyGradient"><div class="skyObjects">
+    <div class="workingArea-wrapper"><div class="workingArea">
+        <div class="header-link"><a></a></div>
+
+        <div ng-controller="LessonController as lc"
+                ng-show="lc.has_lesson"
+                class="balloon-shadow balloon-blue"
+            >
+            <ng-include src="'list_of_lessons_titles'"></ng-include>
+            <div id="lessonsList"></div>
+            <div id="lessonItemDescription"></div>
+        </div>
+
+    </div></div>
+</div></div>
+<div class="grass">
+    <div class="middleContent"><!-- 
+    doesn't have any text. Is using for layout: for placing pictures
+--></div>
+    <div class="bottomContent">
+        <div class="bottomContent-inner"
+                ng-controller="FooterController as cont">
+                <div ng-repeat="column in cont.footer_structure.columns" class="bottomContent-block">
+                    <div ng-repeat="section in column" ng-include src="section"></div>
+                </div>
+            </div>
+        </div>
 </div>
-<hr>
-<div ng-app>
-  <label>Name:</label>
-  <input type="text" ng-model="yourName" placeholder="Enter a name here">
-  <h1>Hello {{yourName}}!</h1>
-</div>
+
+
+<!-- ==== Templates ============================================= -->
+<script type="text/ng-template" id="list_of_lessons_titles">
+    <ul class="tortuga-lessonsListContainer-list">
+        <li ng-repeat="task in lc.tasks"
+                class="tortuga-lessonsListContainer-item"
+                ng-class="{true: 'tortuga-lessonsListContainer-itemSelected'}[task.is_current]">
+            <div ng-if="task.is_current">
+                <div class="tortuga-lessonsListContainer-item-number">{{$index}}</div>
+                <div class="tortuga-lessonsListContainer-item-text tortuga-lessonsListContainer-item-textSelected">{{task.title}}</div>
+            </div>
+            <a ng-if="!task.is_current" href="{{task.url}}">
+                <div class="tortuga-lessonsListContainer-item-number">{{$index}}</div>
+                <div class="tortuga-lessonsListContainer-item-text tortuga-lessonsListContainer-item-textSelected">{{task.title}}</div>
+            </a>
+        </li>
+    </ul>
+</script>
+
 
 
 <!--SCRIPTS_JS-->
@@ -27,15 +67,15 @@
 <script src="js/om/om.func.js"></script>
 <script src="js/om/om.is_browser.js"></script>
 <script src="js/om/om.text.js"></script>
-<script src="js/sandbox/LessonService.js"></script>
-<script src="js/sandbox/LocationService.js"></script>
-<script src="js/sandbox/QuestService.js"></script>
-<script src="js/sandbox/TitleController.js"></script>
-<script src="js/sandbox/ns.js"></script>
-<script src="js/sandbox/values/lessons.js"></script>
-<script src="js/sandbox/values/ns.js"></script>
-<script src="js/sandbox/values/site_structure.js"></script>
-<script src="js/angular_sandbox_module.js"></script>
+<script src="js/trtg/values/lessons.js"></script>
+<script src="js/trtg/values/site_footer_structure.js"></script>
+<script src="js/trtg/site/LocationService.js"></script>
+<script src="js/trtg/site/angular_footer_module.js"></script>
+<script src="js/trtg/site/angular_site_module.js"></script>
+<script src="js/trtg/lessons/LessonController.js"></script>
+<script src="js/trtg/lessons/LessonService.js"></script>
+<script src="js/trtg/lessons/angular_lessons_module.js"></script>
+<script src="js/sandbox_app.js"></script>
 <!--SCRIPTS_JS END-->
 </body>
 </html>

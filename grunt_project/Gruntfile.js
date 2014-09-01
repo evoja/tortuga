@@ -33,9 +33,7 @@ module.exports = function(grunt)
                 requires: []
             },{
                 name: 'omang',
-                files: {
-                    js: ['js/omang/angular_omang_module.js', 'js/omang/**/*.js']
-                },
+                files: {js: ['js/omang/**/*.js']},
                 requires: ['js/lib/angular.js|auto', 'om']
             },{
                 name: 'index',
@@ -53,6 +51,7 @@ module.exports = function(grunt)
                             '!trtg/*.js',
                             'trtg/*.js',
                             '*.js',
+                            '!sandbox_app.js'
                         ])
                 },
                 test: {
@@ -75,9 +74,19 @@ module.exports = function(grunt)
             },{
                 name: 'sandbox',
                 files: {
+                    css: [
+                        'css/reset.css',
+                        'css/tortuga.css',
+                        'css/tortoise.css',
+                        'css/page.css'
+                    ],
                     js: [
-                        'js/sandbox/**/*.js',
-                        'js/angular_sandbox_module.js',
+                        'js/trtg/values/**/*.js',
+                        'js/trtg/site/**/*.js',
+                        'js/trtg/lessons/LessonController.js',
+                        'js/trtg/lessons/LessonService.js',
+                        'js/trtg/lessons/angular_lessons_module.js',
+                        'js/sandbox_app.js',
                     ]
                 },
                 requires: ['omang']
