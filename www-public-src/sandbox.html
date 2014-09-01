@@ -20,8 +20,7 @@
                 class="balloon-shadow balloon-blue"
             >
             <ng-include src="'list_of_lessons_titles'"></ng-include>
-            <div id="lessonsList"></div>
-            <div id="lessonItemDescription"></div>
+            <div id="lessonItemDescription" ng-bind-html="lc.task_description"></div>
         </div>
 
     </div></div>

@@ -17,6 +17,7 @@ angular.module('trtg.lessons.lessons_module', ['trtg.site.site_module'])
         [
             'location_service',
             'lesson_service',
+            '$sce',
             '$scope',
             ns_get('trtg.lessons.LessonController')
         ])
