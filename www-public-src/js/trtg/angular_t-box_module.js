@@ -7,7 +7,7 @@ var tbox_get = function(postfix){return ns_get('trtg.tbox.' + postfix)};
 var tang_get = function(postfix){return ns_get('trtg.tbox.app_msg.' + postfix)};
 
 
-angular.module('t_box_module.TBoxTortoiseCanvas', [])
+angular.module('t_box_module.TBoxTortoiseCanvas', ['trtg.lessons.lessons_module'])
     .value('TBoxTortoiseCanvasBlock',
                  tbox_get('tblocks.TortoiseCanvasBlock'))
 
@@ -35,6 +35,7 @@ angular.module('t_box_module.TBoxTortoiseCanvas', [])
                     'tbox_tortoise_canvas_service', 
                     'tbox_tortoisevm_mouse_manager', 
                     'tbox_tortoise_canvas_bg_dispatcher',
+                    'lesson_service',
                     tbox_get('tblocks.TortoiseCanvasController')
                 ])
 

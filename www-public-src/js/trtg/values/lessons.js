@@ -13,7 +13,8 @@ om.ns_run('trtg.values', function(ns){
                         + '</ul> ',
                     definition: function() {
                         console.log('First lesson, House');
-                    }
+                    },
+                    src: 'lessons/tortuga-01-1-angles.png'
                 },{
                     title: 'Многоугольники',
                     description: 'Длина стороны большинства многоугольников равна&nbsp;40. '
@@ -22,12 +23,14 @@ om.ns_run('trtg.values', function(ns){
                         + 'а&nbsp;в&nbsp;особом случае количество углов указано на&nbsp;рисунке и&nbsp;обозначено за&nbsp;N.',
                     definition: function() {
                         console.log('First lesson, Village');
-                    }
+                    },
+                    src: 'lessons/tortuga-01-2-polygons.png'
                 },{
                     title: 'Домик',
                     description: 'Все изображённые отрезки одинаковы и&nbsp;равны&nbsp;200.<br> '
                         + 'Нарисуйте цветной домик поверх серого и&nbsp;на&nbsp;своё усмотрение '
-                        + ' добавьте на&nbsp;картинку дополнительные элементы: окно, трубу, лавочку, дерево и&nbsp;т.&nbsp;п.'
+                        + ' добавьте на&nbsp;картинку дополнительные элементы: окно, трубу, лавочку, дерево и&nbsp;т.&nbsp;п.',
+                    src: 'lessons/tortuga-01-3-house.png'
                 }
             ],
             words: ['word-1.1', 'word-1.2']
