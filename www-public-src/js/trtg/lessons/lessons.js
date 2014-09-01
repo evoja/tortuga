@@ -212,11 +212,11 @@ ns.initLessons = function(bg, list, descrDiv, env, allContainers)
             });
         }
 
-        if(lesson == null)
-        { 
-            console.log('Некорректная ссылка. Ошибка открытия урока.');
-            //redirectOnIndex();
-        }
+        // if(lesson == null)
+        // { 
+        //     console.log('Некорректная ссылка. Ошибка открытия урока.');
+        //     //redirectOnIndex();
+        // }
         return;
     }
     else

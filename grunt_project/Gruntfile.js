@@ -36,6 +36,12 @@ module.exports = function(grunt)
                 files: {js: ['js/omang/**/*.js']},
                 requires: ['js/lib/angular.js|auto', 'om']
             },{
+                name: 'config',
+                files: {
+                    js: ['js/config.js'],
+                },
+                requires: ['om']
+            },{
                 name: 'index',
                 files: {
                     css: combine_files('css/', [
@@ -50,8 +56,10 @@ module.exports = function(grunt)
                             'trtg/**/*.js',
                             '!trtg/*.js',
                             'trtg/*.js',
-                            '*.js',
-                            '!sandbox_app.js'
+                            'Agent.js',
+                            'files.js',
+                            'help.js',
+                            'tortuga.js'
                         ])
                 },
                 test: {
@@ -64,7 +72,7 @@ module.exports = function(grunt)
                         helpers: ['js/trtg/**/*_jhelper.js']
                     }
                 },
-                requires: ['om', 'js/lib/angular.js|auto']
+                requires: ['om', 'config', 'js/lib/angular.js|auto']
             },{
                 name: 'perepravy',
                 files: {
