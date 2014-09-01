@@ -1,6 +1,6 @@
 om.ns_run('trtg.values', function(ns){
     ns.lessons = {
-        first_id : {
+        '_1' : {
             title: 'Урок 1',
             tasks: [{
                     title: 'Углы',
@@ -35,14 +35,25 @@ om.ns_run('trtg.values', function(ns){
             ],
             words: ['word-1.1', 'word-1.2']
         },
-        second_id : {
-            title: 'Second lesson',
+        '_2' : {
+            title: 'Урок 2',
             tasks: [{
-                    title: 'Only task',
-                    description: 'This is a lesson about something',
-                    definition: function() {
-                        console.log('Second lesson, Only task');
-                    }
+                    title: 'Три дома',
+                    description: 'Длины всех отрезков в&nbsp;больших домах равны&nbsp;200. Длины всех отрезков в&nbsp;маленьком домике равны&nbsp;100.',
+                    src: 'lessons/tortuga-02-1-3houses.png'
+                },{
+                    title: 'Деревня',
+                    description: 'В&nbsp;домах верхнего ряда длины всех отрезков равны&nbsp;40,<br> в&nbsp;домах среднего&nbsp;—&nbsp;60,<br>в&nbsp;домах нижнего&nbsp;—&nbsp;80.<br><br>Боковое расстояние между домами равно половине длины отрезка.',
+                    src: 'lessons/tortuga-02-2-many_houses.png'
+                },{
+                    title: 'Город',
+                    description: 'Каждый дом построен по следующим принципам:<br><br> '
+                        + '&nbsp;&nbsp;- высота окна в полтора раза больше его ширины.<br> '
+                        + '&nbsp;&nbsp;- расстояние между окнами как по горизонтали, так и по вертикали равно высоте окна.<br> '
+                        + '&nbsp;&nbsp;- высота дома больше суммы высоты всех этажей на половину высоты окна.<br><br> '
+                        + 'Про каждый дом известна его ширина, она обозначена на рисунке буквой w. Зная ширину дома, можно найти ширину и высоту каждого окна. Зная высоту окна, можно найти высоту дома.<br><br> '
+                        + 'Дома на правом и левом рисунке одинаковы и одинаково расположены. Отличаются только окнами.',
+                    src: 'lessons/tortuga-02-3-gorod.png'
                 }
             ],
             words: ['word-1.1', 'word-2.1', 'word-2.2']
