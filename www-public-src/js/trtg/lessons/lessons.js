@@ -25,7 +25,7 @@ var CL_ITEM_TEXT_SELECTED = "tortuga-lessonsListContainer-item-textSelected";
 
 var appendClass = function(elem, className)
 {
-    elem.classList.add(className);
+    elem && elem.classList.add(className);
 };
 
 var removeClass = function(elem, className)

@@ -1,4 +1,4 @@
-<html>
+<html ng-app="index_app">
 <head>
 <title>Тортуга</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -19,10 +19,13 @@
 			<a href="http://www.trtg.org/"></a>
 		</div>
 
-		<div class="balloon-shadow balloon-blue tortuga-lessonsContainers-empty" id="lessonsContainer">
-			<div id="lessonsList"></div>
-			<div id="lessonItemDescription"></div>
-		</div>
+		<div ng-controller="LessonController as lc"
+                ng-show="lc.has_lesson"
+                class="balloon-shadow balloon-blue"
+            >
+            <ng-include src="'list_of_lessons_titles'"></ng-include>
+            <div id="lessonItemDescription" ng-bind-html="lc.task_description"></div>
+        </div>
 
 		<div class="balloon-shadow balloon" id="canvasBalloon">
 			<div id="help-underHelp">
@@ -59,7 +62,7 @@
 	--></div>
 
 	<div class="bottomContent">
-		<div id="footer_module" class="bottomContent-inner"
+		<div class="bottomContent-inner"
 			ng-controller="FooterController as cont">
 			<div ng-repeat="column in cont.footer_structure.columns" class="bottomContent-block">
 				<div ng-repeat="section in column" ng-include src="section"></div>
@@ -73,6 +76,26 @@
 
 
 
+<!-- ==== Templates ============================================= -->
+<script type="text/ng-template" id="list_of_lessons_titles">
+    <ul class="tortuga-lessonsListContainer-list">
+        <li ng-repeat="task in lc.tasks"
+                class="tortuga-lessonsListContainer-item"
+                ng-class="{true: 'tortuga-lessonsListContainer-itemSelected'}[task.is_current]">
+            <div ng-if="task.is_current">
+                <div class="tortuga-lessonsListContainer-item-number">{{$index}}</div>
+                <div class="tortuga-lessonsListContainer-item-text tortuga-lessonsListContainer-item-textSelected">{{task.title}}</div>
+            </div>
+            <a ng-if="!task.is_current" href="{{task.url}}">
+                <div class="tortuga-lessonsListContainer-item-number">{{$index}}</div>
+                <div class="tortuga-lessonsListContainer-item-text tortuga-lessonsListContainer-item-textSelected">{{task.title}}</div>
+            </a>
+        </li>
+    </ul>
+</script>
+
+
+
 <!--SCRIPTS_JS-->
 <script src="js/om/om.ns.js"></script>
 <script src="js/om/om.func.js"></script>
@@ -82,9 +105,14 @@
 <script src="js/trtg/t-box/tortoise-vm/TortoiseRunner.js"></script>
 <script src="js/trtg/values/lessons.js"></script>
 <script src="js/trtg/values/site_footer_structure.js"></script>
+<script src="js/trtg/lessons/LessonController.js"></script>
+<script src="js/trtg/lessons/LessonService.js"></script>
 <script src="js/trtg/lessons/ParamsUtil.js"></script>
+<script src="js/trtg/lessons/angular_lessons_module.js"></script>
 <script src="js/trtg/lessons/lessons.js"></script>
+<script src="js/trtg/site/LocationService.js"></script>
 <script src="js/trtg/site/angular_footer_module.js"></script>
+<script src="js/trtg/site/angular_site_module.js"></script>
 <script src="js/trtg/t-box/app-msg/DispatcherController.js"></script>
 <script src="js/trtg/t-box/app-msg/DispatcherService.js"></script>
 <script src="js/trtg/t-box/app-msg/MethodsDispatcherService.js"></script>
@@ -104,6 +132,7 @@
 <script src="js/trtg/index_app.js"></script>
 <script src="js/trtg/ns.js"></script>
 <script src="js/Agent.js"></script>
+<script src="js/config.js"></script>
 <script src="js/files.js"></script>
 <script src="js/help.js"></script>
 <script src="js/tortuga.js"></script>
@@ -126,7 +155,7 @@ var init;
 	init = function()
 	{
 		Tortuga.initApp(
-			gebid("lessonsList"),
+			// gebid("lessonsList"),
 			gebid("lessonItemDescription"),
 			[gebid("lessonsContainer")],
 			gebid("files"),

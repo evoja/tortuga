@@ -47,20 +47,20 @@ var configureFilesArea = function(filesArea)
 };
 
 //==== lessons ======
-var configureLessonsAreas = function(lessonsListContainer, lessonItemDescription)
-{
-    appendClass(lessonsList, "tortuga-lessonsListContainer");
-    appendClass(lessonItemDescription, "tortuga-lessonItemDescription");
-    return {
-        lessonsListContainer : lessonsListContainer,
-        lessonItemDescription : lessonItemDescription
-    };
-};
+// var configureLessonsAreas = function(lessonsListContainer, lessonItemDescription)
+// {
+//     appendClass(lessonsList, "tortuga-lessonsListContainer");
+//     appendClass(lessonItemDescription, "tortuga-lessonItemDescription");
+//     return {
+//         lessonsListContainer : lessonsListContainer,
+//         lessonItemDescription : lessonItemDescription
+//     };
+// };
 
 //===== App ============
 ns.initApp = function(
-    lessonsListContainer, //контейнер для списка задач урока, куда поместятся заголовки задач
-                          //и будут переключаться стили выделенной/невыделенной задачи.
+    // lessonsListContainer, //контейнер для списка задач урока, куда поместятся заголовки задач
+    //                       //и будут переключаться стили выделенной/невыделенной задачи.
     lessonItemDescription, //контейнер для текста урока, куда будет помещаться текст выделенной задачи
     lessonsContainers, //все элементы, которые нужно будет стирать.
     filesArea, //блок, куда будет добавлен элемент выбора файла.
@@ -68,13 +68,13 @@ ns.initApp = function(
     )
 {
     var filesObjects = configureFilesArea(filesArea);
-    var lessonsObjects = configureLessonsAreas(lessonsListContainer, lessonItemDescription);
+    // var lessonsObjects = configureLessonsAreas(lessonsListContainer, lessonItemDescription);
 
     var bg_service = angular.element(document.getElementById('t_box_module'))
                         .injector().get('tbox_tortoise_canvas_bg_dispatcher');
     var do_nothing = function(){};
     Tortuga.initFiles(filesObjects.button, dropFilesArea, do_nothing, do_nothing);
-    trtg.lessons.initLessons(bg_service, lessonsListContainer, lessonItemDescription,
+    trtg.lessons.initLessons(bg_service, undefined, lessonItemDescription,
         new TortugaEnv(), lessonsContainers);
 }
 

@@ -1,5 +1,9 @@
 (function(){
 
-angular.bootstrap(document.getElementById('footer_module'), ['footer_module']);
+angular.module('index_app', [
+        'trtg.site.footer_module',
+        'trtg.lessons.lessons_module',
+        't_box_module'
+    ]);
 
 })();
