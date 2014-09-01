@@ -16,9 +16,15 @@ ns.TortoiseCanvasController = function TortoiseCanvasController($scope,
     context.tortuga_service = tortuga_service;
     context.mouse_service = mouse_service;
 
-    $scope.$watch(function(){return lesson_service.get_task_data().src}, function()
+    var get_task_src = function()
     {
-        context.background_url = lesson_service.get_task_data().src;
+        var task_data = lesson_service.get_task_data();
+        return task_data ? task_data.src : '';
+    };
+
+    $scope.$watch(get_task_src, function(value)
+    {
+        context.background_url = value;
     });
 
     url_service.add_handler(function(url){

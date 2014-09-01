@@ -1,0 +1,217 @@
+<html ng-app="index_app">
+<head>
+<title>Тортуга</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="shortcut icon" href="img/favicon32.png">
+<!--SCRIPTS_CSS-->
+<link type="text/css" rel="stylesheet" href="css/reset.css">
+<link type="text/css" rel="stylesheet" href="css/tortuga.css">
+<link type="text/css" rel="stylesheet" href="css/tortoise.css">
+<link type="text/css" rel="stylesheet" href="css/page.css">
+<!--SCRIPTS_CSS END-->
+
+</head>
+<body>
+<div id="topTextArea"><!-- the area to display Safari/IE warning --></div>
+<div class="skyGradient"><div class="skyObjects">
+	<div class="workingArea-wrapper"><div class="workingArea">
+		<div class="header-link">
+			<a href="http://www.trtg.org/"></a>
+		</div>
+
+		<div ng-controller="LessonController as lc"
+                ng-show="lc.has_lesson"
+                class="balloon-shadow balloon-blue"
+            >
+            <ng-include src="'list_of_lessons_titles'"></ng-include>
+            <div id="lessonItemDescription" ng-bind-html="lc.task_description"></div>
+        </div>
+
+		<div class="balloon-shadow balloon" id="canvasBalloon">
+			<div id="help-underHelp">
+				<div id="t_box_module" class="canvasContainer">
+					<tbox-tortoise-canvas/>
+				</div>
+				<div class="help-hint" id="help-hint">Помощь</div>
+				<div id="files"></div>
+			</div>
+
+			<div id="help-help" class="sideHelp"><div class="sideHelp-inner">
+				<h2>Работа из консоли</h2>
+				<p id="help-hotkey-text">
+				</p>
+				<h2>Основные команды</h2>
+				<ul>
+					<li><b>var x = createTortoise()</b>&nbsp;&mdash; создать черепаху в&nbsp;начале координат.</li>
+					<li><b>var t = createTortoise(100, 50, "green")</b>&nbsp;&mdash; создать черепаху в&nbsp;нужном месте определённого цвета</li>
+					<li><b>t.go(50)</b>&nbsp;&mdash; пройти вперёд на&nbsp;нужное расстояние</li>
+					<li><b>t.rotate(45)</b>&nbsp;&mdash; повернуться против часовой стрелки на&nbsp;нужное количество градусов</li>
+					<li><b>t.tailDown()</b>&nbsp;&mdash; опустить хвост, чтобы рисовать линию.</li>
+					<li><b>t.tailUp()</b>&nbsp;&mdash; поднять хвост, чтобы просто перемещаться.</li>
+					<li><b>t.setColor("red")</b>&nbsp;&mdash; поменять цвет черепахе.</li>
+				</ul>
+				<p class="help-hint">Назад</p>
+			</div></div>
+			<div class="tortoiseMan" id="tortoiseMan"></div>
+		</div>
+	</div></div>
+</div></div>
+<div class="grass">
+	<div class="middleContent"><!-- 
+		doesn't have any text. Is using for layout: for placing pictures
+	--></div>
+
+	<div class="bottomContent">
+		<div class="bottomContent-inner"
+			ng-controller="FooterController as cont">
+			<div ng-repeat="column in cont.footer_structure.columns" class="bottomContent-block">
+				<div ng-repeat="section in column" ng-include src="section"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+<!-- ==== Templates ============================================= -->
+<script type="text/ng-template" id="list_of_lessons_titles">
+    <ul class="tortuga-lessonsListContainer-list">
+        <li ng-repeat="task in lc.tasks"
+                class="tortuga-lessonsListContainer-item"
+                ng-class="{true: 'tortuga-lessonsListContainer-itemSelected'}[task.is_current]">
+            <div ng-if="task.is_current">
+                <div class="tortuga-lessonsListContainer-item-number">{{$index}}</div>
+                <div class="tortuga-lessonsListContainer-item-text tortuga-lessonsListContainer-item-textSelected">{{task.title}}</div>
+            </div>
+            <a ng-if="!task.is_current" href="{{task.url}}"
+                    class="tortuga-lessonsListContainer-item-link"
+                >
+                <div class="tortuga-lessonsListContainer-item-number">{{$index}}</div>
+                <div class="tortuga-lessonsListContainer-item-text">{{task.title}}</div>
+            </a>
+        </li>
+    </ul>
+</script>
+
+
+
+<!--SCRIPTS_JS-->
+<script src="js/om/om.ns.js"></script>
+<script src="js/om/om.func.js"></script>
+<script src="js/om/om.is_browser.js"></script>
+<script src="js/om/om.text.js"></script>
+<script src="js/lib/angular.js"></script>
+<script src="js/trtg/t-box/tortoise-vm/TortoiseRunner.js"></script>
+<script src="js/trtg/values/lessons.js"></script>
+<script src="js/trtg/values/site_footer_structure.js"></script>
+<script src="js/trtg/lessons/LessonController.js"></script>
+<script src="js/trtg/lessons/LessonService.js"></script>
+<script src="js/trtg/lessons/ParamsUtil.js"></script>
+<script src="js/trtg/lessons/angular_lessons_module.js"></script>
+<script src="js/trtg/lessons/lessons.js"></script>
+<script src="js/trtg/site/LocationService.js"></script>
+<script src="js/trtg/site/angular_footer_module.js"></script>
+<script src="js/trtg/site/angular_site_module.js"></script>
+<script src="js/trtg/t-box/app-msg/DispatcherController.js"></script>
+<script src="js/trtg/t-box/app-msg/DispatcherService.js"></script>
+<script src="js/trtg/t-box/app-msg/MethodsDispatcherService.js"></script>
+<script src="js/trtg/t-box/app-msg/ServiceProxyController.js"></script>
+<script src="js/trtg/t-box/app-msg/console_directives.js"></script>
+<script src="js/trtg/t-box/app-msg/ns.js"></script>
+<script src="js/trtg/t-box/ns.js"></script>
+<script src="js/trtg/t-box/t-blocks/TortoiseCanvasBlock.js"></script>
+<script src="js/trtg/t-box/t-blocks/TortoiseCanvasController.js"></script>
+<script src="js/trtg/t-box/t-blocks/TortoiseCanvasDirective.js"></script>
+<script src="js/trtg/t-box/t-blocks/ns.js"></script>
+<script src="js/trtg/t-box/tortoise-vm/JsConverter.js"></script>
+<script src="js/trtg/t-box/tortoise-vm/MouseManager.js"></script>
+<script src="js/trtg/t-box/tortoise-vm/TortoiseGlobals.js"></script>
+<script src="js/trtg/t-box/tortoise-vm/ns.js"></script>
+<script src="js/trtg/angular_t-box_module.js"></script>
+<script src="js/trtg/index_app.js"></script>
+<script src="js/trtg/ns.js"></script>
+<script src="js/Agent.js"></script>
+<script src="js/config.js"></script>
+<script src="js/files.js"></script>
+<script src="js/help.js"></script>
+<script src="js/tortuga.js"></script>
+<script src="lessons/perepravy_shapovalov.js"></script>
+<!--SCRIPTS_JS END-->
+
+<script>
+/**
+Первоначальный код в index.html. Здесь в функции init() из веб-страницы
+по идентификаторам берутся нужные блоки, которые будут
+задействованы в работе программы.
+
+Эти блоки передаются в функции инициализации приложения:
+* *Tortuga.initApp()* из файла *tortuga.js*
+* и *Tortuga.initHelp()* из файла *help.js*
+*/
+var init;
+(function()
+{
+	var gebid = function(id){return document.getElementById(id)};
+	init = function()
+	{
+		Tortuga.initApp(
+			// gebid("lessonsList"),
+			gebid("lessonItemDescription"),
+			[gebid("lessonsContainer")],
+			gebid("files"),
+			gebid("canvasBalloon"));
+
+		Tortuga.initHelp([gebid("tortoiseMan"), gebid("help-help"), gebid("help-hint")],
+			[gebid("help-help"), gebid("help-underHelp"), gebid("canvasBalloon"),gebid("help-hint")]);
+
+		gebid("help-hotkey-text").innerHTML = Tortuga.Agent.helpText;
+	};
+
+	if(Tortuga.Agent.showTop)
+	{
+		gebid("topTextArea").innerHTML = Tortuga.Agent.topText;
+	}
+
+	init();
+})();
+</script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+if(this.Tortuga && Tortuga.Config && Tortuga.Config.yandexMetrikaId)
+{
+	(function (d, w, c) {
+	    (w[c] = w[c] || []).push(function() {
+	        try {
+	            w["yaCounter" + Tortuga.Config.yandexMetrikaId] = new Ya.Metrika({
+	                id        : Tortuga.Config.yandexMetrikaId,
+	                webvisor  : Tortuga.Config.webvisor,
+	                clickmap  : true,
+	                trackLinks:true,
+	                accurateTrackBounce:true,
+	                trackHash:true});
+	        } catch(e) { }
+	    });
+
+	    var n = d.getElementsByTagName("script")[0],
+	        s = d.createElement("script"),
+	        f = function () { n.parentNode.insertBefore(s, n); };
+	    s.type = "text/javascript";
+	    s.async = true;
+	    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+	    if (w.opera == "[object Opera]") {
+	        d.addEventListener("DOMContentLoaded", f, false);
+	    } else { f(); }
+	})(document, window, "yandex_metrika_callbacks");
+}
+else
+{
+	console.log("There is no Yandex.Metrika configuration");
+}
+</script>
+<!-- /Yandex.Metrika counter -->
+</body>
+</html>

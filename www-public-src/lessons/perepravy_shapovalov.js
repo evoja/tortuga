@@ -2869,11 +2869,11 @@ var infrastructure = (function(){
 		]
 	}
 
-	infrastructure.init_lessons([lesson2, lesson1, lesson3])
+	setTimeout(function(){infrastructure.init_lessons([lesson2, lesson1, lesson3])},2000);
 })()
 
 
-infrastructure.init_global_commands();
+setTimeout(function(){infrastructure.init_global_commands();}, 3000);
 
 
 })()
