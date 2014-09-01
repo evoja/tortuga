@@ -48,6 +48,11 @@
 	color:#00c;
 	border-bottom: #00c dashed 1px;
 }
+.tortuga-lessonsListContainer-item-link
+{
+	text-decoration: none;
+}
+
 
 .tortuga-lessonsListContainer-item-textSelected.tortuga-lessonsListContainer-item-text
 {

@@ -86,9 +86,11 @@
                 <div class="tortuga-lessonsListContainer-item-number">{{$index}}</div>
                 <div class="tortuga-lessonsListContainer-item-text tortuga-lessonsListContainer-item-textSelected">{{task.title}}</div>
             </div>
-            <a ng-if="!task.is_current" href="{{task.url}}">
+            <a ng-if="!task.is_current" href="{{task.url}}"
+                    class="tortuga-lessonsListContainer-item-link"
+                >
                 <div class="tortuga-lessonsListContainer-item-number">{{$index}}</div>
-                <div class="tortuga-lessonsListContainer-item-text tortuga-lessonsListContainer-item-textSelected">{{task.title}}</div>
+                <div class="tortuga-lessonsListContainer-item-text">{{task.title}}</div>
             </a>
         </li>
     </ul>
