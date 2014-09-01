@@ -1,11 +1,8 @@
-
-var path_debug = '../build/www-public-debug/';
-var path_release = '../build/www-public-release/';
-var path_jsdoc = '../build/doc-js/';
+var path_build = '../build/';
+var path_debug = path_build + 'www-public-debug/';
+var path_release = path_build + 'www-public-release/';
+var path_jsdoc = path_build + 'doc-js/';
 var path_src = '../www-public-src/';
-var path_from_debugrelease = '../../grunt_project/';
-var path_from_src = '../grunt_project/';
-var path_debugrelease_to_src = '../../www-public-src/';
 
 var copy_excluding = [
     '!**/*.template.js',
@@ -34,6 +31,12 @@ module.exports = function(grunt)
                     }
                 },
                 requires: []
+            },{
+                name: 'omang',
+                files: {
+                    js: ['js/omang/angular_omang_module.js', 'js/omang/**/*.js']
+                },
+                requires: ['js/lib/angular.js|auto', 'om']
             },{
                 name: 'index',
                 files: {
@@ -69,9 +72,12 @@ module.exports = function(grunt)
             },{
                 name: 'sandbox',
                 files: {
-                    js: ['js/angular_sandbox_module.js']
+                    js: [
+                        'js/sandbox/**/*.js',
+                        'js/angular_sandbox_module.js',
+                    ]
                 },
-                requires: ['js/lib/angular.js|auto', 'om']
+                requires: ['omang']
             }
         ],
 
@@ -120,7 +126,7 @@ module.exports = function(grunt)
     //pkg: grunt.file.readJSON('package.json'),
 
     delete_build_files: {
-      dist: ['../build/**/*', '../build/**/.*'],
+      dist: [path_build + '**/*', path_build + '**/.*'],
       options: {
         force: true
       }
@@ -397,7 +403,7 @@ var config_task_jsdoc = function(module, grunt_config)
         dist : {
             src: [], 
             options: {
-                destination: '../build/doc-js',
+                destination: path_jsdoc,
                 configure: 'jsdoc_conf.json'
             }
         }
@@ -502,7 +508,7 @@ var config_task_nodeunit = function(module, grunt_config)
         options: {
             reporter: 'junit',
             reporterOptions: {
-                output: '../build/test-log'
+                output: path_build + 'nodeunit-log'
             }
         }
     };

@@ -1,4 +1,4 @@
-<html ng-app>
+<html>
 <head>
 <title>Песочница</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -7,16 +7,18 @@
 <!--SCRIPTS_CSS END-->
 </head>
 <body>
-<div>
-    <label>Name:</label>
-    <input type="text" ng-model="yourName" placeholder="Enter a name here">
-    <hr>
-    <h1>Hello {{yourName}}!</h1>
+<div id='sandbox_module'>
+    <h1 ng-controller='TitleController as tc'>{{tc.text}}</h1>
+    <sb-quest></sb-quest>
+    <sb-lesson></sb-lesson>
+    <sb-words></sb-words>
 </div>
-<sb-title></sb-title>
-<sb-quest></sb-quest>
-<sb-lesson></sb-lesson>
-<sb-words></sb-words>
+<hr>
+<div ng-app>
+  <label>Name:</label>
+  <input type="text" ng-model="yourName" placeholder="Enter a name here">
+  <h1>Hello {{yourName}}!</h1>
+</div>
 
 
 <!--SCRIPTS_JS-->
@@ -25,6 +27,14 @@
 <script src="js/om/om.func.js"></script>
 <script src="js/om/om.is_browser.js"></script>
 <script src="js/om/om.text.js"></script>
+<script src="js/sandbox/LessonService.js"></script>
+<script src="js/sandbox/LocationService.js"></script>
+<script src="js/sandbox/QuestService.js"></script>
+<script src="js/sandbox/TitleController.js"></script>
+<script src="js/sandbox/ns.js"></script>
+<script src="js/sandbox/values/lessons.js"></script>
+<script src="js/sandbox/values/ns.js"></script>
+<script src="js/sandbox/values/site_structure.js"></script>
 <script src="js/angular_sandbox_module.js"></script>
 <!--SCRIPTS_JS END-->
 </body>
